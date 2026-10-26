@@ -9,87 +9,104 @@
 <meta property="og:description" content="Designing a mental health support app for an NGO where the central decision was making anonymity the default, not an afterthought.">
 <meta property="og:image" content="https://samarthnayyar.com/framerusercontent.com/assets/7rvnFryG96mdwR1iuRA0tZPp9I.png">
 <link rel="icon" href="../framerusercontent.com/images/09KlDhJzTL23u51XmAdHalB9B0g.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/style.css?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@600;700;800&family=Instrument+Serif:ital@0;1&family=Big+Shoulders+Display:wght@300..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preload" href="../assets/fonts/GeistPixel-VF.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/css/base.css?v=4">
+<link rel="stylesheet" href="../assets/css/cs.css?v=4">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js" defer></script>
+<script src="../assets/js/base.js?v=4" defer></script>
+<script src="../assets/js/cs.js?v=4" defer></script>
 </head>
-<body class="pg-cs">
-<div class="cs">
-<aside class="cs-aside">
-  <a class="logo" href="../index.html">Samarth Nayyar</a>
-  <div class="art"><div class="frame"><div class="dither"><canvas data-dither data-src="../framerusercontent.com/images/2mw3yIG9R4kBwdghGrTGUEmanM__Q__width__E__1920__A__height__E__1080.png"></canvas></div><svg viewBox="0 0 300 300" aria-hidden="true">
+<body class="pg-cs" data-lenis="{&quot;duration&quot;: 1.8}">
+<div class="preloader" aria-hidden="true"><div class="pl-counter mono"><span class="pl-n">0</span>%</div><div class="pl-bar"><i></i></div></div>
+<div class="pt-overlay" aria-hidden="true"></div>
+<div class="cur" aria-hidden="true"><i></i></div>
+<header class="cs-bar">
+  <a class="wm" href="../index.html" data-mask><span>Samarth Nayyar</span></a>
+  <nav class="boxnav"><a class="bx" href="../index.html"><span class="rh"><span>Index</span><span aria-hidden="true">Index</span></span></a><a class="bx is-on" href="../case-studies.html"><span class="rh"><span>Work</span><span aria-hidden="true">Work</span></span></a><a class="bx" href="../story.html"><span class="rh"><span>Story</span><span aria-hidden="true">Story</span></span></a><a class="bx" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener"><span class="rh"><span>Resume</span><span aria-hidden="true">Resume</span></span></a></nav>
+</header>
+<a class="fab" href="mailto:contact@samarthnayyar.com"><span class="fab-t">Get in touch</span><svg class="mk" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 10H18M18 2V18"/></svg></a>
+<div class="mwrap" id="top">
+<aside class="maside">
+  <div class="aside-top"><div class="aside-stick">
+  <div class="iso"><svg viewBox="0 0 300 300" aria-hidden="true">
   <path d="M150 22 L270 86 L270 214 L150 278 L30 214 L30 86 Z"/>
   <path d="M30 86 L150 150 L270 86 M150 150 L150 278"/>
   <path class="ghost" d="M150 22 L150 150 M30 214 L150 150 L270 214"/>
   <line x1="0" y1="150" x2="18" y2="150"/><line x1="282" y1="150" x2="300" y2="150"/>
-</svg></div></div>
-  <nav class="cs-index"><div class="hd"><span>&#8866;</span><span>Case Studies</span></div><a href="mphasis-blinkux.html"><span>01</span><span>Blink UX</span></a><a href="insider-vibes.html"><span>02</span><span>Paytm Insider</span></a><a href="paytm-chat.html"><span>03</span><span>Paytm Chat</span></a><a href="makemytrip.html"><span>04</span><span>MakeMyTrip</span></a><a href="airtel.html"><span>05</span><span>Airtel</span></a><a href="winuall.html"><span>06</span><span>Winuall</span></a><a href="poll-police.html"><span>07</span><span>Poll Police</span></a><a href="hope-house.html" class="active"><span>08</span><span>Hope House</span></a><a href="planteria.html"><span>09</span><span>Planteria</span></a><a href="snapshot.html"><span>10</span><span>Snapshot</span></a><a href="storewell.html"><span>11</span><span>Storewell</span></a><a href="moneylingo.html"><span>12</span><span>MoneyLingo</span></a><a href="divergent-minds-convergent-design.html"><span>13</span><span>Divergent Minds, Convergent Designs</span></a><a href="group-alarm.html"><span>14</span><span>Group Alarm</span></a></nav>
+</svg></div>
+  <nav class="mindex">
+    <a class="ni main" href="#top"><span class="no">&#8866;</span><span class="rh"><span>Hope House</span><span aria-hidden="true">Hope House</span></span><i class="prog"></i></a>
+    <a class="ni" href="#s1" data-sec="s1"><span class="no">01</span><span class="rh"><span>The Problem</span><span aria-hidden="true">The Problem</span></span><i class="prog"></i></a><a class="ni" href="#s2" data-sec="s2"><span class="no">02</span><span class="rh"><span>My Role</span><span aria-hidden="true">My Role</span></span><i class="prog"></i></a><a class="ni" href="#s3" data-sec="s3"><span class="no">03</span><span class="rh"><span>The Identity</span><span aria-hidden="true">The Identity</span></span><i class="prog"></i></a><a class="ni" href="#s4" data-sec="s4"><span class="no">04</span><span class="rh"><span>The decision</span><span aria-hidden="true">The decision</span></span><i class="prog"></i></a><a class="ni" href="#s5" data-sec="s5"><span class="no">05</span><span class="rh"><span>What I built</span><span aria-hidden="true">What I built</span></span><i class="prog"></i></a>
+  </nav>
+  </div></div>
+  <nav class="mothers"><span class="hd mono">&#8866; Case Studies</span><a class="oi" href="mphasis-blinkux.html"><span class="no">01</span><span>Blink UX</span></a><a class="oi" href="insider-vibes.html"><span class="no">02</span><span>Paytm Insider</span></a><a class="oi" href="paytm-chat.html"><span class="no">03</span><span>Paytm Chat</span></a><a class="oi" href="makemytrip.html"><span class="no">04</span><span>MakeMyTrip</span></a><a class="oi" href="airtel.html"><span class="no">05</span><span>Airtel</span></a><a class="oi" href="winuall.html"><span class="no">06</span><span>Winuall</span></a><a class="oi" href="poll-police.html"><span class="no">07</span><span>Poll Police</span></a><a class="oi is-on" href="hope-house.html"><span class="no">08</span><span>Hope House</span></a><a class="oi" href="planteria.html"><span class="no">09</span><span>Planteria</span></a><a class="oi" href="snapshot.html"><span class="no">10</span><span>Snapshot</span></a><a class="oi" href="storewell.html"><span class="no">11</span><span>Storewell</span></a><a class="oi" href="moneylingo.html"><span class="no">12</span><span>MoneyLingo</span></a><a class="oi" href="divergent-minds-convergent-design.html"><span class="no">13</span><span>Divergent Minds, Convergent Designs</span></a><a class="oi" href="group-alarm.html"><span class="no">14</span><span>Group Alarm</span></a></nav>
 </aside>
-<main class="cs-main">
-  <div class="cs-top">
-    <span class="crumb mono"><a href="../case-studies.html">&#8592; Work</a> / 08</span>
-    <nav class="tabs"><a href="../index.html">Index</a><a href="../case-studies.html" class="active">Work</a><a href="../story.html">Story</a><a href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true">Resume</a></nav>
-  </div>
-  <header class="cs-head">
-    <span class="mono">Case Study 08 / 14</span>
-    <h1><span class="line-mask"><span>Hope House</span></span></h1>
-    <div class="rule"></div>
-    <div class="cs-chips"><span class="chip">UX Design</span><span class="wire"></span><span class="chip">Brand Identity</span><span class="wire"></span><span class="chip">Research</span></div>
-  </header>
-  <div class="cs-intro reveal">
-    <div class="logo-sq empty">H</div>
-    <p class="tagline">A safe place to ask what you can&#x27;t ask</p>
-    <div>
-      <div class="table"><div class="tr"><span class="th">Role</span><span class="td">Google Developer Group VIT × NGO</span></div><div class="tr"><span class="th">Timeline</span><span class="td">2019</span></div><div class="tr"><span class="th">Context</span><span class="td">Design Lead</span></div><div class="tr"><span class="th">Tools</span><span class="td">Figma</span></div><div class="tr"><span class="th">Context</span><span class="td">Built for</span></div><div class="tr"><span class="th">Context</span><span class="td">adolescents in an</span></div><div class="tr"><span class="th">Context</span><span class="td">orthodox society</span></div><div class="tr"><span class="th">Context</span><span class="td">Anonymous</span></div><div class="tr"><span class="th">Context</span><span class="td">by Design style</span></div><div class="tr"><span class="th">Context</span><span class="td">and structure</span></div></div>
+<main class="mmain">
+  <header class="mhead">
+    <span class="crumb mono"><a href="../case-studies.html">&larr; Case Studies</a><span>08 / 14</span></span>
+    <h1 class="serif" data-lines-in>Hope House</h1>
+    <div class="rule" data-line></div>
+    <div class="mintro">
+      <div class="chips"><span class="chip">UX Design</span><span class="wire"></span><span class="chip">Brand Identity</span><span class="wire"></span><span class="chip">Research</span></div>
+      <div class="mintro-r">
+        <div class="logo-sq empty serif">H</div>
+        <p class="tagline">A safe place to ask what you can&#x27;t ask</p>
+      </div>
+    </div>
+    <div class="mtables">
+      <div class="mtable "><div class="tr" data-line><span class="th">Role</span><span class="td">Google Developer Group VIT × NGO</span></div><div class="tr" data-line><span class="th">Timeline</span><span class="td">2019</span></div><div class="tr" data-line><span class="th">Context</span><span class="td">Design Lead</span></div><div class="tr" data-line><span class="th">Tools</span><span class="td">Figma</span></div><div class="tr" data-line><span class="th">Context</span><span class="td">Built for</span></div><div class="tr" data-line><span class="th">Context</span><span class="td">adolescents in an</span></div><div class="tr" data-line><span class="th">Context</span><span class="td">orthodox society</span></div><div class="tr" data-line><span class="th">Context</span><span class="td">Anonymous</span></div><div class="tr" data-line><span class="th">Context</span><span class="td">by Design style</span></div><div class="tr" data-line><span class="th">Context</span><span class="td">and structure</span></div></div>
       
     </div>
-  </div>
-  <div class="cs-body">
-<section class="cs-sec"><span class="sec-no mono">&sect; 01</span>
-<figure class="fig wide reveal"><img src="../framerusercontent.com/images/2mw3yIG9R4kBwdghGrTGUEmanM__Q__width__E__1920__A__height__E__1080.png" alt="" loading="lazy"></figure></section>
-<section class="cs-sec"><span class="sec-no mono">&sect; 02</span><h2 class="reveal">The Problem</h2>
-<p class="reveal">An NGO in Vellore came to us with something genuinely hard: adolescents had no secure, credible place to get information about the world they were growing up in, or about themselves.</p>
-<p class="reveal">The problem wasn&#x27;t scarcity; it was the opposite. Information overload, uneven credibility, and a social context where asking certain questions out loud carries real cost. In an orthodox society a teenager can&#x27;t ask a parent about half of what they need to know. So they don&#x27;t ask, or they ask the internet and take whatever it gives them.</p></section>
-<section class="cs-sec"><span class="sec-no mono">&sect; 03</span><h2 class="reveal">My Role</h2>
-<p class="reveal">Solo Designer</p>
-<p class="reveal">On a team of five; everyone else was a developer. Identity, user flows, design system, all screens.</p></section>
-<section class="cs-sec"><span class="sec-no mono">&sect; 04</span><h2 class="reveal">The Identity</h2>
-<p class="reveal">Design Style</p>
-<p class="reveal">The design system stayed deliberately plain; clean readable type, soothing simple palette, scalable to both mobile and web. It&#x27;s a text-heavy product about difficult things. Restraint was the point.</p>
-<p class="reveal">The Logo</p>
-<p class="reveal">We wanted warm, welcoming, and instantly recognisable. We played with a simple &quot;H&quot; for recognition and a house for safety, and the final mark combines them — the letter sitting inside the shape. The idea underneath: your house is your hope.</p>
-<figure class="fig left reveal"><img src="../framerusercontent.com/images/jg7szniGkD0XUgyAQZ1yIrEIYM__Q__width__E__5760__A__height__E__3240.png" alt="" loading="lazy"></figure></section>
-<section class="cs-sec"><span class="sec-no mono">&sect; 05</span><h2 class="reveal">The decision</h2>
-<p class="reveal">The whole product turns on one choice: anonymity is the feature, not a setting.</p>
-<p class="reveal">Every instinct in social product design pushes toward identity: profiles, reputation, follower counts, the things that drive engagement. All of them would have destroyed this. A teenager asking something they&#x27;re afraid to ask their parents will not attach their name to it, however good the answer is.</p>
-<p class="reveal">So the entire experience sits behind an anonymous cloak by default. No profile-building, no social capital, no reason to perform</p></section>
-<section class="cs-sec"><span class="sec-no mono">&sect; 06</span><h2 class="reveal">What I built</h2>
-<p class="reveal">Visually separate learning from asking</p>
-<p class="reveal">Reading a post and asking a question are different emotional acts; one is passive and safe, the other takes nerve. Collapsing them into one feed would have made asking feel more exposed than it needed to. The design system draws a clear line, and the product has exactly two tabs.</p>
-<p class="reveal">Home</p>
-<p class="reveal">A post a day, by category. Pets, relationships, sexuality, language, whatever the NGO identified as needed. Every post carries its source, so users know where information came from. A short AI summary for the gist, full article for depth. A calendar so you can reach any day&#x27;s post, at your own pace.</p>
-<p class="reveal">The design system stayed deliberately plain — clean readable type, soothing simple palette, scalable to both mobile and web. It&#x27;s a text-heavy product about difficult things. Restraint was the point.</p>
-<p class="reveal">Doubts</p>
-<p class="reveal">Browse what others have asked, filtered by category, answered by verified NGO professionals. Ask your own in one tap. The system auto-categorises so it routes to the right person, with manual override if it guesses wrong.</p>
-<figure class="fig right reveal"><img src="../framerusercontent.com/images/HS3TpXfGCWM0kJNZzWjVfMKk9W8__Q__width__E__5760__A__height__E__3240.png" alt="" loading="lazy"></figure>
-<div class="callout reveal"><span class="mono">NOTE FROM FUTURE SAMARTH</span><p>Almost every engagement pattern I knew would have made this product worse. Sometimes the job is knowing which best practices to throw out; and I&#x27;d like to say I knew that going in, but honestly the NGO knew their users better than I did and I mostly had the sense to listen.</p></div></section>
+  </header>
+  <section class="msec bare" id="s0">
+<div class="mbody"><figure class="mfig c-a" data-cursor><span class="bi-mask"></span><img src="../framerusercontent.com/images/2mw3yIG9R4kBwdghGrTGUEmanM__Q__width__E__1920__A__height__E__1080.png" alt="" loading="lazy"></figure></div></section>
+<section class="msec" id="s1"><h2 class="serif" data-lines>The Problem</h2>
+<div class="mbody"><p data-lines>An NGO in Vellore came to us with something genuinely hard: adolescents had no secure, credible place to get information about the world they were growing up in, or about themselves.</p>
+<p data-lines>The problem wasn&#x27;t scarcity; it was the opposite. Information overload, uneven credibility, and a social context where asking certain questions out loud carries real cost. In an orthodox society a teenager can&#x27;t ask a parent about half of what they need to know. So they don&#x27;t ask, or they ask the internet and take whatever it gives them.</p></div></section>
+<section class="msec" id="s2"><h2 class="serif" data-lines>My Role</h2>
+<div class="mbody"><p data-lines>Solo Designer</p>
+<p data-lines>On a team of five; everyone else was a developer. Identity, user flows, design system, all screens.</p></div></section>
+<section class="msec" id="s3"><h2 class="serif" data-lines>The Identity</h2>
+<div class="mbody"><p data-lines>Design Style</p>
+<p data-lines>The design system stayed deliberately plain; clean readable type, soothing simple palette, scalable to both mobile and web. It&#x27;s a text-heavy product about difficult things. Restraint was the point.</p>
+<p data-lines>The Logo</p>
+<p data-lines>We wanted warm, welcoming, and instantly recognisable. We played with a simple &quot;H&quot; for recognition and a house for safety, and the final mark combines them — the letter sitting inside the shape. The idea underneath: your house is your hope.</p>
+<figure class="mfig c-b" data-cursor><span class="bi-mask"></span><img src="../framerusercontent.com/images/jg7szniGkD0XUgyAQZ1yIrEIYM__Q__width__E__5760__A__height__E__3240.png" alt="" loading="lazy"></figure></div></section>
+<section class="msec" id="s4"><h2 class="serif" data-lines>The decision</h2>
+<div class="mbody"><p data-lines>The whole product turns on one choice: anonymity is the feature, not a setting.</p>
+<p data-lines>Every instinct in social product design pushes toward identity: profiles, reputation, follower counts, the things that drive engagement. All of them would have destroyed this. A teenager asking something they&#x27;re afraid to ask their parents will not attach their name to it, however good the answer is.</p>
+<p data-lines>So the entire experience sits behind an anonymous cloak by default. No profile-building, no social capital, no reason to perform</p></div></section>
+<section class="msec" id="s5"><h2 class="serif" data-lines>What I built</h2>
+<div class="mbody"><p data-lines>Visually separate learning from asking</p>
+<p data-lines>Reading a post and asking a question are different emotional acts; one is passive and safe, the other takes nerve. Collapsing them into one feed would have made asking feel more exposed than it needed to. The design system draws a clear line, and the product has exactly two tabs.</p>
+<p data-lines>Home</p>
+<p data-lines>A post a day, by category. Pets, relationships, sexuality, language, whatever the NGO identified as needed. Every post carries its source, so users know where information came from. A short AI summary for the gist, full article for depth. A calendar so you can reach any day&#x27;s post, at your own pace.</p>
+<p data-lines>The design system stayed deliberately plain — clean readable type, soothing simple palette, scalable to both mobile and web. It&#x27;s a text-heavy product about difficult things. Restraint was the point.</p>
+<p data-lines>Doubts</p>
+<p data-lines>Browse what others have asked, filtered by category, answered by verified NGO professionals. Ask your own in one tap. The system auto-categorises so it routes to the right person, with manual override if it guesses wrong.</p>
+<figure class="mfig c-c" data-cursor><span class="bi-mask"></span><img src="../framerusercontent.com/images/HS3TpXfGCWM0kJNZzWjVfMKk9W8__Q__width__E__5760__A__height__E__3240.png" alt="" loading="lazy"></figure>
+<div class="callout" data-line><span class="mono">NOTE FROM FUTURE SAMARTH</span><p data-lines>Almost every engagement pattern I knew would have made this product worse. Sometimes the job is knowing which best practices to throw out; and I&#x27;d like to say I knew that going in, but honestly the NGO knew their users better than I did and I mostly had the sense to listen.</p></div></div></section>
 
-  </div>
-  <a class="cs-next" href="planteria.html">
+  <a class="mnext" href="planteria.html">
     <span class="mono">Next case study &mdash; 09</span>
-    <span class="t">Planteria <span class="arr">&rarr;</span></span>
-    <p class="tl">A plant care app that learns from its community</p>
+    <span class="t serif">Planteria</span>
+    <span class="tl">A plant care app that learns from its community</span>
+    <span class="go"><svg class="mk" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 10H18M18 2V18"/></svg></span>
   </a>
-  <footer class="cs-foot">
-    <h2>Always up for a conversation about UX, design systems or AI-native tooling</h2>
-    <div class="row">
-      <a class="btn solid" href="mailto:contact@samarthnayyar.com">Get in touch <span class="arr">&#8599;</span></a>
-      <a class="btn line" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener">Download Resume <span class="arr">&#8600;</span></a>
-    </div>
-    <div class="bar mono"><span>&copy; 2026 Samarth Nayyar</span><a href="#">Back to top &#8593;</a></div>
-  </footer>
 </main>
 </div>
-<a class="fab" href="mailto:contact@samarthnayyar.com"><span class="mk">&#8867;</span>Get in touch</a>
-<script src="../assets/js/site.js?v=3" defer></script>
+<footer class="mfoot">
+  <div class="mfoot-in">
+    <h2 class="serif" data-lines>Always up for a conversation about UX, design systems or AI-native tooling</h2>
+    <div class="mfoot-row">
+      <a class="mbtn solid" href="mailto:contact@samarthnayyar.com"><span class="rh"><span>Get in touch</span><span aria-hidden="true">Get in touch</span></span><svg class="mk" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 10H18M18 2V18"/></svg></a>
+      <a class="mbtn" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener"><span class="rh"><span>Download Resume</span><span aria-hidden="true">Download Resume</span></span><svg class="mk" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 10H18M18 2V18"/></svg></a>
+    </div>
+    <div class="mfoot-bar mono"><span>&copy; 2026 Samarth Nayyar</span><a href="#top" data-top>Back to top &uarr;</a></div>
+  </div>
+  <div class="mfoot-logo" aria-hidden="true">Samarth Nayyar</div>
+</footer>
 </body>
 </html>

@@ -9,96 +9,113 @@
 <meta property="og:description" content="A content-first photo app that deliberately excluded a social feed, raising SUS scores from 76.25 to 82.27 through iterative testing.">
 <meta property="og:image" content="https://samarthnayyar.com/framerusercontent.com/assets/p53xzYnDP6222wRMedMBfN185w.png">
 <link rel="icon" href="../framerusercontent.com/images/09KlDhJzTL23u51XmAdHalB9B0g.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/style.css?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@600;700;800&family=Instrument+Serif:ital@0;1&family=Big+Shoulders+Display:wght@300..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preload" href="../assets/fonts/GeistPixel-VF.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/css/base.css?v=4">
+<link rel="stylesheet" href="../assets/css/cs.css?v=4">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js" defer></script>
+<script src="../assets/js/base.js?v=4" defer></script>
+<script src="../assets/js/cs.js?v=4" defer></script>
 </head>
-<body class="pg-cs">
-<div class="cs">
-<aside class="cs-aside">
-  <a class="logo" href="../index.html">Samarth Nayyar</a>
-  <div class="art"><div class="frame"><div class="dither"><canvas data-dither data-src="../framerusercontent.com/images/gIszQI4GlKWgguu6gjotr8ZQs__Q__width__E__3525__A__height__E__2518.jpg"></canvas></div><svg viewBox="0 0 300 300" aria-hidden="true">
+<body class="pg-cs" data-lenis="{&quot;duration&quot;: 1.8}">
+<div class="preloader" aria-hidden="true"><div class="pl-counter mono"><span class="pl-n">0</span>%</div><div class="pl-bar"><i></i></div></div>
+<div class="pt-overlay" aria-hidden="true"></div>
+<div class="cur" aria-hidden="true"><i></i></div>
+<header class="cs-bar">
+  <a class="wm" href="../index.html" data-mask><span>Samarth Nayyar</span></a>
+  <nav class="boxnav"><a class="bx" href="../index.html"><span class="rh"><span>Index</span><span aria-hidden="true">Index</span></span></a><a class="bx is-on" href="../case-studies.html"><span class="rh"><span>Work</span><span aria-hidden="true">Work</span></span></a><a class="bx" href="../story.html"><span class="rh"><span>Story</span><span aria-hidden="true">Story</span></span></a><a class="bx" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener"><span class="rh"><span>Resume</span><span aria-hidden="true">Resume</span></span></a></nav>
+</header>
+<a class="fab" href="mailto:contact@samarthnayyar.com"><span class="fab-t">Get in touch</span><svg class="mk" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 10H18M18 2V18"/></svg></a>
+<div class="mwrap" id="top">
+<aside class="maside">
+  <div class="aside-top"><div class="aside-stick">
+  <div class="iso"><svg viewBox="0 0 300 300" aria-hidden="true">
   <path d="M150 22 L270 86 L270 214 L150 278 L30 214 L30 86 Z"/>
   <path d="M30 86 L150 150 L270 86 M150 150 L150 278"/>
   <path class="ghost" d="M150 22 L150 150 M30 214 L150 150 L270 214"/>
   <line x1="0" y1="150" x2="18" y2="150"/><line x1="282" y1="150" x2="300" y2="150"/>
-</svg></div></div>
-  <nav class="cs-index"><div class="hd"><span>&#8866;</span><span>Case Studies</span></div><a href="mphasis-blinkux.html"><span>01</span><span>Blink UX</span></a><a href="insider-vibes.html"><span>02</span><span>Paytm Insider</span></a><a href="paytm-chat.html"><span>03</span><span>Paytm Chat</span></a><a href="makemytrip.html"><span>04</span><span>MakeMyTrip</span></a><a href="airtel.html"><span>05</span><span>Airtel</span></a><a href="winuall.html"><span>06</span><span>Winuall</span></a><a href="poll-police.html"><span>07</span><span>Poll Police</span></a><a href="hope-house.html"><span>08</span><span>Hope House</span></a><a href="planteria.html"><span>09</span><span>Planteria</span></a><a href="snapshot.html" class="active"><span>10</span><span>Snapshot</span></a><a href="storewell.html"><span>11</span><span>Storewell</span></a><a href="moneylingo.html"><span>12</span><span>MoneyLingo</span></a><a href="divergent-minds-convergent-design.html"><span>13</span><span>Divergent Minds, Convergent Designs</span></a><a href="group-alarm.html"><span>14</span><span>Group Alarm</span></a></nav>
+</svg><img src="../framerusercontent.com/images/iStzpCwctgHBrcZ4Dawca0fEycU__Q__width__E__700__A__height__E__394.png" alt="" class="iso-logo"></div>
+  <nav class="mindex">
+    <a class="ni main" href="#top"><span class="no">&#8866;</span><span class="rh"><span>Snapshot</span><span aria-hidden="true">Snapshot</span></span><i class="prog"></i></a>
+    <a class="ni" href="#s1" data-sec="s1"><span class="no">01</span><span class="rh"><span>The Problem</span><span aria-hidden="true">The Problem</span></span><i class="prog"></i></a><a class="ni" href="#s2" data-sec="s2"><span class="no">02</span><span class="rh"><span>Research</span><span aria-hidden="true">Research</span></span><i class="prog"></i></a><a class="ni" href="#s3" data-sec="s3"><span class="no">03</span><span class="rh"><span>The decision</span><span aria-hidden="true">The decision</span></span><i class="prog"></i></a><a class="ni" href="#s4" data-sec="s4"><span class="no">04</span><span class="rh"><span>Process</span><span aria-hidden="true">Process</span></span><i class="prog"></i></a><a class="ni" href="#s5" data-sec="s5"><span class="no">05</span><span class="rh"><span>What was shipped</span><span aria-hidden="true">What was shipped</span></span><i class="prog"></i></a><a class="ni" href="#s6" data-sec="s6"><span class="no">06</span><span class="rh"><span>The result</span><span aria-hidden="true">The result</span></span><i class="prog"></i></a>
+  </nav>
+  </div></div>
+  <nav class="mothers"><span class="hd mono">&#8866; Case Studies</span><a class="oi" href="mphasis-blinkux.html"><span class="no">01</span><span>Blink UX</span></a><a class="oi" href="insider-vibes.html"><span class="no">02</span><span>Paytm Insider</span></a><a class="oi" href="paytm-chat.html"><span class="no">03</span><span>Paytm Chat</span></a><a class="oi" href="makemytrip.html"><span class="no">04</span><span>MakeMyTrip</span></a><a class="oi" href="airtel.html"><span class="no">05</span><span>Airtel</span></a><a class="oi" href="winuall.html"><span class="no">06</span><span>Winuall</span></a><a class="oi" href="poll-police.html"><span class="no">07</span><span>Poll Police</span></a><a class="oi" href="hope-house.html"><span class="no">08</span><span>Hope House</span></a><a class="oi" href="planteria.html"><span class="no">09</span><span>Planteria</span></a><a class="oi is-on" href="snapshot.html"><span class="no">10</span><span>Snapshot</span></a><a class="oi" href="storewell.html"><span class="no">11</span><span>Storewell</span></a><a class="oi" href="moneylingo.html"><span class="no">12</span><span>MoneyLingo</span></a><a class="oi" href="divergent-minds-convergent-design.html"><span class="no">13</span><span>Divergent Minds, Convergent Designs</span></a><a class="oi" href="group-alarm.html"><span class="no">14</span><span>Group Alarm</span></a></nav>
 </aside>
-<main class="cs-main">
-  <div class="cs-top">
-    <span class="crumb mono"><a href="../case-studies.html">&#8592; Work</a> / 10</span>
-    <nav class="tabs"><a href="../index.html">Index</a><a href="../case-studies.html" class="active">Work</a><a href="../story.html">Story</a><a href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true">Resume</a></nav>
-  </div>
-  <header class="cs-head">
-    <span class="mono">Case Study 10 / 14</span>
-    <h1><span class="line-mask"><span>Snapshot</span></span></h1>
-    <div class="rule"></div>
-    <div class="cs-chips"><span class="chip">UX Design</span><span class="wire"></span><span class="chip">Research</span><span class="wire"></span><span class="chip">Shadowing</span><span class="wire"></span><span class="chip">Design Systems</span></div>
+<main class="mmain">
+  <header class="mhead">
+    <span class="crumb mono"><a href="../case-studies.html">&larr; Case Studies</a><span>10 / 14</span></span>
+    <h1 class="serif" data-lines-in>Snapshot</h1>
+    <div class="rule" data-line></div>
+    <div class="mintro">
+      <div class="chips"><span class="chip">UX Design</span><span class="wire"></span><span class="chip">Research</span><span class="wire"></span><span class="chip">Shadowing</span><span class="wire"></span><span class="chip">Design Systems</span></div>
+      <div class="mintro-r">
+        <div class="logo-sq"><img src="../framerusercontent.com/images/iStzpCwctgHBrcZ4Dawca0fEycU__Q__width__E__700__A__height__E__394.png" alt="Snapshot logo"></div>
+        <p class="tagline">Real-time feedback while you shoot, not after</p>
+      </div>
+    </div>
+    <div class="mtables">
+      <div class="mtable "><div class="tr" data-line><span class="th">Timeline</span><span class="td">2023</span></div><div class="tr" data-line><span class="th">Role</span><span class="td">Product Designer</span></div><div class="tr" data-line><span class="th">Tools</span><span class="td">Figma · After Effects · Illustrator</span></div></div>
+      <div class="mtable stats"><div class="tr" data-line><span class="th">Interviews</span><span class="td">10</span></div><div class="tr" data-line><span class="th">Survey Responses 76.25 to 82.27 Jump in SUS</span><span class="td">80+</span></div></div>
+    </div>
   </header>
-  <div class="cs-intro reveal">
-    <div class="logo-sq"><img src="../framerusercontent.com/images/iStzpCwctgHBrcZ4Dawca0fEycU__Q__width__E__700__A__height__E__394.png" alt="Snapshot logo"></div>
-    <p class="tagline">Real-time feedback while you shoot, not after</p>
-    <div>
-      <div class="table"><div class="tr"><span class="th">Timeline</span><span class="td">2023</span></div><div class="tr"><span class="th">Role</span><span class="td">Product Designer</span></div><div class="tr"><span class="th">Tools</span><span class="td">Figma · After Effects · Illustrator</span></div></div>
-      <div class="table stats" style="margin-top:28px"><div class="tr"><span class="th">Interviews</span><span class="td big">10</span></div><div class="tr"><span class="th">Survey Responses 76.25 to 82.27 Jump in SUS</span><span class="td big">80+</span></div></div>
-    </div>
-  </div>
-  <div class="cs-body">
-<section class="cs-sec"><span class="sec-no mono">&sect; 01</span>
-<figure class="fig wide reveal"><img src="../framerusercontent.com/images/gIszQI4GlKWgguu6gjotr8ZQs__Q__width__E__3525__A__height__E__2518.jpg" alt="" loading="lazy"></figure></section>
-<section class="cs-sec"><span class="sec-no mono">&sect; 02</span><h2 class="reveal">The Problem</h2>
-<p class="reveal">There are hundreds of photo apps, and almost none of them help you take a better photo. Every suggestion arrives afterwards, in edit mode; which is exactly the wrong moment. The critical time is while you&#x27;re holding the camera up.</p>
-<p class="reveal">Our starting concept came from a shared interest in music, photography, and film: recreate famous photos and movie scenes based on where you&#x27;re standing. That grew into something wider: templates, pose guidance, and real-time feedback.</p></section>
-<section class="cs-sec"><span class="sec-no mono">&sect; 03</span><h2 class="reveal">Research</h2>
-<p class="reveal">10 Interviews</p>
-<p class="reveal">With people across a range of photography skill, friends and family included. What devices, when they shoot, what frustrates them. People overwhelmingly use phones, shoot most when travelling or somewhere new, and want something nice enough to share — but not everyone&#x27;s a professional and the effort is real.</p>
-<p class="reveal">Qualtrics Survey</p>
-<p class="reveal">80+ responses, asking what apps they use, what their goals are, which features they&#x27;d want, and to rank those features. We selected nine essential features from it.</p>
-<p class="reveal">Ideas (everything, good or bad), Product Goals (merged into real-world actions), Users (scenarios)</p>
-<p class="reveal">80+ responses, asking what apps they use, what their goals are, which features they&#x27;d want, and to rank those features. We selected nine essential features from it.</p>
-<p class="reveal">Competitive Analysis</p>
-<p class="reveal">Across Instagram, Snapchat, TikTok, VSCO, AiryCam, and Ulike confirmed the gap: nobody was doing real-time guidance during capture.</p>
-<div class="pair"><img class="reveal" src="../framerusercontent.com/images/ma9Qk1bkOr38gywKWi2eNNBmOE__Q__width__E__2809__A__height__E__2265.png" alt="" loading="lazy"><img class="reveal" src="../framerusercontent.com/images/AhP9NYA6OklgfQ2gR0IZKtj937g__Q__width__E__1868__A__height__E__1109.png" alt="" loading="lazy"><img class="reveal" src="../framerusercontent.com/images/6tTbkXggWgQCAJ4DO2QEdXXmgM.svg" alt="" loading="lazy"><img class="reveal" src="../framerusercontent.com/images/11KSGbIZoRSg4pjdnUoif6MKHI.svg" alt="" loading="lazy"></div></section>
-<section class="cs-sec"><span class="sec-no mono">&sect; 04</span><h2 class="reveal">The decision</h2>
-<div class="callout reveal"><span class="mono">WE CUT THE COMMUNITY FEED</span><p>For a photo app this is close to heresy; social is the obvious growth engine, and every competitor we studied leaned on it. We chose content creation over social networking and deliberately left the feed out. The product does one thing: help you take a better picture. Adding a feed would have made it a worse version of six apps that already exist.</p></div>
-<div class="callout reveal"><span class="mono">WE KEPT TEMPLATES CONTRARY TO SURVEY RESULTS</span><p>Only 38% ranked photo/video templates as high priority, under our own bar. We kept the feature anyway, because it was the differentiator and because a survey measures what people can imagine, not what they&#x27;d use once it existed. The concept tests backed that up: pose recommendations and spot suggestions were what people responded to most.</p></div></section>
-<section class="cs-sec"><span class="sec-no mono">&sect; 05</span><h2 class="reveal">Process</h2>
-<p class="reveal">Crazy 8s</p>
-<p class="reveal">Eight sketches each in eight minutes, then presenting to find common themes. Camera flow, search, and map integration surfaced immediately.</p>
-<p class="reveal">Then wireframes, then concept testing with hand-drawn sketches deliberately kept rough so people understood it was a work in progress and felt free to criticise it.</p>
-<figure class="fig left reveal"><img src="../framerusercontent.com/images/jlEg7a8hsbFz1Rxud0PcZVkFtw__Q__width__E__3761__A__height__E__2004.png" alt="" loading="lazy"></figure>
-<p class="reveal">Medium Fidelity</p>
-<p class="reveal">Moderated usability testing over Zoom and Figma, thinking aloud. SUS: 76.25. Above the 68 average, not good enough. We fixed four things: specific search instructions like &quot;Search Barton Springs&quot;, a progress indicator, clearer real-time feedback, and a browsing function in maps.</p>
-<figure class="fig right reveal"><img src="../framerusercontent.com/images/hjIa7ilIz1uklZ7wuHBjGLaLik__Q__width__E__1352__A__height__E__1161.png" alt="" loading="lazy"></figure></section>
-<section class="cs-sec"><span class="sec-no mono">&sect; 06</span><h2 class="reveal">What was shipped</h2>
-<p class="reveal">High Fidelity Designs</p>
-<p class="reveal">Building upon our mid-fidelity screens, we elevated the design to a high-fidelity level. We developed a design system, incorporating a color palette and iconography for a cohesive visual identity. High-fidelity screens aimed to enhance the app&#x27;s visual appeal while maintaining user-friendliness.</p>
-<p class="reveal">Unmoderated Usability Testing</p>
-<p class="reveal">With high-fidelity screens in place, we conducted unmoderated usability testing using UserTesting.com. This phase involved 10 participants who completed specific tasks within the app. The feedback gathered helped fine-tune the app, addressing issues like instruction clarity and user understanding of features. Achieving an SUS score of 82.27 indicated improved usability</p>
-<div class="pair"><img class="reveal" src="../framerusercontent.com/images/O2AYZQ5agdMckbktaP2UNge9ys__Q__width__E__4096__A__height__E__3902.webp" alt="" loading="lazy"><img class="reveal" src="../framerusercontent.com/images/DJYcJVATxbX80bUM4aSC1IMyngw__Q__width__E__3760__A__height__E__2152.png" alt="" loading="lazy"></div></section>
-<section class="cs-sec"><span class="sec-no mono">&sect; 07</span><h2 class="reveal">The result</h2>
-<div class="stat-line reveal"><span class="n">10</span><span class="l">Interviews</span></div>
-<div class="stat-line reveal"><span class="n">80+</span><span class="l">Survey Responses 76.25 to 82.27 Jump in SUS</span></div>
-<p class="reveal">Feedback was strong enough that some participants asked when they could actually use it. Error, action, and success colours were praised for clarity, and people specifically liked that the step messaging felt human. Icons around editing and saving still confused people.</p>
-<div class="callout reveal"><span class="mono">NOTE FROM FUTURE SAMARTH</span><p>We tested with 10 and got a good SUS score, and I&#x27;d treat that with more suspicion now. A camera app lives or dies in real conditions; bad light, moving subjects, one hand full. Every test we ran was someone calmly holding a phone in a quiet room.</p></div></section>
+  <section class="msec bare" id="s0">
+<div class="mbody"><figure class="mfig c-a" data-cursor><span class="bi-mask"></span><img src="../framerusercontent.com/images/gIszQI4GlKWgguu6gjotr8ZQs__Q__width__E__3525__A__height__E__2518.jpg" alt="" loading="lazy"></figure></div></section>
+<section class="msec" id="s1"><h2 class="serif" data-lines>The Problem</h2>
+<div class="mbody"><p data-lines>There are hundreds of photo apps, and almost none of them help you take a better photo. Every suggestion arrives afterwards, in edit mode; which is exactly the wrong moment. The critical time is while you&#x27;re holding the camera up.</p>
+<p data-lines>Our starting concept came from a shared interest in music, photography, and film: recreate famous photos and movie scenes based on where you&#x27;re standing. That grew into something wider: templates, pose guidance, and real-time feedback.</p></div></section>
+<section class="msec" id="s2"><h2 class="serif" data-lines>Research</h2>
+<div class="mbody"><p data-lines>10 Interviews</p>
+<p data-lines>With people across a range of photography skill, friends and family included. What devices, when they shoot, what frustrates them. People overwhelmingly use phones, shoot most when travelling or somewhere new, and want something nice enough to share — but not everyone&#x27;s a professional and the effort is real.</p>
+<p data-lines>Qualtrics Survey</p>
+<p data-lines>80+ responses, asking what apps they use, what their goals are, which features they&#x27;d want, and to rank those features. We selected nine essential features from it.</p>
+<p data-lines>Ideas (everything, good or bad), Product Goals (merged into real-world actions), Users (scenarios)</p>
+<p data-lines>80+ responses, asking what apps they use, what their goals are, which features they&#x27;d want, and to rank those features. We selected nine essential features from it.</p>
+<p data-lines>Competitive Analysis</p>
+<p data-lines>Across Instagram, Snapchat, TikTok, VSCO, AiryCam, and Ulike confirmed the gap: nobody was doing real-time guidance during capture.</p>
+<div class="mpair n4"><figure class="mfig" data-cursor><span class="bi-mask"></span><img src="../framerusercontent.com/images/ma9Qk1bkOr38gywKWi2eNNBmOE__Q__width__E__2809__A__height__E__2265.png" alt="" loading="lazy"></figure><figure class="mfig" data-cursor><span class="bi-mask"></span><img src="../framerusercontent.com/images/AhP9NYA6OklgfQ2gR0IZKtj937g__Q__width__E__1868__A__height__E__1109.png" alt="" loading="lazy"></figure><figure class="mfig" data-cursor><span class="bi-mask"></span><img src="../framerusercontent.com/images/6tTbkXggWgQCAJ4DO2QEdXXmgM.svg" alt="" loading="lazy"></figure><figure class="mfig" data-cursor><span class="bi-mask"></span><img src="../framerusercontent.com/images/11KSGbIZoRSg4pjdnUoif6MKHI.svg" alt="" loading="lazy"></figure></div></div></section>
+<section class="msec" id="s3"><h2 class="serif" data-lines>The decision</h2>
+<div class="mbody"><div class="callout" data-line><span class="mono">WE CUT THE COMMUNITY FEED</span><p data-lines>For a photo app this is close to heresy; social is the obvious growth engine, and every competitor we studied leaned on it. We chose content creation over social networking and deliberately left the feed out. The product does one thing: help you take a better picture. Adding a feed would have made it a worse version of six apps that already exist.</p></div>
+<div class="callout" data-line><span class="mono">WE KEPT TEMPLATES CONTRARY TO SURVEY RESULTS</span><p data-lines>Only 38% ranked photo/video templates as high priority, under our own bar. We kept the feature anyway, because it was the differentiator and because a survey measures what people can imagine, not what they&#x27;d use once it existed. The concept tests backed that up: pose recommendations and spot suggestions were what people responded to most.</p></div></div></section>
+<section class="msec" id="s4"><h2 class="serif" data-lines>Process</h2>
+<div class="mbody"><p data-lines>Crazy 8s</p>
+<p data-lines>Eight sketches each in eight minutes, then presenting to find common themes. Camera flow, search, and map integration surfaced immediately.</p>
+<p data-lines>Then wireframes, then concept testing with hand-drawn sketches deliberately kept rough so people understood it was a work in progress and felt free to criticise it.</p>
+<figure class="mfig c-b" data-cursor><span class="bi-mask"></span><img src="../framerusercontent.com/images/jlEg7a8hsbFz1Rxud0PcZVkFtw__Q__width__E__3761__A__height__E__2004.png" alt="" loading="lazy"></figure>
+<p data-lines>Medium Fidelity</p>
+<p data-lines>Moderated usability testing over Zoom and Figma, thinking aloud. SUS: 76.25. Above the 68 average, not good enough. We fixed four things: specific search instructions like &quot;Search Barton Springs&quot;, a progress indicator, clearer real-time feedback, and a browsing function in maps.</p>
+<figure class="mfig c-c" data-cursor><span class="bi-mask"></span><img src="../framerusercontent.com/images/hjIa7ilIz1uklZ7wuHBjGLaLik__Q__width__E__1352__A__height__E__1161.png" alt="" loading="lazy"></figure></div></section>
+<section class="msec" id="s5"><h2 class="serif" data-lines>What was shipped</h2>
+<div class="mbody"><p data-lines>High Fidelity Designs</p>
+<p data-lines>Building upon our mid-fidelity screens, we elevated the design to a high-fidelity level. We developed a design system, incorporating a color palette and iconography for a cohesive visual identity. High-fidelity screens aimed to enhance the app&#x27;s visual appeal while maintaining user-friendliness.</p>
+<p data-lines>Unmoderated Usability Testing</p>
+<p data-lines>With high-fidelity screens in place, we conducted unmoderated usability testing using UserTesting.com. This phase involved 10 participants who completed specific tasks within the app. The feedback gathered helped fine-tune the app, addressing issues like instruction clarity and user understanding of features. Achieving an SUS score of 82.27 indicated improved usability</p>
+<div class="mpair n2"><figure class="mfig" data-cursor><span class="bi-mask"></span><img src="../framerusercontent.com/images/O2AYZQ5agdMckbktaP2UNge9ys__Q__width__E__4096__A__height__E__3902.webp" alt="" loading="lazy"></figure><figure class="mfig" data-cursor><span class="bi-mask"></span><img src="../framerusercontent.com/images/DJYcJVATxbX80bUM4aSC1IMyngw__Q__width__E__3760__A__height__E__2152.png" alt="" loading="lazy"></figure></div></div></section>
+<section class="msec" id="s6"><h2 class="serif" data-lines>The result</h2>
+<div class="mbody"><div class="statrow" data-line><span class="th">Interviews</span><span class="td serif">10</span></div>
+<div class="statrow" data-line><span class="th">Survey Responses 76.25 to 82.27 Jump in SUS</span><span class="td serif">80+</span></div>
+<p data-lines>Feedback was strong enough that some participants asked when they could actually use it. Error, action, and success colours were praised for clarity, and people specifically liked that the step messaging felt human. Icons around editing and saving still confused people.</p>
+<div class="callout" data-line><span class="mono">NOTE FROM FUTURE SAMARTH</span><p data-lines>We tested with 10 and got a good SUS score, and I&#x27;d treat that with more suspicion now. A camera app lives or dies in real conditions; bad light, moving subjects, one hand full. Every test we ran was someone calmly holding a phone in a quiet room.</p></div></div></section>
 
-  </div>
-  <a class="cs-next" href="storewell.html">
+  <a class="mnext" href="storewell.html">
     <span class="mono">Next case study &mdash; 11</span>
-    <span class="t">Storewell <span class="arr">&rarr;</span></span>
-    <p class="tl">When you need fridge shelves, not folders</p>
+    <span class="t serif">Storewell</span>
+    <span class="tl">When you need fridge shelves, not folders</span>
+    <span class="go"><svg class="mk" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 10H18M18 2V18"/></svg></span>
   </a>
-  <footer class="cs-foot">
-    <h2>Always up for a conversation about UX, design systems or AI-native tooling</h2>
-    <div class="row">
-      <a class="btn solid" href="mailto:contact@samarthnayyar.com">Get in touch <span class="arr">&#8599;</span></a>
-      <a class="btn line" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener">Download Resume <span class="arr">&#8600;</span></a>
-    </div>
-    <div class="bar mono"><span>&copy; 2026 Samarth Nayyar</span><a href="#">Back to top &#8593;</a></div>
-  </footer>
 </main>
 </div>
-<a class="fab" href="mailto:contact@samarthnayyar.com"><span class="mk">&#8867;</span>Get in touch</a>
-<script src="../assets/js/site.js?v=3" defer></script>
+<footer class="mfoot">
+  <div class="mfoot-in">
+    <h2 class="serif" data-lines>Always up for a conversation about UX, design systems or AI-native tooling</h2>
+    <div class="mfoot-row">
+      <a class="mbtn solid" href="mailto:contact@samarthnayyar.com"><span class="rh"><span>Get in touch</span><span aria-hidden="true">Get in touch</span></span><svg class="mk" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 10H18M18 2V18"/></svg></a>
+      <a class="mbtn" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener"><span class="rh"><span>Download Resume</span><span aria-hidden="true">Download Resume</span></span><svg class="mk" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 10H18M18 2V18"/></svg></a>
+    </div>
+    <div class="mfoot-bar mono"><span>&copy; 2026 Samarth Nayyar</span><a href="#top" data-top>Back to top &uarr;</a></div>
+  </div>
+  <div class="mfoot-logo" aria-hidden="true">Samarth Nayyar</div>
+</footer>
 </body>
 </html>

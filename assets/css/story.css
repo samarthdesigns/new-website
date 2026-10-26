@@ -79,6 +79,7 @@
 .xproj.single .xcap{min-height:0}
 .xproj.single{padding-block:var(--band);align-items:center}
 .xproj.single .xpin{height:auto}
+.xthumb{display:none}
 
 /* ---- marquee bands (landing marquee: pixel + serif, hairlines, stickers between) */
 .xband{display:block;overflow:hidden;padding-block:34px 30px;border-bottom:1px solid var(--line);color:var(--ink);user-select:none}
@@ -102,12 +103,13 @@
   .xcap{min-height:0;margin-bottom:40px}
   .xh{font-size:40px}
   .xb-track>span{font-size:72px}
-  /* multi-card stack: sticky under the navbar, captions scroll beneath and swap cards */
-  .xproj:not(.single){row-gap:0}
-  .xproj:not(.single) .xpin{position:sticky;top:102px;z-index:2;padding:32px 0 40px;background:var(--ink)}
-  .xproj:not(.single) .xstack{width:min(86%,460px)}
-  .xproj:not(.single) .xcaps{padding:0 0 30vh}
-  .xproj:not(.single) .xcap{min-height:70vh;justify-content:flex-start;padding-top:24px;margin:0}
+  /* multi-card stack on phones: no pin, each project is its image + caption in plain flow */
+  .xproj:not(.single) .xpin{display:none}
+  .xproj:not(.single) .xcaps{padding:72px 0 32px}
+  .xproj:not(.single) .xcap{min-height:0;margin:0 0 64px;gap:20px}
+  .xcap .t{font-size:38px}
+  .xthumb{display:block;width:100%;aspect-ratio:4/3;border:10px solid var(--fr);overflow:hidden;background:#222}
+  .xthumb img{width:100%;height:100%;object-fit:cover}
 }
 .pg-story .links--1{width:min(229px,100%)}
 .pg-story .links--2{width:min(459px,100%);margin-top:24px}

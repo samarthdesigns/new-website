@@ -112,7 +112,7 @@
       gsap.set(pill, {scale: .6, transformOrigin: '0 0'});
     }
     /* whole-row click for [data-href] */
-    qa('[data-href]').forEach(r => r.addEventListener('click', e => { if (!e.target.closest('a')) location.href = r.dataset.href; }));
+    qa('[data-href]').forEach(r => r.addEventListener('click', e => { if (!e.target.closest('a')) (SN.go || (u => location.href = u))(r.dataset.href); }));
   });
 })();
 
@@ -151,7 +151,9 @@
 })();
 
 /* "Listen to what I like": nav pill plays a small playlist through a hidden YouTube player.
-   Silent until clicked (nothing loads before that); track + position carry over between pages. */
+   Silent until clicked; the on/off choice, track and position are remembered (localStorage).
+   While it plays, internal links open in a full-screen frame over this page, so the player here never unloads
+   and the music runs on uninterrupted. Pages inside the frame drive this player through window.SNMusic. */
 (function(){
   const btn = document.querySelector('.nav__music'); if (!btn) return;
   const lab = btn.querySelector('.nav__music-l');
@@ -162,37 +164,109 @@
     ['2IE3T9mcqyM', 'Prey', 'The Neighbourhood'],
     ['zvCBSSwgtg4', 'Ho Hey', 'The Lumineers']
   ];
-  const KEY = 'sn-music', IDLE = 'Listen to what I like';
-  let st = {}; try { st = JSON.parse(sessionStorage.getItem(KEY)) || {}; } catch (e) {}
-  let i = st.i || 0, player = null, ready = null, on = false, fails = 0;
-  const save = () => { try { sessionStorage.setItem(KEY, JSON.stringify({i, t: player && player.getCurrentTime ? player.getCurrentTime() : 0, on})); } catch (e) {} };
+  let host = null; try { if (parent !== window && parent.SNMusic) host = parent.SNMusic; } catch (e) {}
+  const M = host || (window.SNMusic = engine());
+
+  function engine(){
+    const KEY = 'sn-music'; let st = {}; try { st = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+    const m = {i: (st.i | 0) % SONGS.length, on: false}, subs = new Set();
+    let player = null, ready = null, fails = 0;
+    const emit = () => subs.forEach(f => { try { f(m); } catch (e) { subs.delete(f); } });
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify({i: m.i, on: m.on, t: player && player.getCurrentTime ? player.getCurrentTime() : 0})); } catch (e) {} };
+    const load = () => ready || (ready = new Promise(res => {
+      const box = document.createElement('div');
+      box.style.cssText = 'position:fixed;left:0;bottom:0;width:2px;height:2px;opacity:0;pointer-events:none;overflow:hidden;z-index:-1';
+      box.innerHTML = '<div id="sn-yt"></div>'; document.body.appendChild(box);
+      const make = () => { player = new YT.Player('sn-yt', {width: 2, height: 2, videoId: SONGS[m.i][0],
+        playerVars: {autoplay: 0, controls: 0, disablekb: 1, playsinline: 1, rel: 0, start: Math.floor(st.t || 0)},
+        events: {onReady: () => res(player),
+          onStateChange: e => { if (e.data === 1) { fails = 0; if (!m.on) { m.on = true; emit(); save(); } } if (e.data === 0) m.next(); },
+          onError: () => { if (++fails < SONGS.length) m.next(); else { m.on = false; emit(); } }}}); };
+      if (window.YT && YT.Player) make();
+      else { const prev = window.onYouTubeIframeAPIReady; window.onYouTubeIframeAPIReady = () => { prev && prev(); make(); };
+        const sc = document.createElement('script'); sc.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(sc); }
+    }));
+    const start = p => { p.unMute(); p.setVolume(70); p.playVideo(); };
+    m.sub = f => { subs.add(f); f(m); return () => subs.delete(f); };
+    m.play = () => { m.on = true; emit(); save(); load().then(start); };
+    m.pause = () => { m.on = false; emit(); save(); if (player && player.pauseVideo) player.pauseVideo(); };
+    m.pick = k => { m.i = k; st.t = 0; m.on = true; emit(); save();
+      load().then(p => { p.unMute(); p.setVolume(70); p.loadVideoById(SONGS[k][0]); }); };
+    m.next = () => { m.i = (m.i + 1) % SONGS.length; st.t = 0; if (player) player.loadVideoById(SONGS[m.i][0]); emit(); save(); };
+    addEventListener('pagehide', save);
+    /* it was on last time: carry on. Browsers that hold sound until a tap get it back on the first tap or key press. */
+    if (st.on) {
+      m.on = true;
+      const evs = ['pointerdown', 'keydown'], off = () => evs.forEach(t => removeEventListener(t, kick, true));
+      function kick(e){ off(); if (!(e.target.closest && e.target.closest('.music'))) m.play(); }
+      load().then(p => { start(p); setTimeout(() => { if (p.getPlayerState && p.getPlayerState() !== 1) {
+        m.on = false; emit(); evs.forEach(t => addEventListener(t, kick, true)); } }, 2500); });
+    }
+    return m;
+  }
+
+  /* host page only: while music is on, internal links open in the frame instead of reloading this page */
+  if (!host) {
+    let frame = null, title0 = document.title;
+    const internal = u => u.origin === location.origin && /(\.html|\/)$/.test(u.pathname);
+    const close = () => { if (!frame) return; frame.remove(); frame = null; document.title = title0;
+      document.documentElement.classList.remove('sn-framed'); gsap.ticker.wake(); if (SN.lenis) SN.lenis.start(); };
+    const open = url => {
+      if (frame) { frame.src = url; return; }
+      frame = document.createElement('iframe'); frame.className = 'sn-frame'; frame.title = 'Samarth Nayyar';
+      frame.src = url; document.body.appendChild(frame);
+      history.pushState({sn: 1}, '', url);
+      frame.addEventListener('load', () => {
+        try { const w = frame.contentWindow; history.replaceState({sn: 1}, '', w.location.href); document.title = w.document.title; } catch (e) {}
+        if (!frame.classList.contains('is-in')) { frame.classList.add('is-in');
+          document.documentElement.classList.add('sn-framed'); if (SN.lenis) SN.lenis.stop(); setTimeout(() => gsap.ticker.sleep(), 500); }
+      });
+    };
+    SN.go = url => { const u = new URL(url, location.href); if (M.on && internal(u)) open(u.href); else location.href = u.href; };
+    document.addEventListener('click', e => {
+      if (!M.on || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = e.target.closest('a[href]'); if (!a || (a.target && a.target !== '_self') || a.hasAttribute('download')) return;
+      const u = new URL(a.href, location.href); if (!internal(u)) return;
+      e.preventDefault(); open(u.href);
+    });
+    /* back past the first framed page returns to this one */
+    addEventListener('popstate', e => { if (frame && !(e.state && e.state.sn)) close(); });
+  } else {
+    /* inside the frame: links that leave the site take the whole window with them */
+    document.addEventListener('click', e => {
+      const a = e.target.closest('a[href]'); if (!a || e.defaultPrevented || (a.target && a.target !== '_self')) return;
+      const u = new URL(a.href, location.href); if (u.origin === location.origin) return;
+      e.preventDefault(); top.location.href = u.href;
+    });
+  }
+
+  /* ui: pill toggles play; hovering (or a tap on touch screens) shows the playlist */
+  const wrap = document.createElement('div'); wrap.className = 'music';
+  btn.replaceWith(wrap); wrap.append(btn);
+  const list = document.createElement('ul'); list.className = 'music__list'; list.setAttribute('aria-label', 'Songs');
+  list.innerHTML = SONGS.map((s, k) => `<li><button type="button" data-k="${k}"><span class="music__n">${String(k + 1).padStart(2, '0')}</span><span class="music__s"><b>${s[1]}</b><small>${s[2]}</small></span><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span></button></li>`).join('');
+  wrap.append(list);
+  const touch = !matchMedia('(hover:hover)').matches;
+  const setOpen = v => wrap.classList.toggle('is-open', v);
+  btn.addEventListener('click', () => {
+    if (!touch) return M.on ? M.pause() : M.play();
+    if (!M.on) { M.play(); setOpen(true); } else if (!wrap.classList.contains('is-open')) setOpen(true); else { M.pause(); setOpen(false); }
+  });
+  list.addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (!b) return; const k = +b.dataset.k;
+    if (k === M.i && M.on) M.pause(); else M.pick(k); if (touch) setTimeout(() => setOpen(false), 450); });
+  document.addEventListener('pointerdown', e => { if (!wrap.contains(e.target)) setOpen(false); });
+  addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+
   /* label swap: old text slides up and out, new text rises in */
   const say = txt => { if (lab.textContent === txt) return;
     lab.classList.add('is-out');
     setTimeout(() => { lab.textContent = txt; lab.classList.remove('is-out'); lab.classList.add('is-in');
       requestAnimationFrame(() => requestAnimationFrame(() => lab.classList.remove('is-in'))); }, 280); };
-  const paint = () => { btn.classList.toggle('is-on', on); btn.setAttribute('aria-pressed', on);
-    const s = SONGS[i]; say(on ? `${s[1]} · ${s[2]}` : IDLE);
-    btn.setAttribute('aria-label', on ? `Pause music: ${s[1]} by ${s[2]}` : 'Listen to what I like (plays music)'); };
-  const load = () => ready || (ready = new Promise(res => {
-    const box = document.createElement('div');
-    box.style.cssText = 'position:fixed;left:0;bottom:0;width:2px;height:2px;opacity:0;pointer-events:none;overflow:hidden;z-index:-1';
-    box.innerHTML = '<div id="sn-yt"></div>'; document.body.appendChild(box);
-    const make = () => { player = new YT.Player('sn-yt', {width: 2, height: 2, videoId: SONGS[i][0],
-      playerVars: {autoplay: 0, controls: 0, disablekb: 1, playsinline: 1, rel: 0, start: Math.floor(st.t || 0)},
-      events: {onReady: () => res(player),
-        onStateChange: e => { if (e.data === 1) { fails = 0; if (!on) { on = true; paint(); } } if (e.data === 0) next(); },
-        onError: () => { if (++fails < SONGS.length) next(); else { on = false; paint(); } }}}); };
-    if (window.YT && YT.Player) make();
-    else { const prev = window.onYouTubeIframeAPIReady; window.onYouTubeIframeAPIReady = () => { prev && prev(); make(); };
-      const s = document.createElement('script'); s.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(s); }
-  }));
-  const next = () => { i = (i + 1) % SONGS.length; st.t = 0; if (player) player.loadVideoById(SONGS[i][0]); paint(); save(); };
-  const play = () => { on = true; paint(); load().then(p => { p.unMute(); p.setVolume(70); p.playVideo(); }); };
-  const pause = () => { on = false; paint(); if (player && player.pauseVideo) player.pauseVideo(); save(); };
-  btn.addEventListener('click', () => on ? pause() : play());
-  addEventListener('pagehide', save);
-  /* was playing on the previous page: try to pick up where it left off (browsers may need a click first) */
-  if (st.on) { const resume = () => { load().then(p => { p.playVideo(); setTimeout(() => { if (p.getPlayerState && p.getPlayerState() !== 1) { on = false; paint(); } }, 2500); }); };
-    on = true; paint(); setTimeout(resume, 600); }
+  const paint = m => { const s = SONGS[m.i];
+    btn.classList.toggle('is-on', m.on); wrap.classList.toggle('is-on', m.on); btn.setAttribute('aria-pressed', m.on);
+    say(m.on ? `${s[1]} · ${s[2]}` : 'Listen to what I like');
+    btn.setAttribute('aria-label', m.on ? `Pause music: ${s[1]} by ${s[2]}` : 'Listen to what I like (plays music)');
+    list.querySelectorAll('[data-k]').forEach(b => b.classList.toggle('is-cur', +b.dataset.k === m.i)); };
+  const unsub = M.sub(paint);
+  addEventListener('pagehide', unsub);
 })();

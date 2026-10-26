@@ -94,7 +94,6 @@
       return () => gsap.set(qa('[data-featured-stack-slide]'), {clearProps: 'all'});
     };
     mm.add('(min-width: 992px)', stack(true));
-    mm.add('(max-width: 991px)', stack(false));
     qa('.xcap').forEach(c => gsap.from(c.children, {y: 40, autoAlpha: 0, duration: 1, ease: 'expo.out', stagger: .08,
       scrollTrigger: {trigger: c, start: 'top 75%', once: true}}));
     qa('.xproj.single .xslide').forEach(s => gsap.from(s, {yPercent: 18, rotation: -4, autoAlpha: 0, duration: 1.4, ease: 'expo.out',

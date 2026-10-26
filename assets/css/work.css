@@ -1,0 +1,29 @@
+/* WORK INDEX — extrafazant /werk structure (kicker + big title, staggered framed card columns), landing style. */
+.whero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:32px;padding:100px var(--gutter) 90px}
+.whero__t{font-size:min(220px,(100vw - 2*var(--gutter))*.16);margin:0}
+.whero__jump{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 52px;list-style:none;margin:0;padding:0;font-size:14px;line-height:16.8px;letter-spacing:1.12px;text-transform:uppercase}
+.whero__jump a span{display:inline-block;transition:transform .45s var(--liquid)}
+.whero__jump a:hover span{transform:translateY(4px)}
+.wgroup__head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
+.wgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:start;padding-block:var(--band-sm) calc(var(--band) + 40px)}
+.wgrid--2{grid-template-columns:repeat(2,minmax(0,1fr));width:min(900px,100% - 2*var(--gutter))}
+.wgrid--1{grid-template-columns:minmax(0,440px);justify-content:center}
+.wcol{display:flex;flex-direction:column;gap:24px;will-change:transform}
+.wgrid--3 .wcol--0,.wgrid--3 .wcol--2,.wgrid--2 .wcol--1{margin-top:120px}
+.wcard{position:relative;background:#fff;padding:16px 16px 28px;cursor:pointer;transition:background .5s var(--liquid)}
+.wcard__frame{display:block}
+.wcard__img{display:block;position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--tile)}
+.wcard__img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--liquid)}
+.wcard:hover .wcard__img img{transform:scale(1.04)}
+.wcard__cap{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding-top:24px}
+.wcard__no{font-weight:500;color:var(--mut);font-size:14px}
+.wcard__t{font-weight:500;font-size:24px;line-height:1.2;margin:0}
+.wcard__t a{background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size .6s var(--liquid)}
+.wcard:hover .wcard__t a{background-size:100% 1px}
+.wcard__d{margin:0;max-width:34ch}
+.wcard .chips{justify-content:center;margin-top:6px}
+.wcard__open{font-weight:500;margin-top:8px}
+.wcard__open span{display:inline-block;transition:transform .45s var(--liquid)}
+.wcard:hover .wcard__open span{transform:translate(3px,-3px)}
+@media (max-width:1100px){.wgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.wgrid .wcol{margin-top:0!important}.wgrid--3{display:flex;flex-wrap:wrap}.wgrid--3 .wcol{flex:1 1 calc(50% - 12px)}}
+@media (max-width:700px){.wgrid,.wgrid--2,.wgrid--3{display:flex;flex-direction:column}.wcol{width:100%}}

@@ -25,11 +25,11 @@
       }});
     });
 
-    /* ---- proximity weight hover on heavy caps (quickTo .4s, radius 400) */
+    /* ---- proximity melt on pixel words (quickTo .4s, radius 400) — the landing's liquid pixels */
     if (fine) {
       const hv = qa('[data-weight-hover] .hv').flatMap(h => SplitText.create(h, {type: 'chars', charsClass: 'wc'}).chars);
-      const tos = hv.map(c => gsap.quickTo(c, '--wght', {duration: .4, ease: 'power2.out'}));
-      hv.forEach(c => c.style.setProperty('--wght', 800));
+      const tos = hv.map(c => gsap.quickTo(c, '--elsh', {duration: .4, ease: 'power2.out'}));
+      hv.forEach(c => c.style.setProperty('--elsh', 1));
       let mx = -1e4, my = -1e4, raf = 0;
       addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; if (!raf) raf = requestAnimationFrame(tick); }, {passive: true});
       function tick() {
@@ -37,7 +37,7 @@
         hv.forEach((c, i) => {
           const r = c.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
           const d = Math.hypot(mx - (r.left + r.width / 2), my - (r.top + r.height / 2));
-          tos[i](d < 400 ? 300 + (1 - d / 400) * 600 : 800);
+          tos[i](d < 400 ? 1 + (1 - d / 400) * 15 : 1);
         });
       }
     }
@@ -108,12 +108,9 @@
       });
     });
 
-    /* ---- logo blend off on dark sections */
-    qa('[data-theme="dark"]').forEach(s => ScrollTrigger.create({trigger: s, start: 'top 40px', end: 'bottom 40px',
-      toggleClass: {targets: document.body, className: 'on-dark'}}));
+    /* ---- chapter hairlines draw like the landing bands */
+    qa('.xch').forEach(el => gsap.fromTo(el, {'--draw': 0}, {'--draw': 1, duration: 1.6, ease: 'expo.inOut', scrollTrigger: {trigger: el, start: 'bottom 95%', once: true}}));
 
-    /* ---- closing name rises */
-    gsap.from('.xname .hv, .xname .sf', {yPercent: 60, ease: 'none', scrollTrigger: {trigger: '.xname', start: 'top bottom', end: 'bottom bottom', scrub: true}});
     ScrollTrigger.refresh();
   });
 })();

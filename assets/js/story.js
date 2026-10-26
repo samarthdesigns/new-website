@@ -1,6 +1,6 @@
 /* STORY — extrafazant.nl motion: line reveals (yPercent 135, 1s expo.out, .07),
    DrawSVG squiggle on hover, proximity weight on heavy caps, image trail,
-   polaroid drift, marquee bands. */
+   pinned featured-stack, polaroid drift, marquee bands. */
 (() => {
   const {RM, fine} = window.SN || {};
   const q = (s, r = document) => r.querySelector(s), qa = (s, r = document) => [...r.querySelectorAll(s)];
@@ -72,6 +72,32 @@
       pols.forEach((p, i) => gsap.to(p, {y: (i % 2 ? -1 : 1) * (30 + i * 12), ease: 'none',
         scrollTrigger: {trigger: c, start: 'top bottom', end: 'bottom top', scrub: true}}));
     });
+
+    /* ---- featured stack: cards stacked in depth, front card falls away while the rest step forward */
+    const mm = gsap.matchMedia();
+    const stack = (desk) => () => {
+      qa('[data-featured-stack]:not(.single)').forEach(sec => {
+        const slides = qa('[data-featured-stack-slide]', sec), n = slides.length, pin = q('[data-featured-stack-pin]', sec);
+        const dz = desk ? 120 : 60, dy = desk ? 40 : 18, fall = desk ? .9 : .6;
+        slides.forEach((s, b) => gsap.set(s, {z: -b * dz, y: -b * dy, zIndex: n - b}));
+        // desktop pins the stack beside the captions; mobile keeps it sticky above them (CSS)
+        const tl = gsap.timeline({defaults: {ease: 'none'}, scrollTrigger: {trigger: sec, pin: desk ? pin : false, pinSpacing: false,
+          start: desk ? 'top top' : 'top 102px', end: 'bottom bottom', scrub: .3, invalidateOnRefresh: true}});
+        slides.forEach((s, w) => {
+          if (w === n - 1) return;
+          tl.to(s, {y: '+=' + innerHeight * fall, duration: 1, ease: 'power2.in'}, w)
+            .to(s, {autoAlpha: 0, duration: .25}, w + .7);
+          slides.slice(w + 1).forEach((o, k) => tl.to(o, {z: -k * dz, y: -k * dy, duration: 1, ease: 'power2.inOut'}, w));
+        });
+        tl.to({}, {duration: .6});
+      });
+      return () => gsap.set(qa('[data-featured-stack-slide]'), {clearProps: 'all'});
+    };
+    mm.add('(min-width: 992px)', stack(true));
+    qa('.xcap').forEach(c => gsap.from(c.children, {y: 40, autoAlpha: 0, duration: 1, ease: 'expo.out', stagger: .08,
+      scrollTrigger: {trigger: c, start: 'top 75%', once: true}}));
+    qa('.xproj.single .xslide').forEach(s => gsap.from(s, {yPercent: 18, rotation: -4, autoAlpha: 0, duration: 1.4, ease: 'expo.out',
+      scrollTrigger: {trigger: s, start: 'top 85%', once: true}}));
 
     /* ---- marquee bands: constant drift, sped + reversed by scroll velocity */
     qa('.xb-track').forEach((t, k) => {

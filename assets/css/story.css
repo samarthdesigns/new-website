@@ -1,5 +1,5 @@
-/* STORY — extrafazant.nl structure & motion (image-trail hero, tilted polaroid chapters with stickers,
-   squiggle links, pinned featured stack, marquee bands), dressed in the landing design system:
+/* STORY — extrafazant.nl structure & motion (image-trail hero, tilted polaroid chapters,
+   standard CTAs, pinned featured stack, marquee bands), dressed in the landing design system:
    pixel + serif-italic type pair, 1340 grid, 100px bands with hairlines, tile chips, liquid CTAs. */
 .pg-story .sf{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none;letter-spacing:-.005em}
 .pg-story .hv{font-family:var(--pixel);font-weight:400;text-transform:none;letter-spacing:0}
@@ -19,16 +19,7 @@
 .xtrail{position:absolute;inset:0;z-index:1;pointer-events:none}
 .xtrail img{position:absolute;left:0;top:0;width:clamp(150px,15vw,240px);aspect-ratio:4/5;object-fit:cover;border:8px solid #fff;opacity:0;will-change:transform}
 
-/* ---- squiggle link: label + tile arrow, squiggle draws on hover */
-.xline{position:relative;display:inline-flex;align-items:center;gap:12px;padding-bottom:10px;color:var(--ink);font-weight:500;font-size:16px;text-transform:uppercase}
-.xline .lb{font:inherit}
-.xline .sq{width:32px;height:32px;display:grid;place-items:center;border-radius:10px;background:var(--tile);transition:background .4s var(--liquid),border-radius .4s var(--liquid),color .4s}
-.xline:hover .sq{background:var(--forest);color:#fff;border-radius:16px}
-.xline svg{fill:none;stroke:currentColor;stroke-width:1.6}
-.xline .sq svg{width:14px;height:14px}
-.xline .squig{position:absolute;left:0;right:44px;bottom:-4px;width:calc(100% - 44px);height:14px;stroke:var(--pink);stroke-width:8;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
-.xline.down .squig{stroke:var(--gold)}
-.xlinks{display:flex;flex-wrap:wrap;gap:14px 40px;justify-content:center;margin-top:10px}
+.xlinks{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:10px}
 .xmail{position:relative;color:inherit;text-decoration:underline;text-underline-offset:4px}
 
 /* ---- chapters: banded split, polaroids one side, centred text the other */
@@ -58,27 +49,19 @@
 .n4 .p1{right:0;top:4%;width:48%;height:46%;rotate:4deg}
 .n4 .p2{left:4%;top:52%;width:46%;height:46%;rotate:3deg}
 .n4 .p3{right:2%;top:50%;width:46%;height:46%;rotate:-5deg}
-.stk{position:absolute;width:clamp(60px,6vw,96px);z-index:3;pointer-events:none}
-.stk svg{width:100%;height:auto;display:block}
-.xcollage .stk.s0{right:-4%;top:-6%;rotate:12deg}
-.xcollage .stk.s1{left:-5%;bottom:-4%;rotate:-10deg}
-.xcollage .stk.s2{right:-3%;bottom:6%;rotate:8deg}
-.xcollage .stk.s3{left:-2%;top:-5%;rotate:-14deg}
 
 /* ---- featured stack (ink band) */
 .xdark{background:var(--ink);color:#fff}
 .xproj{position:relative;padding:0 max(var(--gutter),calc((100% - var(--max))/2));display:grid;grid-template-columns:1.1fr .9fr;column-gap:clamp(40px,9vw,129px)}
 .xpin{height:100vh;display:grid;place-items:center;perspective:1600px}
 .xstack{position:relative;width:min(100%,620px);aspect-ratio:4/3;transform-style:preserve-3d}
-.xslide{position:absolute;inset:0;border:12px solid var(--fr);overflow:hidden;background:var(--fr);will-change:transform}
+.xslide{position:absolute;inset:0;border:1px solid rgba(255,255,255,.14);overflow:hidden;background:#1e1e1e;will-change:transform}
 .xslide img{width:100%;height:100%;object-fit:contain;transition:transform 1.2s var(--liquid)}
 .xslide:hover img{transform:scale(1.04)}
-.xs-t{position:absolute;left:0;bottom:0;padding:10px 16px 8px;background:var(--fr);color:var(--fc);font-size:28px;line-height:1}
-.xbadge{position:absolute;right:-5%;top:-7%;width:clamp(70px,7vw,104px);z-index:50;rotate:14deg}
-.xbadge svg{width:100%;display:block}
+.xs-t{position:absolute;left:0;bottom:0;padding:10px 16px 8px;background:#1e1e1e;color:#fff;font-size:18px;line-height:1.1}
 .xcaps{display:flex;flex-direction:column;justify-content:center;padding:18vh 0}
 .xcap{min-height:70vh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:24px;max-width:460px}
-.xcap .t{font:italic 400 52px/1.2 var(--serif);margin:0}
+.xcap .t{font:italic 400 40px/1.2 var(--serif);margin:0}
 .xcap .d{font-size:18px;line-height:1.65;color:rgba(255,255,255,.66);margin:0}
 .xdark .cta{color:#fff;border-color:rgba(255,255,255,.2)}
 .xproj.single .xcap{min-height:0}
@@ -86,17 +69,13 @@
 .xproj.single .xpin{height:auto}
 .xthumb{display:none}
 
-/* ---- marquee bands (landing marquee: pixel + serif, hairlines, stickers between) */
-.xband{display:block;overflow:hidden;padding-block:34px 30px;border-bottom:1px solid var(--line);color:var(--ink);user-select:none}
+/* ---- marquee bands (landing small marquee: pixel + serif, hairlines, forest + between) */
+.xband{display:block;overflow:hidden;padding-block:22px 20px;border-bottom:1px solid var(--line);color:var(--ink);user-select:none}
 .xb-track{display:flex;width:max-content;align-items:center;will-change:transform}
-.xb-track>span{font-size:128px;line-height:1;padding-right:.22em;white-space:nowrap}
+.xb-track>span{font-size:40px;line-height:1;padding-right:.3em;white-space:nowrap}
 .xb-track .hv{font-family:var(--pixel)}
 .xb-track .sf{font-family:var(--serif);font-style:italic}
-.xb-track .stk{position:static;width:72px;margin:0 .45em}
-
-/* ---- closing: pixel name above the footer meta (landing hero name) */
-.xname-row{margin-top:60px}
-.xname{display:block;font-size:min(250px,(100vw - 2*var(--gutter))*.126);text-align:center}
+.xb-track .xb-plus{font-family:var(--pixel);font-size:20px;color:var(--forest);padding:0 .9em 0 .6em;transform:translateY(-.08em)}
 
 @media (max-width:991px){
   .xch,.xproj{grid-template-columns:1fr;row-gap:48px}
@@ -107,17 +86,17 @@
   .xcaps{padding:40px 0 80px}
   .xcap{min-height:0;margin-bottom:40px}
   .xh{font-size:40px}
-  .xb-track>span{font-size:72px}
+  .xb-track>span{font-size:28px}
+  .xb-track .xb-plus{font-size:14px}
   /* multi-card stack on phones: no pin, each project is its image + caption in plain flow */
   .xproj:not(.single) .xpin{display:none}
   .xproj:not(.single) .xcaps{padding:72px 0 32px}
   .xproj:not(.single) .xcap{min-height:0;margin:0 0 64px;gap:20px}
-  .xcap .t{font-size:38px}
-  .xthumb{display:block;width:100%;border:10px solid var(--fr);overflow:hidden;background:var(--fr)}
+  .xcap .t{font-size:32px}
+  .xthumb{display:block;width:100%;border:1px solid rgba(255,255,255,.14);overflow:hidden;background:#1e1e1e}
   .xthumb img{width:100%;height:auto}
 }
 .pg-story .links--1{width:min(229px,100%)}
 .pg-story .links--2{width:min(459px,100%);margin-top:24px}
 .pg-story .contact__sub{margin-top:40px}
-.xname-row+.footer__note{margin-top:48px}
 .nw{white-space:nowrap}

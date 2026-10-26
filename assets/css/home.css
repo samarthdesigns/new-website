@@ -6,18 +6,18 @@
 .hero>*{width:min(var(--max),100% - 2*var(--gutter));margin-inline:auto}
 .hero__lede{margin-left:max(var(--gutter),calc((100% - var(--max))/2));font-weight:400;font-size:28px;line-height:1.5;max-width:520px;color:var(--ink);will-change:transform}
 .hero__meta{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:52px;margin-top:100px;font-size:14px;line-height:16.8px;letter-spacing:1.12px;text-transform:uppercase;white-space:nowrap;will-change:transform}
-.hero__meta h1{font:inherit;letter-spacing:inherit}
+.hero__meta p{font:inherit;letter-spacing:inherit}
 .hero .hero__meta{margin:100px auto 0}
 .hero__meta a span{display:inline-block;transition:transform .45s var(--liquid)}
 .hero__meta a:hover span{transform:translateY(4px)}
 .hero__plus{font-weight:500}
 .hero__name-row{position:relative;will-change:transform}
-.hero__name{font-family:var(--pixel);font-size:min(250px,(100vw - 2*var(--gutter))*.126);line-height:1;white-space:nowrap;user-select:none;margin-top:24px}
+.hero__name{font-family:var(--pixel);font-weight:400;font-size:min(250px,(100vw - 2*var(--gutter))*.126);line-height:1;white-space:nowrap;user-select:none;margin-top:24px}
 .hero__name .char{display:inline-block;overflow:clip;vertical-align:top;padding-bottom:.04em}
 .hero__name .pc{display:inline-block;will-change:transform;font-variation-settings:"ELSH" min(20,calc(var(--elsh,1) + var(--melt,0) + var(--field,0)))}
 .hero__name .sp{display:inline-block;width:.32em}
 
-/* craft cards (after anjaliagrawal.framer.website "Expertise" grid): hairline cells, bracket-framed icon */
+/* craft cards (after anjaliagrawal.framer.website "Expertise" grid): hairline cells, icon on the site tile chip */
 /* landing section heads: no hairline under the title, content follows close */
 .pg-home .section-head{padding-block:var(--band) 32px}
 .pg-home .section-head::after{display:none}
@@ -27,13 +27,10 @@
 .craft+.craft{border-left:1px solid var(--line)}
 .craft::before{content:"";position:absolute;inset:0;background:var(--bg2);opacity:0;transition:opacity .6s var(--liquid);z-index:-1}
 .craft:hover::before{opacity:1}
-.craft__ic{position:relative;width:64px;height:64px;display:grid;place-items:center;background:var(--tile);margin-bottom:40px;transition:background .5s var(--liquid)}
-.craft__ic svg{width:24px;height:24px;fill:none;stroke:var(--forest);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;transition:transform .7s var(--liquid)}
+.craft__ic{width:48px;height:48px;display:grid;place-items:center;border-radius:14px;background:var(--tile);margin-bottom:40px;transition:background-color .4s var(--liquid),border-radius .4s var(--liquid)}
+.craft:hover .craft__ic{background:var(--tile-2);border-radius:24px}
+.craft__ic svg{width:22px;height:22px;fill:none;stroke:var(--forest);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;transition:transform .7s var(--liquid)}
 .craft:hover .craft__ic svg{transform:rotate(-8deg) scale(1.08)}
-.cr{position:absolute;width:10px;height:10px;border:0 solid var(--forest);transition:translate .6s var(--liquid)}
-.cr--tl{top:0;left:0;border-width:1.5px 0 0 1.5px}.cr--tr{top:0;right:0;border-width:1.5px 1.5px 0 0}
-.cr--bl{bottom:0;left:0;border-width:0 0 1.5px 1.5px}.cr--br{bottom:0;right:0;border-width:0 1.5px 1.5px 0}
-.craft:hover .cr--tl{translate:-4px -4px}.craft:hover .cr--tr{translate:4px -4px}.craft:hover .cr--bl{translate:-4px 4px}.craft:hover .cr--br{translate:4px 4px}
 .craft__no{position:absolute;top:32px;right:32px;font-size:14px;font-weight:500;color:var(--mut-2);font-variant-numeric:tabular-nums}
 .craft__t{font-weight:500;font-size:22px;line-height:1.2;letter-spacing:-.005em;margin-bottom:14px}
 .craft__b{color:var(--mut);font-size:16px;line-height:1.65}

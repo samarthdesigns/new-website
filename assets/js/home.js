@@ -108,11 +108,17 @@
   const box = document.querySelector('[data-screen]'); if (!box) return;
   const img = box.querySelector('img');
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const cv = document.createElement('canvas'), gl = cv.getContext('webgl', {premultipliedAlpha: false, antialias: false});
+  const cv = document.createElement('canvas'), gl = cv.getContext('webgl', {premultipliedAlpha: false, antialias: false, preserveDrawingBuffer: true});
+  cv.addEventListener('webglcontextlost', () => { on = false; cancelAnimationFrame(raf); box.classList.remove('is-gl'); cv.remove(); });
   if (!gl) return;
   const VS = 'attribute vec2 p;varying vec2 v;void main(){v=p*.5+.5;v.y=1.-v.y;gl_Position=vec4(p,0.,1.);}';
-  const FS = `precision mediump float;varying vec2 v;uniform sampler2D T;uniform vec2 R;uniform vec2 C;uniform float t;uniform float dpr;
-  float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
+  const FS = `#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+varying vec2 v;uniform sampler2D T;uniform vec2 R;uniform vec2 C;uniform float t;uniform float dpr;
+  float h(vec2 p){p=fract(p*vec2(.1031,.1030));p+=dot(p,p.yx+33.33);return fract((p.x+p.y)*p.x);}
   vec3 tex(vec2 uv){uv=clamp(uv,0.,1.);return texture2D(T,uv*C.xy+(1.-C.xy)*vec2(.5,.3)).rgb;}
   void main(){
     vec2 uv=v;
@@ -160,7 +166,11 @@
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img);
     [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach(k => gl.texParameteri(gl.TEXTURE_2D, k, gl.CLAMP_TO_EDGE));
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    box.appendChild(cv); box.classList.add('is-gl'); ready = true; size(); draw(performance.now());
+    box.appendChild(cv); ready = true; size(); draw(performance.now());
+    const px = new Uint8Array(4); let lit = 0;
+    for (const [x, y] of [[.3, .3], [.5, .5], [.7, .6], [.5, .8]]) { gl.readPixels(Math.floor(cv.width * x), Math.floor(cv.height * y), 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); lit += px[0] + px[1] + px[2]; }
+    if (gl.getError() || !lit) { on = false; cv.remove(); return; }
+    box.classList.add('is-gl');
     new ResizeObserver(() => { size(); if (!on || RM) draw(performance.now()); }).observe(box);
   };
   new IntersectionObserver(([e]) => {

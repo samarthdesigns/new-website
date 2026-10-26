@@ -4,6 +4,7 @@
 .pg-story .sf{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none;letter-spacing:-.005em}
 .pg-story .hv{font-family:var(--pixel);font-weight:400;text-transform:none;letter-spacing:0}
 .pg-story .hv .wc{display:inline-block;font-variation-settings:"ELSH" var(--elsh,1)}
+.pg-story .hv .ww{display:inline-block;white-space:nowrap}
 .pg-story .line{overflow:clip;padding-bottom:.08em}
 .pg-story{overflow-wrap:normal;word-break:normal;hyphens:manual}
 

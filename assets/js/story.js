@@ -27,7 +27,7 @@
 
     /* ---- proximity melt on pixel words (quickTo .4s, radius 400) — the landing's liquid pixels */
     if (fine) {
-      const hv = qa('[data-weight-hover] .hv').flatMap(h => SplitText.create(h, {type: 'chars', charsClass: 'wc'}).chars);
+      const hv = qa('[data-weight-hover] .hv').flatMap(h => SplitText.create(h, {type: 'words,chars', wordsClass: 'ww', charsClass: 'wc'}).chars);
       const tos = hv.map(c => gsap.quickTo(c, '--elsh', {duration: .4, ease: 'power2.out'}));
       hv.forEach(c => c.style.setProperty('--elsh', 1));
       let mx = -1e4, my = -1e4, raf = 0;

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MakeMyTrip | Samarth Nayyar</title>
+<meta name="description" content="Redesigning checkout for a bus booking platform serving 82M monthly users, improving speed by 72% and cutting drop-off by 34%.">
+<meta property="og:title" content="MakeMyTrip | Samarth Nayyar">
+<meta property="og:description" content="Redesigning checkout for a bus booking platform serving 82M monthly users, improving speed by 72% and cutting drop-off by 34%.">
+<meta property="og:image" content="https://samarthnayyar.com/framerusercontent.com/assets/M8mS4tT8tWDDKY63WBhAjUaRw6E.png">
+<link rel="icon" href="../framerusercontent.com/images/09KlDhJzTL23u51XmAdHalB9B0g.png">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700&family=Tektur:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="site-nav">
+  <a class="logo" href="../index.html">Samarth Nayyar</a>
+  <nav>
+    <a href="../case-studies.html">Work</a>
+    <a href="../story.html">Story</a>
+    <a href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&ouid=107449157409953777248&rtpof=true&sd=true">Resume</a>
+  </nav>
+  <a class="btn gold" href="mailto:contact@samarthnayyar.com">Get in touch</a>
+</header>
+
+<nav class="cs-breadcrumb"><a href="../case-studies.html">&larr; Case Studies</a> / MakeMyTrip</nav>
+<section class="cs-hero">
+  <h1>MakeMyTrip</h1>
+  <p class="tagline">Cutting checkout time 72% for 82M monthly travellers</p>
+  <div class="hero-img"><div class="cs-img"><img src="../framerusercontent.com/images/uJGgyMlHK1GnyCtX3sXsgUNYk__Q__width__E__700__A__height__E__223.png" alt="" loading="lazy"></div></div>
+</section>
+<section class="cs-meta"><div class="item"><span class="label">Timeline</span><div class="val">Dec 2019 - May 2020</div></div><div class="item"><span class="label">Role</span><div class="val">Product Designer, Buses &amp; Cabs</div></div><div class="item"><span class="label">Tools</span><div class="val">Sketch · After Effects · Illustrator</div></div></section>
+<section class="cs-stats"><div class="stat"><div class="value">82M+</div><div class="lbl">Monthly Users</div></div><div class="stat"><div class="value">72%</div><div class="lbl">Faster Checkout</div></div><div class="stat"><div class="value">34%</div><div class="lbl">Lower Drop -off</div></div></section>
+<article class="cs-body">
+<div class="cs-section"><div class="cs-img"><img src="../framerusercontent.com/images/7cjfSGTbQshPfoWMVQWy7JZZc__Q__width__E__1823__A__height__E__1164.png" alt="" loading="lazy"></div></div><div class="cs-section"><h2>The Problem</h2>
+<p>I spent my first month not designing anything.</p>
+<p>Instead I audited the whole buses and cabs experience, built a flowchart mapping how every part of the company connected, and put together a deck on what I thought was broken. Inconsistent design system, wasted space, visual hierarchy that had quietly given up. I also critiqued GoIbibo's app while I was at it, unprompted.</p>
+<p>I presented it expecting to be told which parts I'd got wrong. They put me on the biggest problem in it: users were dropping off hard during seat selection and at payment , and people were coming back after booking with questions because information had never made it onto their screen.</p></div><div class="cs-section"><h2>What I built</h2>
+<p>Filtered Searches</p>
+<p>Actually narrowed things down; departure time, bus type, amenities.</p>
+<p>Loading and error states</p>
+<p>Silence reads as broken. Plus ghost loaders, so waiting felt like progress rather than a stall.</p>
+<p>A universal seat selection system</p>
+<p>This was the hard one. Buses have wildly different layouts: sleeper, semi-sleeper, seater, double-decker; and each needs its own representation. I built a step-by-step mechanism that adapts to whatever layout it's handed, rather than twelve special cases.</p>
+<p>Checkout</p>
+<p>Clear coupon actions and a step-by-step payment guide.</p>
+<div class="cs-img-row"><img src="../framerusercontent.com/images/cxBzM8lDIHQM6UYLfQTy8tckqE__Q__width__E__5760__A__height__E__4000.png" alt="" loading="lazy"><img src="../framerusercontent.com/images/EcDEECQy1VcDjauJr9Wof8gkTs__Q__width__E__5760__A__height__E__4000.png" alt="" loading="lazy"><img src="../framerusercontent.com/images/59x7ryNoD4R6TeIcwBkF9pGxtA__Q__width__E__4320__A__height__E__3000.png" alt="" loading="lazy"><img src="../framerusercontent.com/images/qht0S1JLiRys6YzvEDyMaipw__Q__width__E__4320__A__height__E__3000.png" alt="" loading="lazy"><img src="../framerusercontent.com/images/6tTbkXggWgQCAJ4DO2QEdXXmgM.svg" alt="" loading="lazy"><img src="../framerusercontent.com/images/11KSGbIZoRSg4pjdnUoif6MKHI.svg" alt="" loading="lazy"></div></div><div class="cs-section"><h2>The decision</h2>
+<p>The obvious fix was to strip it down. Fewer steps, less information, faster to payment. I didn't, and this is the part worth explaining.</p>
+<div class="callout"><span class="label">DECISION TAKEN</span><p>MakeMyTrip needs to cross sell. Flights, hotels, trains, cars; the review page is among the most commercially valuable real estate on the platform. A pure simplification would have improved my metric and quietly cost the business money.</p></div>
+<div class="callout"><span class="label">WHAT HAPPENED</span><p>So I restructured when information appeared instead of removing it. Step-by-step navigation, clear transitions, a live review of selections always visible. Cross-sell stayed re-positioned so it never competes with the thing the user came to do.</p></div></div><div class="cs-section"><h2>The second project; Airport Cabs</h2>
+<p>Same principle, worse conditions: people landing at an airport, stressed, dragging luggage, trying to find their cab.</p>
+<p>I built step-by-step illustrated boarding instructions and we A/B tested two versions. Version two won; chosen on support-call volume plus feedback from the staff working the airport booths, not on which one I preferred.</p>
+<div class="cs-img"><img src="../framerusercontent.com/images/FD4GjIeR95NwOtvXPURubXDLpY__Q__width__E__4572__A__height__E__2187.png" alt="" loading="lazy"></div></div><div class="cs-section"><h2>The result</h2>
+<p><span class="inline-stat">72%</span> &nbsp;Faster Checkout</p>
+<p><span class="inline-stat">34%</span> &nbsp;Lower Drop -off</p>
+<p>User interviews confirmed people felt less lost hunting for bus information, and support calls dropped.</p>
+<div class="callout"><span class="label">NOTE FROM FUTURE SAMARTH</span><p>Looking at that cab onboarding again, would bigger steps have worked better? The distinction between 1, 2, 3 isn't strong enough. And "Take a left from taxi counters to reach the GoIbibo parking and get into your cab" is a mouthful for someone reading it one-handed with a suitcase in the other.</p></div></div>
+</article>
+
+<footer class="footer-cta">
+  <h2>Always up for a conversation about UX, design systems or AI-native tooling</h2>
+  <div class="cta-row">
+    <a class="btn gold" href="mailto:contact@samarthnayyar.com">Get in touch</a>
+    <a class="btn ghost" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&ouid=107449157409953777248&rtpof=true&sd=true">Download Resume</a>
+  </div>
+</footer>
+<div class="site-footer">
+  <span>&copy; 2026 Samarth Nayyar</span>
+  <a href="../index.html">Back to top</a>
+</div>
+</body>
+</html>

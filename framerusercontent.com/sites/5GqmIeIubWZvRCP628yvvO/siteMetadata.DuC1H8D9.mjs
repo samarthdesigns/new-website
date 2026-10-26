@@ -1,0 +1,2 @@
+import{t as e}from"./rolldown-runtime.Dh6celcD.mjs";function t(e,t){return{description:`Product Designer, San Francisco. Design systems for AI-native products. 500M+ users. $100M+ in enterprise deals.`,favicon:`https://framerusercontent.com/assets/09KlDhJzTL23u51XmAdHalB9B0g.png`,robots:`max-image-preview:large`,socialImage:`https://framerusercontent.com/assets/IPRaE8F5gCIqECKUPiKi1rzOS8E.png`,title:`Samarth Nayyar — Product Designer`}}var n=e((()=>{}));export{t as n,n as t};
+//# sourceMappingURL=siteMetadata.DuC1H8D9.mjs.map

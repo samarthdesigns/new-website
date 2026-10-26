@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poll Police | Samarth Nayyar</title>
+<meta name="description" content="A Flutter app built with the Tamil Nadu Police and Government of India, serving three voter, officer, and administrator roles across 70M+ people.">
+<meta property="og:title" content="Poll Police | Samarth Nayyar">
+<meta property="og:description" content="A Flutter app built with the Tamil Nadu Police and Government of India, serving three voter, officer, and administrator roles across 70M+ people.">
+<meta property="og:image" content="https://samarthnayyar.com/framerusercontent.com/assets/xEFR8JmOX0zX6Y3D7TuIs1DWuYA.png">
+<link rel="icon" href="../framerusercontent.com/images/09KlDhJzTL23u51XmAdHalB9B0g.png">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700&family=Tektur:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="site-nav">
+  <a class="logo" href="../index.html">Samarth Nayyar</a>
+  <nav>
+    <a href="../case-studies.html">Work</a>
+    <a href="../story.html">Story</a>
+    <a href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&ouid=107449157409953777248&rtpof=true&sd=true">Resume</a>
+  </nav>
+  <a class="btn gold" href="mailto:contact@samarthnayyar.com">Get in touch</a>
+</header>
+
+<nav class="cs-breadcrumb"><a href="../case-studies.html">&larr; Case Studies</a> / Poll Police</nav>
+<section class="cs-hero">
+  <h1>Poll Police</h1>
+  <p class="tagline">Election information for 70 million people</p>
+  
+</section>
+<section class="cs-meta"><div class="item"><span class="label">Role</span><div class="val">Google Developer Group VIT × Government of India</div></div><div class="item"><span class="label">Timeline</span><div class="val">2019</div></div><div class="item"><span class="label">Context</span><div class="val">Design Lead</div></div><div class="item"><span class="label">Tools</span><div class="val">Figma</div></div></section>
+<section class="cs-stats"><div class="stat"><div class="value">70M+</div><div class="lbl">People Serviced in Tamil Nadu</div></div><div class="stat"><div class="value">3</div><div class="lbl">Districts Deployed on launch Built for Low powered devices</div></div></section>
+<article class="cs-body">
+<div class="cs-section"><div class="cs-img"><img src="../framerusercontent.com/images/Mo1EhfWgQVMDeb6XkzecngUxhg__Q__width__E__1280__A__height__E__854.png" alt="" loading="lazy"></div>
+<p>Not everyone like's to read to much nowadays (thanks TikTok). See a comic strip or 30 second video to understand this project?</p>
+<p>Comic Strip</p>
+<p>30 second video</p></div><div class="cs-section"><h2>The Problem</h2>
+<p>The Tamil Nadu Police came to us; me and four others from the Google Developer Group at VIT, where I was Community Lead. With a problem they'd identified themselves.</p>
+<p>Two things were going wrong: People didn't reliably know where to go to vote. And in a lot of places, people didn't feel safe going; violence and pressure around polling stations were real, and the information gap made it worse. Police had their own problem: officers working the same election couldn't easily see what other officers were seeing.</p></div><div class="cs-section"><h2>Research</h2>
+<p>Field Research</p>
+<p>We went into the field and talked to officers and to people across Tamil Nadu — specifically about what devices they were actually holding, because that would define everything else.</p>
+<p>User base diversity</p>
+<p>Two findings shaped the whole build. Tamil Nadu is linguistically diverse, so text-heavy interfaces exclude people by default; visuals are understood universally. And the device reality across 70 million+ people skewed heavily toward older, low-powered phones.</p>
+<div class="cs-img"><img src="../framerusercontent.com/images/1G4WTyXa5QhDYZybcgX5VMaUij8__Q__width__E__1998__A__height__E__1037.png" alt="" loading="lazy"></div></div><div class="cs-section"><h2>Understanding the users</h2>
+<p>General Voters</p>
+<p>Find your polling station, know when it's safe. Select a district from a list or a map, zoom in, tap a station, get everything.</p>
+<p>Police Officers on Duty</p>
+<p>Navigate the city, track police vehicles, coordinate coverage.</p>
+<p>Police Incharges</p>
+<p>Oversee the operation, manage resources, see the whole picture.</p>
+<div class="cs-img"><img src="../framerusercontent.com/images/OcteK2y8zzWEZYCQcVOP2FZx6cc__Q__width__E__5760__A__height__E__3240.png" alt="" loading="lazy"></div></div><div class="cs-section"><h2>The decision</h2>
+<p>We built in Flutter and designed against the worst device in the field, not the best.</p></div><div class="cs-section"><h2>What I built</h2>
+<p>Designed for the worst devices on market</p>
+<p>That killed a lot of otherwise-good ideas early: heavy maps, rich media, anything assuming a modern handset or a stable connection. Flutter let us serve both older low-power devices and the web from one codebase, which mattered more than any individual feature would have.</p>
+<p>Color for coordination not aesthetic</p>
+<p>Each of the three districts got its own theme, held consistently across backgrounds and containers, with contrast tuned so even plain black text stayed effortlessly readable.</p>
+<p>That sounds cosmetic. It isn't. An officer glancing at a colleague's screen knows the district instantly, without asking. Mid-election, that removes an entire category of miscommunication.</p>
+<div class="cs-img-row"><img src="../framerusercontent.com/images/xRkIgCEHAE50VnRfKDHOifg79E__Q__width__E__1506__A__height__E__1506.png" alt="" loading="lazy"><img src="../framerusercontent.com/images/133m37YT5esg9pZ8zsId6Egs5w__Q__width__E__1506__A__height__E__1506.png" alt="" loading="lazy"><img src="../framerusercontent.com/images/B7WBnOo4LO16TUpCEJBczyWBElo__Q__width__E__1506__A__height__E__1506.png" alt="" loading="lazy"><img src="../framerusercontent.com/images/XXA9Og83m1Fg9ciLgZK3BRt33M__Q__width__E__1506__A__height__E__1506.png" alt="" loading="lazy"><img src="../framerusercontent.com/images/6tTbkXggWgQCAJ4DO2QEdXXmgM.svg" alt="" loading="lazy"><img src="../framerusercontent.com/images/11KSGbIZoRSg4pjdnUoif6MKHI.svg" alt="" loading="lazy"></div></div><div class="cs-section"><h2>The result</h2>
+<p><span class="inline-stat">70M+</span> &nbsp;People Serviced in Tamil Nadu</p>
+<p><span class="inline-stat">3</span> &nbsp;Districts Deployed on launch</p>
+<div class="callout"><span class="label">NOTE FROM FUTURE SAMARTH</span><p>Three districts shipped. We designed for seventy million and deployed to a fraction of that, and I've never fully stopped thinking about the gap. Also I'd fight harder for a proper offline mode. We optimised for weak connections but never truly designed for no connection, which on election day in rural Tamil Nadu is not an edge case.</p></div></div>
+</article>
+
+<footer class="footer-cta">
+  <h2>Always up for a conversation about UX, design systems or AI-native tooling</h2>
+  <div class="cta-row">
+    <a class="btn gold" href="mailto:contact@samarthnayyar.com">Get in touch</a>
+    <a class="btn ghost" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&ouid=107449157409953777248&rtpof=true&sd=true">Download Resume</a>
+  </div>
+</footer>
+<div class="site-footer">
+  <span>&copy; 2026 Samarth Nayyar</span>
+  <a href="../index.html">Back to top</a>
+</div>
+</body>
+</html>

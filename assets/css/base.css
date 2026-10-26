@@ -114,9 +114,14 @@ body{line-height:1.65;overflow-x:clip}
 .cursor-pill__t{position:relative}
 
 @media (max-width:900px){
-  :root{--gutter:24px;--band:64px}
+  :root{--gutter:24px;--band:64px;--navh:116px}
   .display{font-size:40px}
-  .nav__links{display:none}
+  .nav{grid-template-columns:1fr auto;margin-top:20px;row-gap:14px}
+  .nav__brand{font-size:30px}
+  .nav__cta{height:40px;padding:0 16px}
+  .nav__links{grid-column:1/-1;grid-row:2;gap:24px;font-size:15px}
+  .navbar-spacer{height:116px}
+  .navbar.is-scrolled{padding-bottom:12px}.navbar.is-scrolled .nav{margin-top:12px}
   .vrule::before{display:none}
   .links{grid-auto-flow:row}
   .links a+a{border-left:0;border-top:1px solid var(--line)}

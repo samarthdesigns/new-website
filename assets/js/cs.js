@@ -1,6 +1,20 @@
 /* CASE PAGE — mecha's dynamic section index (active item + scrubbed progress); everything else is the shared landing motion. */
 (function(){
   const {RM, q, qa} = SN;
+
+  /* image carousels: native scroll-snap (swipe on touch), buttons + counter */
+  SN.qa('[data-car]').forEach(c => {
+    const tr = c.querySelector('.mcar__track'), sl = [...tr.children], n = sl.length,
+      num = c.querySelector('.mcar__n b'), pv = c.querySelector('[data-prev]'), nx = c.querySelector('[data-next]');
+    const idx = () => Math.round(tr.scrollLeft / (sl[1].offsetLeft - sl[0].offsetLeft));
+    const go = i => tr.scrollTo({left: sl[Math.max(0, Math.min(n - 1, i))].offsetLeft - sl[0].offsetLeft, behavior: 'smooth'});
+    const upd = () => { const i = Math.min(n - 1, idx()); num.textContent = String(i + 1).padStart(2, '0');
+      pv.disabled = tr.scrollLeft < 4; nx.disabled = tr.scrollLeft > tr.scrollWidth - tr.clientWidth - 4; };
+    pv.addEventListener('click', () => go(idx() - 1));
+    nx.addEventListener('click', () => go(idx() + 1));
+    tr.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') { e.preventDefault(); go(idx() - 1); } if (e.key === 'ArrowRight') { e.preventDefault(); go(idx() + 1); } });
+    tr.addEventListener('scroll', upd, {passive: true}); addEventListener('resize', upd); upd();
+  });
   if (RM) return;
   SN.fontsReady.then(() => {
     const items = qa('.ni[data-sec]');

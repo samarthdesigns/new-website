@@ -1,3 +1,9 @@
+/* animated custom props: registered + non-inheriting, so tweening them restyles one element, not its whole subtree */
+@property --draw{syntax:"<number>";inherits:false;initial-value:1}
+@property --elsh{syntax:"<number>";inherits:false;initial-value:1}
+@property --melt{syntax:"<number>";inherits:false;initial-value:0}
+@property --field{syntax:"<number>";inherits:false;initial-value:0}
+@property --speed{syntax:"<number>";inherits:false;initial-value:0}
 /* shared tokens — palette from samarthnayyar.com */
 @font-face{font-family:"Geist Pixel";src:url(../fonts/GeistPixel-VF.woff2) format("woff2");font-weight:400;font-display:swap}
 :root{
@@ -135,3 +141,7 @@ body{line-height:1.65;overflow-x:clip}
 [data-pixel-title] .pc{display:inline-block;will-change:transform;font-variation-settings:"ELSH" min(20,calc(var(--elsh,1) + var(--melt,0)))}
 [data-pixel-title] .sp{display:inline-block;width:.3em}
 .contact__sub{max-width:560px;margin-top:40px}
+
+/* smooth motion: promote animated layers */
+[data-lean]{will-change:transform}
+[data-liquid] .line{will-change:transform,opacity;backface-visibility:hidden}

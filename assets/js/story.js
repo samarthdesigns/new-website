@@ -102,13 +102,15 @@
 
     /* ---- marquee bands: constant drift, sped + reversed by scroll velocity */
     qa('.xb-track').forEach((t, k) => {
-      let x = 0, dir = k % 2 ? 1 : -1;
+      let x = 0, dir = k % 2 ? 1 : -1, hw = t.scrollWidth / 2; const on = SN.watch(t);
+      addEventListener('resize', () => hw = t.scrollWidth / 2);
       gsap.ticker.add((_, dms) => {
+        if (!on()) return;
         const dt = Math.min(.05, dms / 1000), v = SN.vel();
         if (Math.abs(v) > .4) dir = (v > 0 ? -1 : 1) * (k % 2 ? -1 : 1);
         x += dir * (60 + Math.min(900, Math.abs(v) * 30)) * dt;
-        const h = t.scrollWidth / 2; if (x < -h) x += h; if (x > 0) x -= h;
-        t.style.transform = `translate3d(${x}px,0,0)`;
+        const h = hw; if (x < -h) x += h; if (x > 0) x -= h;
+        t.style.transform = `translate3d(${x.toFixed(2)}px,0,0)`;
       });
     });
 

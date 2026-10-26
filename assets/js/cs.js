@@ -22,11 +22,11 @@
     items.forEach(it => {
       const sec = document.getElementById(it.dataset.sec), bar = q('.prog', it); if (!sec) return;
       const st = {trigger: sec, start: 'top 50%', end: 'bottom 50%', invalidateOnRefresh: true};
-      gsap.fromTo(bar, {width: '0%'}, {width: '100%', ease: 'none', scrollTrigger: {...st, scrub: true, onLeave: () => gsap.set(bar, {width: '0%'})}});
+      gsap.fromTo(bar, {scaleX: 0}, {scaleX: 1, ease: 'none', scrollTrigger: {...st, scrub: true, onLeave: () => gsap.set(bar, {scaleX: 0})}});
       ScrollTrigger.create({...st, onEnter: () => setActive(it), onEnterBack: () => setActive(it)});
     });
     const main = q('.ni.main .prog');
-    if (main) gsap.fromTo(main, {width: '0%'}, {width: '100%', ease: 'none', scrollTrigger: {trigger: '.mmain', start: 'top top', end: 'bottom bottom', scrub: true}});
+    if (main) gsap.fromTo(main, {scaleX: 0}, {scaleX: 1, ease: 'none', scrollTrigger: {trigger: '.mmain', start: 'top top', end: 'bottom bottom', scrub: true}});
     const as = q('.maside');
     if (as) gsap.fromTo(as, {'--draw': 0}, {'--draw': 1, duration: 1.4, ease: 'expo.inOut', scrollTrigger: {trigger: as, start: 'top 90%', once: true}});
     ScrollTrigger.refresh();

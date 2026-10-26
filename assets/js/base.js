@@ -13,6 +13,10 @@
     gsap.ticker.add(t => lenis.raf(t * 1000));
     gsap.ticker.lagSmoothing(0);
   }
+  ScrollTrigger.config({ignoreMobileResize: true});
+  /* true while el is near the viewport — tickers skip work for offscreen pieces */
+  const vis = new WeakMap(), io = new IntersectionObserver(es => es.forEach(e => vis.set(e.target, e.isIntersecting)), {rootMargin: '200px 0px'});
+  SN.watch = el => { if (el) { vis.set(el, true); io.observe(el); } return () => !el || vis.get(el); };
   SN.vel = () => SN.lenis ? SN.lenis.velocity : 0;
   SN.to = (target) => SN.lenis ? SN.lenis.scrollTo(target, {offset:0, duration:1.4}) : (typeof target==='number'?scrollTo(0,target):document.querySelector(target)?.scrollIntoView({behavior:'smooth'}));
   document.addEventListener('click', e => {
@@ -34,7 +38,7 @@
   if (nb) { const f = () => nb.classList.toggle('is-scrolled', scrollY > 8); f(); addEventListener('scroll', f, {passive:true}); }
 
   /* footer local time (visitor's clock) */
-  qa('[data-local-time]').forEach(el => { const t = () => el.textContent = new Date().toLocaleTimeString([], {hour:'numeric', minute:'2-digit'}); t(); setInterval(t, 30000); });
+  qa('[data-local-time]').forEach(el => { const t = () => el.textContent = new Date().toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit', timeZone:'America/Los_Angeles'}); t(); setInterval(t, 30000); });
 
   if (RM) { qa('[data-reveal]').forEach(el => el.style.opacity = 1); return; }
 
@@ -51,10 +55,10 @@
         gsap.set(s.lines, {transformOrigin: '50% 100%'});
         /* fresh tweens each time (overwrite) so a melt can never leave a head stuck hidden */
         const show = up => gsap.fromTo(s.lines,
-          {autoAlpha: 0, yPercent: up ? -35 : 35, scaleY: 1.25, filter: 'blur(12px)'},
-          {autoAlpha: 1, yPercent: 0, scaleY: 1, filter: 'blur(0px)', duration: 1.1, ease: 'power3.out', stagger: .12, overwrite: true});
-        const melt = up => gsap.to(s.lines, {autoAlpha: 0, yPercent: up ? -30 : 30, scaleY: 1.2, filter: 'blur(10px)', duration: .55, ease: 'power2.in', stagger: .06, overwrite: true});
-        gsap.set(s.lines, {autoAlpha: 0, transformOrigin: '50% 100%'});
+          {autoAlpha: 0, yPercent: up ? -35 : 35, scaleY: 1.25},
+          {autoAlpha: 1, yPercent: 0, scaleY: 1, duration: 1.1, ease: 'power3.out', stagger: .12, overwrite: true});
+        const melt = up => gsap.to(s.lines, {autoAlpha: 0, yPercent: up ? -30 : 30, scaleY: 1.2, duration: .55, ease: 'power2.in', stagger: .06, overwrite: true});
+        gsap.set(s.lines, {autoAlpha: 0, transformOrigin: '50% 100%', force3D: true});
         const st = ScrollTrigger.create({trigger: h, start: 'top 92%', end: 'bottom top',
           onEnter: () => show(false), onEnterBack: () => show(true), onLeave: () => melt(true), onLeaveBack: () => melt(false)});
         if (st.isActive) show(false);
@@ -63,12 +67,15 @@
     });
 
     /* lazy images change page height → keep trigger positions fresh */
-    let rz; new ResizeObserver(() => { clearTimeout(rz); rz = setTimeout(() => ScrollTrigger.refresh(), 150); }).observe(document.body);
+    let rz, bh = document.body.offsetHeight; const refresh = () => { clearTimeout(rz); rz = setTimeout(() => {
+      if (SN.lenis && SN.lenis.isScrolling) return refresh();
+      const h = document.body.offsetHeight; if (Math.abs(h - bh) > 2) { bh = h; ScrollTrigger.refresh(); } }, 200); };
+    new ResizeObserver(refresh).observe(document.body);
     /* safety net: any liquid head sitting in view but hidden gets shown once scrolling settles */
     let idle; const heal = () => { clearTimeout(idle); idle = setTimeout(() => qa('[data-liquid] .line').forEach(l => {
       const r = l.getBoundingClientRect();
       if (r.bottom > 0 && r.top < innerHeight && +getComputedStyle(l).opacity < .05)
-        gsap.to(l, {autoAlpha: 1, yPercent: 0, scaleY: 1, filter: 'blur(0px)', duration: 1, ease: 'power3.out', overwrite: true});
+        gsap.to(l, {autoAlpha: 1, yPercent: 0, scaleY: 1, duration: 1, ease: 'power3.out', overwrite: true});
     }), 250); };
     addEventListener('scroll', heal, {passive: true});
 
@@ -80,13 +87,15 @@
 
     /* scroll lean: skewY ±3.2 from velocity, spring 55/10 */
     const lean = qa('[data-lean]');
-    if (lean.length) { let y = 0, v = 0;
+    if (lean.length) { let y = 0, v = 0, last = '';
       gsap.ticker.add((t, dms) => { const dt = Math.min(.05, dms / 1000), tg = gsap.utils.clamp(-3.2, 3.2, -SN.vel() * .09);
-        v += (55 * (tg - y) - 10 * v) * dt; y += v * dt; const s = `skewY(${y.toFixed(3)}deg)`; lean.forEach(el => el.style.transform = s); }); }
+        v += (55 * (tg - y) - 10 * v) * dt; y += v * dt;
+        const s = Math.abs(y) < .002 && Math.abs(v) < .002 ? '' : `skewY(${y.toFixed(3)}deg)`;
+        if (s !== last) { last = s; lean.forEach(el => el.style.transform = s); } }); }
 
     /* reading progress */
     const pv = q('.progress__v'), pl = q('.progress__line i');
-    if (pv) ScrollTrigger.create({start: 0, end: 'max', onUpdate: s => { pv.textContent = Math.round(s.progress * 100) + '%'; pl.style.transform = `scaleY(${s.progress})`; }});
+    if (pv) ScrollTrigger.create({start: 0, end: 'max', onUpdate: s => { const t = Math.round(s.progress * 100) + '%'; if (pv.textContent !== t) pv.textContent = t; pl.style.transform = `scaleY(${s.progress.toFixed(4)})`; }});
 
     /* cursor pill over [data-cursor-pill]: quickTo .35 power3 + skew lean */
     const pill = q('.cursor-pill');

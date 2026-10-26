@@ -34,7 +34,7 @@
 .mindex .ni:last-child{border-bottom:1px solid var(--line)}
 .ni .no{font-variant-numeric:tabular-nums}
 .ni:hover,.ni.item-active,.ni.main,.ni.is-on{color:var(--ink)}
-.ni .prog{position:absolute;left:0;bottom:-1px;height:1px;width:0;background:var(--ink);z-index:1}
+.ni .prog{position:absolute;left:0;bottom:-1px;height:1px;width:100%;transform:scaleX(0);transform-origin:left;background:var(--ink);z-index:1}
 
 .mmain{min-width:0}
 .msec{padding-top:var(--band)}
@@ -82,9 +82,9 @@
 .mbody>.msub:first-child{margin-top:0}
 
 /* subhead icons (from the original case studies) */
-.msub--i{display:flex;align-items:center;gap:12px}
-.msub__ic{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--tile);color:var(--forest)}
-.msub__ic svg{width:22px;height:22px}
+.msub--i{display:flex;align-items:center;gap:.45em}
+.msub__ic{flex:none;display:inline-flex;color:var(--forest)}
+.msub__ic svg{width:1.1em;height:1.1em;stroke-width:2}
 .mcards{display:grid;grid-template-columns:repeat(2,1fr);gap:32px 24px;margin:12px 0 20px}
 .mcards.n3{grid-template-columns:repeat(3,1fr)}
 .mcard{padding-top:24px;border-top:1px solid var(--line)}

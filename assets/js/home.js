@@ -34,39 +34,46 @@
     const st = pcs.map((c, i) => ({c, f: 0, x: 0, v: 0, k: Math.max(20, 70 - i * 4)}));
     let mx = -1e4, my = -1e4, time = 0;
     if (fine) addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; }, {passive: true});
-    const row = q('.hero__name');
+    const row = q('.hero__name'), rowOn = SN.watch(row);
+    /* letter centres relative to the row, measured once (and on resize) instead of every frame */
+    let cen = [], rw = 1; const measure = () => { const rr = row.getBoundingClientRect(); rw = rr.width || 1;
+      cen = pcs.map(c => { const r = c.getBoundingClientRect(); return [r.left - rr.left + r.width / 2, r.top - rr.top + r.height / 2]; }); };
+    measure(); setTimeout(measure, 2600); addEventListener('resize', () => requestAnimationFrame(measure));
     gsap.ticker.add((t, dms) => {
       const step = Math.min(.05, dms / 1000); time += step;
-      const rr = row.getBoundingClientRect(); if (rr.bottom < 0 || rr.top > innerHeight) return;
+      if (!rowOn()) return;
+      const rr = row.getBoundingClientRect();
       const vel = SN.vel(), sp = Math.min(9, Math.abs(vel) * .3), a = 1 - Math.exp(-step * 9);
       const ripple = ((time % 6.5) / 1.6) * 1.5 - .25;
       const tgt = gsap.utils.clamp(-9, 9, -vel * .22);
-      st.forEach(s => {
-        const r = s.c.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      st.forEach((s, i) => {
+        const cx = rr.left + cen[i][0], cy = rr.top + cen[i][1];
         const dx = mx - cx, dy = (my - cy) * 1.3;
-        const u = (cx - rr.left) / rr.width;
+        const u = cen[i][0] / rw;
         const warm = 13 * Math.exp(-(dx * dx + dy * dy) / (2 * 170 * 170));
         const rip = 6 * Math.exp(-((u - ripple) ** 2) / (2 * .07 * .07));
         s.f += (warm + rip + sp - s.f) * a;
-        s.c.style.setProperty('--field', s.f.toFixed(2));
+        const f = s.f.toFixed(1); if (f !== s.lf) { s.lf = f; s.c.style.setProperty('--field', f); }
         s.v += (s.k * (tgt - s.x) - 11 * s.v) * step; s.x += s.v * step;
-        s.c.style.transform = `skewX(${s.x.toFixed(2)}deg)`;
+        const k = s.x.toFixed(2); if (k !== s.lk) { s.lk = k; s.c.style.transform = `skewX(${k}deg)`; }
       });
     });
 
     /* setupMarquee: base 70px/s + |vel|*38 (cap 1400), direction follows scroll, lean spring, --speed melts pixels */
     const track = q('.marquee__track');
     if (track) {
-      let x = 0, dir = -1, speed = 70, lean = 0, lv = 0, spd = 0;
+      let x = 0, dir = -1, speed = 70, lean = 0, lv = 0, spd = 0, ls = '', hw = track.scrollWidth / 2;
+      const on = SN.watch(track); addEventListener('resize', () => hw = track.scrollWidth / 2);
       gsap.ticker.add((t, dms) => {
+        if (!on()) return;
         const step = Math.min(.05, dms / 1000), v = SN.vel();
         if (Math.abs(v) > .3) dir = v > 0 ? -1 : 1;
         speed += (70 + Math.min(1400, Math.abs(v) * 38) - speed) * (1 - Math.exp(-step * 5));
-        x += dir * speed * step; const h = track.scrollWidth / 2; if (x <= -h) x += h; if (x > 0) x -= h;
+        x += dir * speed * step; const h = hw; if (x <= -h) x += h; if (x > 0) x -= h;
         lv += (60 * (gsap.utils.clamp(-10, 10, -v * .25) - lean) - 10 * lv) * step; lean += lv * step;
         spd += (Math.min(19, Math.abs(v) * .45) - spd) * (1 - Math.exp(-step * 6));
         track.style.transform = `translate3d(${x.toFixed(2)}px,0,0) skewX(${lean.toFixed(2)}deg)`;
-        track.style.setProperty('--speed', spd.toFixed(2));
+        const sv = spd.toFixed(1); if (sv !== ls) { ls = sv; track.style.setProperty('--speed', sv); }
       });
     }
 
@@ -74,10 +81,13 @@
     const layers = [['.hero__lede', .28, -12], ['.hero__meta', .12, -6], ['.hero__name-row', -.1, 16]].map(([s, k, m]) => ({el: q(s), k, m}));
     const tilt = {x: 0, y: 0}, tt = {x: 0, y: 0};
     if (fine) addEventListener('pointermove', e => { tt.x = e.clientX / innerWidth - .5; tt.y = e.clientY / innerHeight - .5; }, {passive: true});
-    const hero = q('.hero');
-    gsap.ticker.add(() => {
-      tilt.x += (tt.x - tilt.x) * .06; tilt.y += (tt.y - tilt.y) * .06;
-      const y = Math.min(scrollY, hero.offsetHeight + 200), near = Math.max(0, 1 - y / hero.offsetHeight);
+    const hero = q('.hero'), heroOn = SN.watch(hero);
+    let hh = hero.offsetHeight; addEventListener('resize', () => hh = hero.offsetHeight);
+    gsap.ticker.add((t, dms) => {
+      if (!heroOn()) return;
+      const a = 1 - Math.exp(-Math.min(.05, dms / 1000) * 3.7); /* frame-rate independent: same feel at 60 or 120hz */
+      tilt.x += (tt.x - tilt.x) * a; tilt.y += (tt.y - tilt.y) * a;
+      const y = Math.min(scrollY, hh + 200), near = Math.max(0, 1 - y / hh);
       layers.forEach(l => l.el && (l.el.style.translate = `${(tilt.x * l.m * near).toFixed(2)}px ${(y * l.k + tilt.y * l.m * .6 * near).toFixed(2)}px`));
     });
   });

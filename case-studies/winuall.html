@@ -20,18 +20,18 @@
 <link rel="icon" href="../framerusercontent.com/images/09KlDhJzTL23u51XmAdHalB9B0g.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@600;700;800&family=Instrument+Serif:ital@0;1&family=Big+Shoulders+Display:wght@300..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="preload" href="../assets/fonts/GeistPixel-VF.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/css/base.css?v=12">
-<link rel="stylesheet" href="../assets/css/cs.css?v=12">
+<link rel="stylesheet" href="../assets/css/base.css?v=14">
+<link rel="stylesheet" href="../assets/css/cs.css?v=14">
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js" defer></script>
-<script src="../assets/js/base.js?v=12" defer></script>
-<script src="../assets/js/cs.js?v=12" defer></script>
+<script src="../assets/js/base.js?v=14" defer></script>
+<script src="../assets/js/cs.js?v=14" defer></script>
 </head>
 <body class="pg-cs" data-lenis="{&quot;lerp&quot;: 0.09}">
 <div class="navbar"><header class="nav">
   <a class="nav__brand" href="../index.html" aria-label="Samarth Nayyar, home">Samarth</a>
   <nav class="nav__links" aria-label="Primary"><a class="" href="../index.html">Index</a><a class=" is-on" href="../case-studies.html">Work</a><a class="" href="../story.html">Story</a><a class="" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener">Resume</a></nav>
-  <a class="nav__cta" href="mailto:contact@samarthnayyar.com"><i></i>Get in touch</a>
+  <button class="nav__music" type="button" aria-pressed="false" aria-label="Listen to what I like (plays music)"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="nav__music-t"><span class="nav__music-l">Listen to what I like</span></span></button>
 </header></div>
 <div class="navbar-spacer"></div>
 <div class="progress" aria-hidden="true"><span class="progress__v">0%</span><span class="progress__line"><i></i></span></div>
@@ -46,7 +46,7 @@
       <div class="logo-sq"><img src="../framerusercontent.com/images/Z3joUNF1uXVEunMKCdgcAGEGpHw__Q__width__E__1253__A__height__E__337.png" alt="Winuall logo"></div>
     </div>
     <div class="chips" data-intro-item><span class="chip">Design Systems</span><span class="chip">UX Designs</span><span class="chip">Freelance</span></div>
-    <div class="comic" data-intro-item><p class="muted">Not everyone like&#x27;s to read to much nowadays (thanks TikTok). See a comic strip?</p><a class="cta" href="#s0"><span>Comic Strip &darr;</span></a></div>
+    <div class="comic" data-intro-item><p class="muted">Not everyone like&#x27;s to read to much nowadays (thanks TikTok). See a comic strip?</p><button class="cta" type="button" data-comic-open><span>Comic Strip</span></button></div>
   </div>
 </header>
 <section class="mfacts band"><div class="container mfacts__grid">
@@ -66,7 +66,7 @@
   <section class="msec bare" id="s0">
 <div class="mbody"><figure class="mfig c-a" data-reveal><img src="../framerusercontent.com/images/3VlKHvXp1y7LO2HutdiwKw6mbY__Q__width__E__1863__A__height__E__1183.png" alt="" loading="lazy"></figure>
 <p data-reveal>Not everyone like&#x27;s to read to much nowadays (thanks TikTok). See a comic strip or 30 second video to understand this project?</p>
-<div class="comic comic--in" data-reveal><a class="cta" href="#top"><span>Comic Strip</span></a><a class="cta" href="#top"><span>30 second video</span></a></div></div></section>
+<div class="comic comic--in" data-reveal><button class="cta" type="button" data-comic-open><span>Comic Strip</span></button><a class="cta" href="#top"><span>30 second video</span></a></div></div></section>
 <section class="msec" id="s1"><h2 class="display" data-liquid>The Problem</h2>
 <div class="mbody"><p data-reveal>COVID broke Indian education overnight. A huge amount of teaching; especially outside major cities ran on paper. Notebooks, printed papers, physical submissions. When classrooms closed, that had nowhere to go.</p>
 <p data-reveal>Winuall was the bridge: get paper-based coaching institutes online without assuming anyone involved was comfortable with digital anything. We worked with institutes each serving thousands of students, all of them rooted in decades of traditional methods.</p></div></section>
@@ -94,14 +94,40 @@
 
 </div>
 </div>
-<a class="mnext band" href="poll-police.html" data-cursor-pill="Next">
-  <span class="container mnext__in">
-    <span class="kicker">Next case study &middot; (07)</span>
-    <span class="display mnext__t">Poll Police</span>
-    <span class="muted">Election information for 70 million people <span aria-hidden="true">&rarr;</span></span>
-  </span>
-</a>
+<section class="mmore band" aria-label="Next case studies">
+  <div class="container mmore__head"><h2 class="display" data-liquid>Next case studies</h2><a class="mmore__all" href="../case-studies.html">View all <span aria-hidden="true">&#8599;</span></a></div>
+  <div class="container mmore__grid"><article class="wcard" data-href="poll-police.html" data-cursor-pill="Open" data-reveal>
+  <a class="wcard__frame" href="poll-police.html"><span class="wcard__img"><img src="../framerusercontent.com/images/Mo1EhfWgQVMDeb6XkzecngUxhg__Q__width__E__1280__A__height__E__854.png" alt="Poll Police" loading="lazy"></span></a>
+  <div class="wcard__cap">
+    <span class="wcard__no">(07)</span>
+    <h3 class="wcard__t"><a href="poll-police.html">Poll Police</a></h3>
+    <p class="wcard__d muted">Election information for 70 million people</p>
+    <div class="chips"><span class="chip">UX Design</span><span class="chip">Research</span></div>
+    <a class="wcard__open" href="poll-police.html">Open <span aria-hidden="true">&#8599;</span></a>
+  </div>
+</article><article class="wcard" data-href="hope-house.html" data-cursor-pill="Open" data-reveal>
+  <a class="wcard__frame" href="hope-house.html"><span class="wcard__img"><img src="../framerusercontent.com/images/2mw3yIG9R4kBwdghGrTGUEmanM__Q__width__E__1920__A__height__E__1080.png" alt="Hope House" loading="lazy"></span></a>
+  <div class="wcard__cap">
+    <span class="wcard__no">(08)</span>
+    <h3 class="wcard__t"><a href="hope-house.html">Hope House</a></h3>
+    <p class="wcard__d muted">A safe place to ask what you can&#x27;t ask</p>
+    <div class="chips"><span class="chip">UX Design</span><span class="chip">Brand Identity</span><span class="chip">Research</span></div>
+    <a class="wcard__open" href="hope-house.html">Open <span aria-hidden="true">&#8599;</span></a>
+  </div>
+</article><article class="wcard" data-href="planteria.html" data-cursor-pill="Open" data-reveal>
+  <a class="wcard__frame" href="planteria.html"><span class="wcard__img"><img src="../framerusercontent.com/images/jThsSNHxS9DwHMjmIQLJjHUicLg__Q__width__E__1920__A__height__E__800.png" alt="Planteria" loading="lazy"></span></a>
+  <div class="wcard__cap">
+    <span class="wcard__no">(09)</span>
+    <h3 class="wcard__t"><a href="planteria.html">Planteria</a></h3>
+    <p class="wcard__d muted">A plant care app that learns from its community</p>
+    <div class="chips"><span class="chip">Design Systems</span><span class="chip">Usability Testing</span><span class="chip">UX Design</span><span class="chip">Research</span></div>
+    <a class="wcard__open" href="planteria.html">Open <span aria-hidden="true">&#8599;</span></a>
+  </div>
+</article></div>
+</section>
 </main>
+<div class="comic-drawer" aria-hidden="true"><div class="comic-drawer__scrim" data-comic-close></div><aside class="comic-drawer__panel" role="dialog" aria-modal="true" aria-label="Comic strip" tabindex="-1"><header class="comic-drawer__head"><span class="kicker">Comic strip</span><button class="comic-drawer__x" type="button" data-comic-close aria-label="Close comic strip"><span></span><span></span></button></header><div class="comic-drawer__body" data-lenis-prevent><h2 class="display">Winuall</h2><div class="comic-drawer__strip" data-comic-strip></div><p class="comic-drawer__empty muted">The comic for this project is still being drawn. Check back soon, or read the full story on this page.</p></div></aside></div>
+
 <section class="contact band" id="contact">
   <div class="contact__inner container">
     <h2 class="display" data-liquid>Always up for a conversation about UX, design systems or AI-native tooling</h2>

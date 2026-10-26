@@ -2,6 +2,14 @@
    Reveals, liquid heads, hairlines, lean, progress, cursor pill come from base.js. */
 (function(){
   const {RM, fine, q, qa} = SN;
+  /* skills banner: fresh random order on every visit (both copies match so the loop stays seamless) */
+  const mq = q('[data-shuffle]');
+  if (mq) { const gs = qa('.marquee__group', mq), words = qa('span:not(.marquee__plus)', gs[0]).map(s => s.textContent);
+    for (let k = words.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [words[k], words[j]] = [words[j], words[k]]; }
+    gs.forEach(g => qa('span:not(.marquee__plus)', g).forEach((s, k) => s.textContent = words[k])); }
+  /* past-employers carousel: CSS loop, paused while offscreen */
+  const pm = q('.prow__marquee');
+  if (pm) new IntersectionObserver(([e]) => pm.classList.toggle('is-off', !e.isIntersecting)).observe(pm);
   if (RM) return;
   SN.fontsReady.then(() => {
     const ex = 'expo.out';

@@ -15,6 +15,18 @@
     tr.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') { e.preventDefault(); go(idx() - 1); } if (e.key === 'ArrowRight') { e.preventDefault(); go(idx() + 1); } });
     tr.addEventListener('scroll', upd, {passive: true}); addEventListener('resize', upd); upd();
   });
+  /* comic strip drawer: slides in from the right; Esc / scrim / × close; page scroll pauses meanwhile */
+  const dr = q('.comic-drawer');
+  if (dr) {
+    const panel = q('.comic-drawer__panel', dr); let opener = null;
+    const open = e => { opener = e.currentTarget; dr.classList.add('is-open'); dr.setAttribute('aria-hidden', 'false');
+      SN.lenis && SN.lenis.stop(); document.documentElement.style.overflow = 'hidden'; setTimeout(() => panel.focus({preventScroll: true}), 50); };
+    const close = () => { if (!dr.classList.contains('is-open')) return; dr.classList.remove('is-open'); dr.setAttribute('aria-hidden', 'true');
+      SN.lenis && SN.lenis.start(); document.documentElement.style.overflow = ''; opener && opener.focus({preventScroll: true}); };
+    qa('[data-comic-open]').forEach(b => b.addEventListener('click', open));
+    qa('[data-comic-close]', dr).forEach(b => b.addEventListener('click', close));
+    addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  }
   if (RM) return;
   SN.fontsReady.then(() => {
     const items = qa('.ni[data-sec]');

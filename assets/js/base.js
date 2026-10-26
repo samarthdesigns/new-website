@@ -82,7 +82,7 @@
     /* hairlines draw: horizontal bands (bottom 95%), vertical dividers (top 90%) */
     qa('.band,.hero,.about,[data-draw-h]').forEach(el => gsap.fromTo(el, {'--draw': 0}, {'--draw': 1, duration: 1.6, ease: 'expo.inOut',
       scrollTrigger: {trigger: el, start: 'bottom 95%', once: true}}));
-    qa('.vrule,.pillar+.pillar,.place+.place,.work__mid,[data-draw-v]').forEach(el => gsap.fromTo(el, {'--draw': 0}, {'--draw': 1, duration: 1.4, ease: 'expo.inOut',
+    qa('.vrule,.work__mid,[data-draw-v]').forEach(el => gsap.fromTo(el, {'--draw': 0}, {'--draw': 1, duration: 1.4, ease: 'expo.inOut',
       scrollTrigger: {trigger: el, start: 'top 90%', once: true}}));
 
     /* scroll lean: skewY ±3.2 from velocity, spring 55/10 */
@@ -148,4 +148,51 @@
       }));
     });
   });
+})();
+
+/* "Listen to what I like": nav pill plays a small playlist through a hidden YouTube player.
+   Silent until clicked (nothing loads before that); track + position carry over between pages. */
+(function(){
+  const btn = document.querySelector('.nav__music'); if (!btn) return;
+  const lab = btn.querySelector('.nav__music-l');
+  const SONGS = [
+    ['20Ov0cDPZy8', "Free Fallin'", 'John Mayer'],
+    ['IjcE8SxupX8', 'Taaj', 'Lost Stories'],
+    ['KQetemT1sWc', 'Here Comes the Sun', 'The Beatles'],
+    ['2IE3T9mcqyM', 'Prey', 'The Neighbourhood'],
+    ['zvCBSSwgtg4', 'Ho Hey', 'The Lumineers']
+  ];
+  const KEY = 'sn-music', IDLE = 'Listen to what I like';
+  let st = {}; try { st = JSON.parse(sessionStorage.getItem(KEY)) || {}; } catch (e) {}
+  let i = st.i || 0, player = null, ready = null, on = false, fails = 0;
+  const save = () => { try { sessionStorage.setItem(KEY, JSON.stringify({i, t: player && player.getCurrentTime ? player.getCurrentTime() : 0, on})); } catch (e) {} };
+  /* label swap: old text slides up and out, new text rises in */
+  const say = txt => { if (lab.textContent === txt) return;
+    lab.classList.add('is-out');
+    setTimeout(() => { lab.textContent = txt; lab.classList.remove('is-out'); lab.classList.add('is-in');
+      requestAnimationFrame(() => requestAnimationFrame(() => lab.classList.remove('is-in'))); }, 280); };
+  const paint = () => { btn.classList.toggle('is-on', on); btn.setAttribute('aria-pressed', on);
+    const s = SONGS[i]; say(on ? `${s[1]} · ${s[2]}` : IDLE);
+    btn.setAttribute('aria-label', on ? `Pause music: ${s[1]} by ${s[2]}` : 'Listen to what I like (plays music)'); };
+  const load = () => ready || (ready = new Promise(res => {
+    const box = document.createElement('div');
+    box.style.cssText = 'position:fixed;left:0;bottom:0;width:2px;height:2px;opacity:0;pointer-events:none;overflow:hidden;z-index:-1';
+    box.innerHTML = '<div id="sn-yt"></div>'; document.body.appendChild(box);
+    const make = () => { player = new YT.Player('sn-yt', {width: 2, height: 2, videoId: SONGS[i][0],
+      playerVars: {autoplay: 0, controls: 0, disablekb: 1, playsinline: 1, rel: 0, start: Math.floor(st.t || 0)},
+      events: {onReady: () => res(player),
+        onStateChange: e => { if (e.data === 1) { fails = 0; if (!on) { on = true; paint(); } } if (e.data === 0) next(); },
+        onError: () => { if (++fails < SONGS.length) next(); else { on = false; paint(); } }}}); };
+    if (window.YT && YT.Player) make();
+    else { const prev = window.onYouTubeIframeAPIReady; window.onYouTubeIframeAPIReady = () => { prev && prev(); make(); };
+      const s = document.createElement('script'); s.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(s); }
+  }));
+  const next = () => { i = (i + 1) % SONGS.length; st.t = 0; if (player) player.loadVideoById(SONGS[i][0]); paint(); save(); };
+  const play = () => { on = true; paint(); load().then(p => { p.unMute(); p.setVolume(70); p.playVideo(); }); };
+  const pause = () => { on = false; paint(); if (player && player.pauseVideo) player.pauseVideo(); save(); };
+  btn.addEventListener('click', () => on ? pause() : play());
+  addEventListener('pagehide', save);
+  /* was playing on the previous page: try to pick up where it left off (browsers may need a click first) */
+  if (st.on) { const resume = () => { load().then(p => { p.playVideo(); setTimeout(() => { if (p.getPlayerState && p.getPlayerState() !== 1) { on = false; paint(); } }, 2500); }); };
+    on = true; paint(); setTimeout(resume, 600); }
 })();

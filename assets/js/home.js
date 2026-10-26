@@ -100,3 +100,72 @@
     });
   });
 })();
+
+/* about photo as a screen (after jithinrp.com): grayscale, fine dot grid + scanlines, a glitch every
+   few seconds (slices slip, a ghost offsets) and now and then a short burst of big pixels. WebGL; the
+   plain grayscale <img> stays as the fallback. Renders only while on screen. */
+(function(){
+  const box = document.querySelector('[data-screen]'); if (!box) return;
+  const img = box.querySelector('img');
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cv = document.createElement('canvas'), gl = cv.getContext('webgl', {premultipliedAlpha: false, antialias: false});
+  if (!gl) return;
+  const VS = 'attribute vec2 p;varying vec2 v;void main(){v=p*.5+.5;v.y=1.-v.y;gl_Position=vec4(p,0.,1.);}';
+  const FS = `precision mediump float;varying vec2 v;uniform sampler2D T;uniform vec2 R;uniform vec2 C;uniform float t;uniform float dpr;
+  float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
+  vec3 tex(vec2 uv){uv=clamp(uv,0.,1.);return texture2D(T,uv*C.xy+(1.-C.xy)*vec2(.5,.3)).rgb;}
+  void main(){
+    vec2 uv=v;
+    float gs=floor(t/3.7),gp=fract(t/3.7);
+    float g=step(.3,h(vec2(gs,2.)))*smoothstep(.80,.81,gp)*(1.-smoothstep(.86,.87,gp));
+    float band=floor(v.y*22.+h(vec2(gs,5.))*9.);
+    uv.x+=step(.55,h(vec2(band,gs)))*(h(vec2(band,gs+3.))-.5)*.09*g;
+    uv.x+=sin(v.y*46.+t*24.)*.004*g;
+    float pp=fract(t/6.1),pulse=smoothstep(.50,.53,pp)*(1.-smoothstep(.58,.64,pp));
+    float cell=mix(1.,22.,pulse);
+    if(cell>1.5)uv=(floor(uv*R/cell)+.5)*cell/R;
+    float y=dot(tex(uv),vec3(.299,.587,.114));
+    y=clamp((y-.5)*1.12+.5,0.,1.);
+    vec3 col=vec3(y);
+    col=max(col,vec3(dot(tex(uv+vec2(.012,0.)*g),vec3(.333)))*.55*g);
+    vec2 fc=gl_FragCoord.xy/dpr;
+    float dm=smoothstep(.95,.35,length(fract(fc/3.)-.5)*2.);
+    float sc=.88+.12*step(.5,fract(fc.y/3.));
+    col*=mix(.62,1.18,dm)*sc;
+    col+=(h(fc+floor(t*24.))-.5)*.05;
+    col+=step(.985,h(vec2(floor(v.y*140.),floor(t*12.))))*.12*g;
+    gl_FragColor=vec4(col,1.);
+  }`;
+  const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null; };
+  const vs = sh(gl.VERTEX_SHADER, VS), fs = sh(gl.FRAGMENT_SHADER, FS); if (!vs || !fs) return;
+  const pr = gl.createProgram(); gl.attachShader(pr, vs); gl.attachShader(pr, fs); gl.linkProgram(pr);
+  if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return;
+  gl.useProgram(pr);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const U = n => gl.getUniformLocation(pr, n), uR = U('R'), uC = U('C'), uT = U('t'), uD = U('dpr');
+  let ready = false, on = false, raf = 0, t0 = performance.now();
+  const size = () => {
+    const d = Math.min(devicePixelRatio || 1, 2), w = box.clientWidth, hgt = box.clientHeight;
+    cv.width = Math.round(w * d); cv.height = Math.round(hgt * d); gl.viewport(0, 0, cv.width, cv.height);
+    gl.uniform2f(uR, w, hgt); gl.uniform1f(uD, d);
+    /* object-fit: cover — show the part of the texture that fills the box */
+    const ia = img.naturalWidth / img.naturalHeight, ba = w / hgt;
+    gl.uniform2f(uC, ba < ia ? ba / ia : 1, ba < ia ? 1 : ia / ba);
+  };
+  const draw = now => { gl.uniform1f(uT, (now - t0) / 1000); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); if (on && !RM) raf = requestAnimationFrame(draw); };
+  const start = () => {
+    const tx = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tx);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img);
+    [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach(k => gl.texParameteri(gl.TEXTURE_2D, k, gl.CLAMP_TO_EDGE));
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    box.appendChild(cv); box.classList.add('is-gl'); ready = true; size(); draw(performance.now());
+    new ResizeObserver(() => { size(); if (!on || RM) draw(performance.now()); }).observe(box);
+  };
+  new IntersectionObserver(([e]) => {
+    on = e.isIntersecting;
+    if (on && !ready) { img.loading = 'eager'; img.complete && img.naturalWidth ? start() : img.addEventListener('load', start, {once: true}); return; }
+    cancelAnimationFrame(raf); if (on && ready && !RM) raf = requestAnimationFrame(draw);
+  }, {rootMargin: '200px'}).observe(box);
+})();

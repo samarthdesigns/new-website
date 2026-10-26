@@ -49,16 +49,28 @@
     qa('[data-liquid]').forEach(h => {
       SplitText.create(h, {type: 'lines', linesClass: 'line', autoSplit: true, onSplit(s){
         gsap.set(s.lines, {transformOrigin: '50% 100%'});
-        const tl = gsap.timeline({paused: true}).fromTo(s.lines,
-          {autoAlpha: 0, yPercent: 35, scaleY: 1.25, filter: 'blur(12px)'},
-          {autoAlpha: 1, yPercent: 0, scaleY: 1, filter: 'blur(0px)', duration: 1.1, ease: 'power3.out', stagger: .12});
+        /* fresh tweens each time (overwrite) so a melt can never leave a head stuck hidden */
+        const show = up => gsap.fromTo(s.lines,
+          {autoAlpha: 0, yPercent: up ? -35 : 35, scaleY: 1.25, filter: 'blur(12px)'},
+          {autoAlpha: 1, yPercent: 0, scaleY: 1, filter: 'blur(0px)', duration: 1.1, ease: 'power3.out', stagger: .12, overwrite: true});
         const melt = up => gsap.to(s.lines, {autoAlpha: 0, yPercent: up ? -30 : 30, scaleY: 1.2, filter: 'blur(10px)', duration: .55, ease: 'power2.in', stagger: .06, overwrite: true});
-        const st = ScrollTrigger.create({trigger: h, start: 'top 92%', end: 'bottom 8%',
-          onEnter: () => tl.restart(), onEnterBack: () => tl.restart(), onLeave: () => melt(true), onLeaveBack: () => melt(false)});
-        gsap.set(s.lines, {autoAlpha: 0});
+        gsap.set(s.lines, {autoAlpha: 0, transformOrigin: '50% 100%'});
+        const st = ScrollTrigger.create({trigger: h, start: 'top 92%', end: 'bottom top',
+          onEnter: () => show(false), onEnterBack: () => show(true), onLeave: () => melt(true), onLeaveBack: () => melt(false)});
+        if (st.isActive) show(false);
         return st;
       }});
     });
+
+    /* lazy images change page height → keep trigger positions fresh */
+    let rz; new ResizeObserver(() => { clearTimeout(rz); rz = setTimeout(() => ScrollTrigger.refresh(), 150); }).observe(document.body);
+    /* safety net: any liquid head sitting in view but hidden gets shown once scrolling settles */
+    let idle; const heal = () => { clearTimeout(idle); idle = setTimeout(() => qa('[data-liquid] .line').forEach(l => {
+      const r = l.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < innerHeight && +getComputedStyle(l).opacity < .05)
+        gsap.to(l, {autoAlpha: 1, yPercent: 0, scaleY: 1, filter: 'blur(0px)', duration: 1, ease: 'power3.out', overwrite: true});
+    }), 250); };
+    addEventListener('scroll', heal, {passive: true});
 
     /* hairlines draw: horizontal bands (bottom 95%), vertical dividers (top 90%) */
     qa('.band,.hero,.about,[data-draw-h]').forEach(el => gsap.fromTo(el, {'--draw': 0}, {'--draw': 1, duration: 1.6, ease: 'expo.inOut',

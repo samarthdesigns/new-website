@@ -11,12 +11,12 @@
 <link rel="icon" href="../framerusercontent.com/images/09KlDhJzTL23u51XmAdHalB9B0g.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@400;500;600&family=Barlow+Condensed:wght@600;700;800&family=Instrument+Serif:ital@0;1&family=Big+Shoulders+Display:wght@300..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="preload" href="../assets/fonts/GeistPixel-VF.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/css/base.css?v=6">
-<link rel="stylesheet" href="../assets/css/cs.css?v=6">
+<link rel="stylesheet" href="../assets/css/base.css?v=8">
+<link rel="stylesheet" href="../assets/css/cs.css?v=8">
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js" defer></script>
-<script src="../assets/js/base.js?v=6" defer></script>
-<script src="../assets/js/cs.js?v=6" defer></script>
+<script src="../assets/js/base.js?v=8" defer></script>
+<script src="../assets/js/cs.js?v=8" defer></script>
 </head>
 <body class="pg-cs" data-lenis="{&quot;lerp&quot;: 0.09}">
 <div class="navbar"><header class="nav">
@@ -68,11 +68,11 @@
 <section class="msec" id="s3"><h2 class="display" data-liquid>Understanding the users</h2>
 <div class="mbody"><p data-reveal>Most platforms design for the third and bolt on tooling for the first two. We designed all three properly, because a community with weak moderation isn&#x27;t a community for very long.</p>
 <p data-reveal>Three roles, and they needed genuinely different products inside the same product:</p>
-<p data-reveal>Admin</p>
+<h3 class="msub" data-reveal>Admin</h3>
 <p data-reveal>Create rooms, manage users, oversee content, set rules.</p>
-<p data-reveal>Moderators</p>
+<h3 class="msub" data-reveal>Moderators</h3>
 <p data-reveal>Support admins, monitor discussions, de-escalate conflict, report upward.</p>
-<p data-reveal>Participants</p>
+<h3 class="msub" data-reveal>Participants</h3>
 <p data-reveal>Participate, follow rules, build the community, personalise their profile.</p></div></section>
 <section class="msec" id="s4"><h2 class="display" data-liquid>The decision</h2>
 <div class="mbody"><p data-reveal>I built the design system plug-and-play from day one, knowing it would slow us down at the start.</p>
@@ -80,18 +80,18 @@
 <div class="callout" data-reveal><span class="kicker">WHAT HAPPENED</span><p>That slowed the first few weeks down. It also meant that when engineering rebuilt the entire stack from Angular to React midway through the project, a decision made without me and one I didn&#x27;t see coming, the interface barely felt it. If I&#x27;d built rigid, one-off screens instead of a real system, that migration would have cost us weeks we didn&#x27;t have.</p></div>
 <p data-reveal>I also made a smaller call I&#x27;d defend again: the poll interaction wasn&#x27;t the same component reused on every screen. Mobile got a bottom sheet, desktop got a corner box. Small difference, but it meant the feature never felt bolted on to whichever platform wasn&#x27;t the primary target.</p></div></section>
 <section class="msec" id="s5"><h2 class="display" data-liquid>What shipped</h2>
-<div class="mbody"><p data-reveal>Three roles, fully designed</p>
+<div class="mbody"><h3 class="msub" data-reveal>Three roles, fully designed</h3>
 <p data-reveal>Admins running rooms and setting rules, Moderators keeping sessions on track, Room Joinees showing up to participate. A joining flow that told people upfront what the platform could see and hear from them, camera and mic controls front and center before anyone entered a room, not buried in settings.</p>
-<p data-reveal>Device based design</p>
+<h3 class="msub" data-reveal>Device based design</h3>
 <p data-reveal>An information-dense left panel that resized on interaction, giving people more room to scan detail without a second screen or a separate tab. Animated states for live polls, built in Protopie and Rive, appearing as an unobtrusive bottom sheet on mobile and a corner box on desktop.</p>
-<p data-reveal>Design system underneath all of it</p>
+<h3 class="msub" data-reveal>Design system underneath all of it</h3>
 <p data-reveal>Plug-and-play from day one, translated into React components with the dev team so it could scale past the first version without a redesign.</p>
 <figure class="mfig c-b" data-reveal><img src="../framerusercontent.com/images/O9bctiiCSNA73go87ZbSWrDmzs__Q__width__E__5988__A__height__E__2160.png" alt="" loading="lazy"></figure></div></section>
 <section class="msec" id="s6"><h2 class="display" data-liquid>What I still like</h2>
-<div class="mbody"><p data-reveal>The expanding Panel</p>
+<div class="mbody"><h3 class="msub" data-reveal>The expanding Panel</h3>
 <p data-reveal>The bottom half is information-dense and some users want to live in it. Rather than a separate view, the top half shrinks as you scroll so the bottom can breathe. Small thing. Removes a whole navigation step.</p>
 <div class="mpair n2"><figure class="mfig" data-reveal><img src="../framerusercontent.com/images/J9r5a0eyAD21PNf7qdhyVma6TXg__Q__width__E__1920__A__height__E__1080.png" alt="" loading="lazy"></figure><figure class="mfig" data-reveal><img src="../framerusercontent.com/images/BRA7ILaTMsqoLeypON6ge50JNQg__Q__width__E__1920__A__height__E__1080.png" alt="" loading="lazy"></figure></div>
-<p data-reveal>Polls</p>
+<h3 class="msub" data-reveal>Polls</h3>
 <p data-reveal>A bottom sheet on mobile, an unobtrusive box in the top-right on desktop. Polls should interrupt you just enough to answer and not enough to lose your place in the conversation.</p>
 <div class="mpair n2"><figure class="mfig" data-reveal><img src="../framerusercontent.com/images/zeitq9GEPnL8tZv0TNWfux5MQA__Q__width__E__1920__A__height__E__1080.png" alt="" loading="lazy"></figure><figure class="mfig" data-reveal><img src="../framerusercontent.com/images/HUxRmb0Dbjwli6BjGxSX4zzzx6k__Q__width__E__1920__A__height__E__1080.png" alt="" loading="lazy"></figure></div></div></section>
 <section class="msec" id="s7"><h2 class="display" data-liquid>The result</h2>

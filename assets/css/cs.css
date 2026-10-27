@@ -131,7 +131,8 @@
 .mcar__n{margin-right:auto}.mcar__n b{color:var(--ink);font-weight:600}
 .mcar__b{position:relative;overflow:hidden;width:50px;height:50px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink);font:500 18px/1 var(--sans);cursor:pointer;transition:color .4s var(--liquid),opacity .3s}
 .mcar__b::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--forest);transform:scale(0);transition:transform .5s var(--liquid)}
-.mcar__b span{position:relative}
+.mcar__b span{position:relative;display:grid;place-items:center}
+.mcar__b svg{width:18px;height:18px}
 .mcar__b:hover:not(:disabled){color:#fff}.mcar__b:hover:not(:disabled)::before{transform:scale(1)}
 .mcar__b:disabled{opacity:.35;cursor:default}
 .mcar__b:focus-visible,.mcar__track:focus-visible{outline:2px solid var(--forest);outline-offset:3px}

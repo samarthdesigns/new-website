@@ -51,6 +51,11 @@
 .n4 .p2{left:4%;top:52%;width:46%;height:46%;rotate:3deg}
 .n4 .p3{right:2%;top:50%;width:46%;height:46%;rotate:-5deg}
 
+/* ---- hero scroll cue: label + tile arrow */
+.xline{display:inline-flex;align-items:center;gap:12px;color:var(--ink);font-weight:500;font-size:16px}
+.xline .sq{width:32px;height:32px;display:grid;place-items:center;border-radius:10px;background:var(--tile);transition:background .4s var(--liquid),border-radius .4s var(--liquid),color .4s}
+.xline:hover .sq{background:var(--forest);color:#fff;border-radius:16px}
+.xline svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.6}
 /* ---- featured stack (ink band) */
 .xdark{background:var(--ink);color:#fff}
 .xproj{position:relative;padding:0 max(var(--gutter),calc((100% - var(--max))/2));display:grid;grid-template-columns:1.1fr .9fr;column-gap:clamp(40px,9vw,129px)}

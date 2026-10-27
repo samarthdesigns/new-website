@@ -2,6 +2,26 @@
 (function(){
   const {RM, q, qa} = SN;
 
+  /* locked carousel: images are AES-GCM encrypted; the password derives the key in the browser */
+  SN.qa('[data-lock]').forEach(c => {
+    const ov = c.querySelector('.mlock'), cta = ov.querySelector('.mlock__cta'), f = ov.querySelector('form'),
+      inp = f.querySelector('input'), err = f.querySelector('.mlock__e'), imgs = [...c.querySelectorAll('img[data-enc]')];
+    cta.addEventListener('click', () => { cta.hidden = true; f.hidden = false; inp.focus(); });
+    f.addEventListener('submit', async e => {
+      e.preventDefault(); err.textContent = 'Unlocking…';
+      try {
+        const bufs = await Promise.all(imgs.map(i => fetch(i.dataset.enc).then(r => r.arrayBuffer())));
+        const b0 = new Uint8Array(bufs[0]), base = await crypto.subtle.importKey('raw', new TextEncoder().encode(inp.value), 'PBKDF2', false, ['deriveKey']);
+        const key = await crypto.subtle.deriveKey({name: 'PBKDF2', salt: b0.slice(0, 16), iterations: 250000, hash: 'SHA-256'}, base, {name: 'AES-GCM', length: 256}, false, ['decrypt']);
+        const out = await Promise.all(bufs.map(b => { b = new Uint8Array(b); return crypto.subtle.decrypt({name: 'AES-GCM', iv: b.slice(16, 28)}, key, b.slice(28)); }));
+        imgs.forEach((i, k) => { i.src = URL.createObjectURL(new Blob([out[k]], {type: 'image/webp'})); });
+        c.classList.remove('is-locked'); ov.classList.add('is-gone'); setTimeout(() => ov.remove(), 600);
+      } catch (_) {
+        err.textContent = 'Wrong password'; f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); inp.select();
+      }
+    });
+  });
+
   /* image carousels: native scroll-snap (swipe on touch), buttons + counter */
   SN.qa('[data-car]').forEach(c => {
     const tr = c.querySelector('.mcar__track'), sl = [...tr.children], n = sl.length,
@@ -40,6 +60,9 @@
     const main = q('.ni.main .prog');
     if (main) gsap.fromTo(main, {scaleX: 0}, {scaleX: 1, ease: 'none', scrollTrigger: {trigger: '.mmain', start: 'top top', end: 'bottom bottom', scrub: true}});
     const as = q('.maside');
+    /* sticky aside: if it's taller than the viewport, pin it higher so the whole list stays reachable */
+    const st = q('.aside-stick');
+    if (st) { const fit = () => st.style.setProperty('--stick', Math.min(99, innerHeight - st.offsetHeight) + 'px'); fit(); addEventListener('resize', fit); }
     if (as) gsap.fromTo(as, {'--draw': 0}, {'--draw': 1, duration: 1.4, ease: 'expo.inOut', scrollTrigger: {trigger: as, start: 'top 90%', once: true}});
     ScrollTrigger.refresh();
   });

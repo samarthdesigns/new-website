@@ -1,148 +1,146 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Paytm Chat: Chat Payments for 500M+ Users | Case Study by Samarth Nayyar</title>
-<meta name="description" content="Designing chat-payments primitives from zero for 500M+ users, where every component needed legal and compliance sign-off before it could ship.">
-<meta property="og:title" content="Paytm Chat: Chat Payments for 500M+ Users | Case Study by Samarth Nayyar">
-<meta property="og:description" content="Designing chat-payments primitives from zero for 500M+ users, where every component needed legal and compliance sign-off before it could ship.">
-<meta property="og:image" content="https://samarthnayyar.com/framerusercontent.com/assets/6vNBm5jMFSHAAXq6AwVOzZv8vE.png">
-<link rel="canonical" href="https://samarthnayyar.com/case-studies/paytm-chat.html">
-<meta property="og:url" content="https://samarthnayyar.com/case-studies/paytm-chat.html">
-<meta property="og:type" content="article">
-<meta property="og:site_name" content="Samarth Nayyar">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Paytm Chat: Chat Payments for 500M+ Users | Case Study by Samarth Nayyar">
-<meta name="author" content="Samarth Nayyar">
-<meta name="robots" content="index,follow,max-image-preview:large">
-<meta property="og:locale" content="en_US">
-<meta name="theme-color" content="#f6f6f4">
-<meta name="twitter:description" content="Designing chat-payments primitives from zero for 500M+ users, where every component needed legal and compliance sign-off before it could ship.">
-<meta name="twitter:image" content="https://samarthnayyar.com/framerusercontent.com/assets/6vNBm5jMFSHAAXq6AwVOzZv8vE.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
-<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<link rel="preload" href="../assets/fonts/GeistPixel-VF.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/css/base.css?v=29">
-<link rel="stylesheet" href="../assets/css/cs.css?v=29">
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js" defer></script>
-<script src="../assets/js/base.js?v=29" defer></script>
-<script src="../assets/js/cs.js?v=29" defer></script>
+<meta content="Designing chat-payments primitives from zero for 500M+ users, where every component needed legal and compliance sign-off before it could ship." name="description"/>
+<meta content="Paytm Chat: Chat Payments for 500M+ Users | Case Study by Samarth Nayyar" property="og:title"/>
+<meta content="Designing chat-payments primitives from zero for 500M+ users, where every component needed legal and compliance sign-off before it could ship." property="og:description"/>
+<meta content="https://samarthnayyar.com/framerusercontent.com/assets/6vNBm5jMFSHAAXq6AwVOzZv8vE.png" property="og:image"/>
+<link href="https://samarthnayyar.com/case-studies/paytm-chat.html" rel="canonical"/>
+<meta content="https://samarthnayyar.com/case-studies/paytm-chat.html" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="Samarth Nayyar" property="og:site_name"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Paytm Chat: Chat Payments for 500M+ Users | Case Study by Samarth Nayyar" name="twitter:title"/>
+<meta content="Samarth Nayyar" name="author"/>
+<meta content="index,follow,max-image-preview:large" name="robots"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="#f6f6f4" name="theme-color"/>
+<meta content="Designing chat-payments primitives from zero for 500M+ users, where every component needed legal and compliance sign-off before it could ship." name="twitter:description"/>
+<meta content="https://samarthnayyar.com/framerusercontent.com/assets/6vNBm5jMFSHAAXq6AwVOzZv8vE.png" name="twitter:image"/>
+<link href="../assets/img/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet"/>
+<link as="font" crossorigin="" href="../assets/fonts/GeistPixel-VF.woff2" rel="preload" type="font/woff2"/>
+<link href="../assets/css/base.css?v=37" rel="stylesheet"/>
+<link href="../assets/css/cs.css?v=37" rel="stylesheet"/>
+<script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js"></script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js"></script>
+<script defer="" src="../assets/js/base.js?v=37"></script>
+<script defer="" src="../assets/js/cs.js?v=37"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"Paytm Chat: Chat Payments for 500M+ Users","description":"Designing chat-payments primitives from zero for 500M+ users, where every component needed legal and compliance sign-off before it could ship.","image":"https://samarthnayyar.com/framerusercontent.com/assets/6vNBm5jMFSHAAXq6AwVOzZv8vE.png","url":"https://samarthnayyar.com/case-studies/paytm-chat.html","mainEntityOfPage":"https://samarthnayyar.com/case-studies/paytm-chat.html","inLanguage":"en-US","author":{"@id":"https://samarthnayyar.com/#person"},"publisher":{"@id":"https://samarthnayyar.com/#person"},"about":"Product design case study"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://samarthnayyar.com/"},{"@type":"ListItem","position":2,"name":"Work","item":"https://samarthnayyar.com/case-studies.html"},{"@type":"ListItem","position":3,"name":"Paytm Chat","item":"https://samarthnayyar.com/case-studies/paytm-chat.html"}]},{"@type":"Person","@id":"https://samarthnayyar.com/#person","name":"Samarth Nayyar","jobTitle":"Product Designer","url":"https://samarthnayyar.com/","email":"mailto:contact@samarthnayyar.com","image":"https://samarthnayyar.com/framerusercontent.com/assets/IPRaE8F5gCIqECKUPiKi1rzOS8E.png","address":{"@type":"PostalAddress","addressLocality":"San Francisco","addressRegion":"CA","addressCountry":"US"},"knowsAbout":["Product Design","UX Design","Design Systems","AI-native product design","Interaction Design","Prototyping","User Research","Fintech UX"]}]}</script>
-<script defer src="https://cloud.umami.is/script.js" data-website-id="12ea2061-77c4-4a85-aa50-0a532e9b67d4"></script></head>
-<body class="pg-cs" data-lenis="{&quot;lerp&quot;: 0.09}">
+<script data-website-id="12ea2061-77c4-4a85-aa50-0a532e9b67d4" defer="" src="https://cloud.umami.is/script.js"></script></head>
+<body class="pg-cs" data-lenis='{"lerp": 0.09}'>
 <div class="navbar"><header class="nav">
-  <a class="nav__brand" href="../index.html" aria-label="Samarth Nayyar, home">Samarth</a>
-  <nav class="nav__links" aria-label="Primary"><a class="" href="../index.html">Index</a><a class=" is-on" href="../case-studies.html">Work</a><a class="" href="../story.html">Story</a><a class="" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener">Resume</a></nav>
-  <button class="nav__music" type="button" aria-pressed="false" aria-label="Listen to what I like (plays music)"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="nav__music-t"><span class="nav__music-l">Listen to what I like</span></span></button>
+<a aria-label="Samarth Nayyar, home" class="nav__brand" href="../index.html">Samarth</a>
+<nav aria-label="Primary" class="nav__links"><a class="" href="../index.html">Index</a><a class="is-on" href="../case-studies.html">Work</a><a class="" href="../story.html">Story</a><a class="" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" rel="noopener" target="_blank">Resume</a></nav>
+<button aria-label="Listen to what I like (plays music)" aria-pressed="false" class="nav__music" type="button"><span aria-hidden="true" class="eq"><i></i><i></i><i></i><i></i></span><span class="nav__music-t"><span class="nav__music-l">Listen to what I like</span></span></button>
 </header></div>
 <div class="navbar-spacer"></div>
-<div class="progress" aria-hidden="true"><span class="progress__v">0%</span><span class="progress__line"><i></i></span></div>
-<div class="cursor-pill" aria-hidden="true"><span class="cursor-pill__body"></span><span class="cursor-pill__t"></span></div>
+<div aria-hidden="true" class="progress"><span class="progress__v">0%</span><span class="progress__line"><i></i></span></div>
+<div aria-hidden="true" class="cursor-pill"><span class="cursor-pill__body"></span><span class="cursor-pill__t"></span></div>
 <main id="top">
 <header class="chero hero">
-  <div class="container">
-    <span class="crumb kicker" data-intro-item><a href="../case-studies.html">&larr; Case Studies</a><span>(03 / 14)</span></span>
-    <h1 class="chero__t" data-intro-lines>Paytm Chat</h1>
-    <div class="chero__row">
-      <p class="chero__lede" data-intro-item>Social Payments for 500M+ Monthly Users</p>
-      <div class="logo-sq"><img src="../framerusercontent.com/images/vgLV046QkYTYPyRAKUnvErMPyY__Q__width__E__500__A__height__E__281.png" alt="Paytm Chat logo"></div>
-    </div>
-    <div class="chips" data-intro-item><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">Mobile</span><span class="chip">Scale</span></div>
-    <div class="comic" data-intro-item><p class="muted">Not everyone like&#x27;s to read to much nowadays (thanks TikTok). See a comic strip?</p><button class="cta" type="button" data-comic-open><span>Comic Strip</span></button></div>
-  </div>
+<div class="container">
+<span class="crumb kicker" data-intro-item=""><a href="../case-studies.html">← Case Studies</a><span>(03 / 14)</span></span>
+<h1 class="chero__t" data-intro-lines="">Paytm Chat</h1>
+<div class="chero__row">
+<p class="chero__lede" data-intro-item="">Social Payments for 500M+ Monthly Users</p>
+<div class="logo-sq"><img alt="Paytm Chat logo" src="../framerusercontent.com/images/vgLV046QkYTYPyRAKUnvErMPyY__Q__width__E__500__A__height__E__281.png"/></div>
+</div>
+<div class="chips" data-intro-item=""><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">Mobile</span><span class="chip">Scale</span></div>
+<div class="comic" data-intro-item=""><p class="muted">Not everyone like's to read to much nowadays (thanks TikTok). See a comic strip?</p><button class="cta" data-comic-open="" type="button"><span>Comic Strip</span></button></div>
+</div>
 </header>
 <section class="mfacts band"><div class="container mfacts__grid">
-  <div class="mtable" data-reveal><div class="tr"><span class="th">Timeline</span><span class="td">2020 - 2021</span></div><div class="tr"><span class="th">Role</span><span class="td">Product Designer</span></div><div class="tr"><span class="th">Tools</span><span class="td">Figma ·Storybooks</span></div></div>
-  <div class="mtable stats" data-reveal><div class="tr"><span class="th">Monthly Users Touch this Homepage 6 months Start to Launch</span><span class="td">$500M+</span></div></div>
+<div class="mtable" data-reveal=""><div class="tr"><span class="th">Timeline</span><span class="td">2020 - 2021</span></div><div class="tr"><span class="th">Role</span><span class="td">Product Designer</span></div><div class="tr"><span class="th">Tools</span><span class="td">Figma · Storybook</span></div></div>
+<div class="mtable stats" data-reveal=""><div class="tr"><span class="th">Monthly users touch this homepage</span><span class="td">500M+</span></div><div class="tr"><span class="th">Start to launch</span><span class="td">6 mo</span></div></div>
 </div></section>
 <div class="mwrap container">
 <aside class="maside"><div class="aside-stick">
-  <nav class="mindex">
-    <span class="kicker hd">Contents</span>
-    <a class="ni main" href="#top"><span class="no">&#8866;</span><span>Paytm Chat</span><i class="prog"></i></a>
-    <a class="ni" href="#s1" data-sec="s1"><span class="no">01</span><span>The Problem</span><i class="prog"></i></a><a class="ni" href="#s2" data-sec="s2"><span class="no">02</span><span>The Brief</span><i class="prog"></i></a><a class="ni" href="#s3" data-sec="s3"><span class="no">03</span><span>The Caveat</span><i class="prog"></i></a><a class="ni" href="#s4" data-sec="s4"><span class="no">04</span><span>What was shipped</span><i class="prog"></i></a><a class="ni" href="#s5" data-sec="s5"><span class="no">05</span><span>The result</span><i class="prog"></i></a>
-  </nav>
-  <nav class="mindex mothers"><span class="kicker hd">Case Studies</span><a class="ni" href="mphasis-blinkux.html"><span class="no">01</span><span>Blink UX</span></a><a class="ni" href="insider-vibes.html"><span class="no">02</span><span>Paytm Insider</span></a><a class="ni is-on" href="paytm-chat.html"><span class="no">03</span><span>Paytm Chat</span></a><a class="ni" href="makemytrip.html"><span class="no">04</span><span>MakeMyTrip</span></a><a class="ni" href="airtel.html"><span class="no">05</span><span>Airtel</span></a><a class="ni" href="winuall.html"><span class="no">06</span><span>Winuall</span></a><a class="ni" href="poll-police.html"><span class="no">07</span><span>Poll Police</span></a><a class="ni" href="hope-house.html"><span class="no">08</span><span>Hope House</span></a><a class="ni" href="planteria.html"><span class="no">09</span><span>Planteria</span></a><a class="ni" href="snapshot.html"><span class="no">10</span><span>Snapshot</span></a><a class="ni" href="storewell.html"><span class="no">11</span><span>Storewell</span></a><a class="ni" href="moneylingo.html"><span class="no">12</span><span>MoneyLingo</span></a><a class="ni" href="divergent-minds-convergent-design.html"><span class="no">13</span><span>Divergent Minds, Convergent Designs</span></a><a class="ni" href="group-alarm.html"><span class="no">14</span><span>Group Alarm</span></a></nav>
+<nav class="mindex">
+<span class="kicker hd">Contents</span>
+<a class="ni main" href="#top"><span class="no">⊢</span><span>Paytm Chat</span><i class="prog"></i></a>
+<a class="ni" data-sec="s1" href="#s1"><span class="no">01</span><span>The Problem</span><i class="prog"></i></a><a class="ni" data-sec="s2" href="#s2"><span class="no">02</span><span>The Brief</span><i class="prog"></i></a><a class="ni" data-sec="s3" href="#s3"><span class="no">03</span><span>The Caveat</span><i class="prog"></i></a><a class="ni" data-sec="s4" href="#s4"><span class="no">04</span><span>What was shipped</span><i class="prog"></i></a><a class="ni" data-sec="s5" href="#s5"><span class="no">05</span><span>The result</span><i class="prog"></i></a>
+</nav>
+<nav class="mindex mothers"><span class="kicker hd">Case Studies</span><a class="ni" href="mphasis-blinkux.html"><span class="no">01</span><span>Blink UX</span></a><a class="ni" href="insider-vibes.html"><span class="no">02</span><span>Paytm Insider</span></a><a class="ni is-on" href="paytm-chat.html"><span class="no">03</span><span>Paytm Chat</span></a><a class="ni" href="makemytrip.html"><span class="no">04</span><span>MakeMyTrip</span></a><a class="ni" href="airtel.html"><span class="no">05</span><span>Airtel</span></a><a class="ni" href="winuall.html"><span class="no">06</span><span>Winuall</span></a><a class="ni" href="poll-police.html"><span class="no">07</span><span>Poll Police</span></a><a class="ni" href="hope-house.html"><span class="no">08</span><span>Hope House</span></a><a class="ni" href="planteria.html"><span class="no">09</span><span>Planteria</span></a><a class="ni" href="snapshot.html"><span class="no">10</span><span>Snapshot</span></a><a class="ni" href="storewell.html"><span class="no">11</span><span>Storewell</span></a><a class="ni" href="moneylingo.html"><span class="no">12</span><span>MoneyLingo</span></a><a class="ni" href="divergent-minds-convergent-design.html"><span class="no">13</span><span>Divergent Minds, Convergent Designs</span></a><a class="ni" href="group-alarm.html"><span class="no">14</span><span>Group Alarm</span></a></nav>
 </div></aside>
 <div class="mmain">
-  <section class="msec bare" id="s0">
-<div class="mbody"><figure class="mfig c-a" data-reveal><img src="../framerusercontent.com/images/Gp546S1zKuQYpMTXluK20aAlus__Q__width__E__1515__A__height__E__795.png" alt="Paytm Chat case study screen" loading="lazy"></figure></div></section>
-<section class="msec" id="s1"><h2 class="display" data-liquid>The Problem</h2>
-<div class="mbody"><p data-reveal>I joined Paytm in 2020, right as UPI; India&#x27;s real-time payments rail was reshaping the market. Paytm had been the default way to send money in India for years. Then Google Pay integrated UPI and added something Paytm didn&#x27;t have: you could chat with someone while paying them. Users started migrating.</p>
-<p data-reveal>Paytm&#x27;s answer was to bring that same idea to its own homepage: a surface that over 500 million people touch every month. Whatever shipped there wasn&#x27;t a feature update. It was a brand statement.</p></div></section>
-<section class="msec" id="s2"><h2 class="display" data-liquid>The Brief</h2>
-<div class="mbody"><h3 class="msub msub--i" data-reveal><span class="msub__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M 10.001 3.009 C 10.004 1.92 9.417 0.915 8.467 0.383 C 7.517 -0.149 6.354 -0.125 5.427 0.446 C 4.5 1.017 3.955 2.046 4.004 3.134 C 2.813 3.44 1.829 4.277 1.336 5.404 C 0.842 6.53 0.895 7.821 1.478 8.904 C 0.451 9.738 -0.097 11.026 0.014 12.345 C 0.125 13.663 0.882 14.841 2.034 15.492 C 1.843 16.97 2.489 18.431 3.711 19.284 C 4.932 20.137 6.527 20.241 7.848 19.552 C 9.17 18.864 9.999 17.499 10.001 16.009 Z" transform="translate(1.999 1.991)"/><path d="M 0 4 C 1.717 3.396 2.901 1.817 3 0" transform="translate(9 9)"/><path d="M 0 0 C 0.02 0.484 0.156 0.955 0.398 1.375" transform="translate(6.003 5.125)"/><path d="M 0 0.396 C 0.183 0.247 0.379 0.114 0.585 0" transform="translate(3.477 10.5)"/><path d="M 1.967 0.516 C 1.278 0.516 0.6 0.339 0 0" transform="translate(4.033 17.484)"/><path d="M 0 0 L 4 0" transform="translate(12 13)"/><path d="M 0 0 L 6 0 C 7.105 0 8 0.895 8 2 L 8 3" transform="translate(12 18)"/><path d="M 0 0 L 8 0" transform="translate(12 8)"/><path d="M 0 5 L 0 2 C 0 0.895 0.895 0 2 0" transform="translate(16 3)"/><path d="M 0 0.5 C 0 0.224 0.224 0 0.5 0 C 0.776 0 1 0.224 1 0.5 C 1 0.776 0.776 1 0.5 1 C 0.224 1 0 0.776 0 0.5 Z" transform="translate(15.5 12.5)"/><path d="M 0 0.5 C 0 0.224 0.224 0 0.5 0 C 0.776 0 1 0.224 1 0.5 C 1 0.776 0.776 1 0.5 1 C 0.224 1 0 0.776 0 0.5 Z" transform="translate(17.5 2.5)"/><path d="M 0 0.5 C 0 0.224 0.224 0 0.5 0 C 0.776 0 1 0.224 1 0.5 C 1 0.776 0.776 1 0.5 1 C 0.224 1 0 0.776 0 0.5 Z" transform="translate(19.5 20.5)"/><path d="M 0 0.5 C 0 0.224 0.224 0 0.5 0 C 0.776 0 1 0.224 1 0.5 C 1 0.776 0.776 1 0.5 1 C 0.224 1 0 0.776 0 0.5 Z" transform="translate(19.5 7.5)"/></svg></span><span>Understanding the Domain</span></h3>
-<p data-reveal>We didn&#x27;t just want chat-plus-payments. We wanted to go further than Google Pay had: bill splitting, group chats, group savings pools, and eventually using the same surface for conversations about investing — UPI as a starting point, not the whole idea.</p></div></section>
-<section class="msec" id="s3"><h2 class="display" data-liquid>The Caveat</h2>
-<div class="mbody"><p data-reveal>Every component we built had to go back into Paytm&#x27;s core design system; which meant every one of them needed legal, business, and management sign-off before it shipped.</p>
-<p data-reveal>Paytm had never had chat before. There was no bubble style, no message-state pattern, nothing to extend: we were defining primitives for the first time, in a domain (payments) that&#x27;s about as regulated as consumer software gets in India. That&#x27;s a real constraint most chat products never face: a &quot;send&quot; button isn&#x27;t just a UX decision, it&#x27;s a compliance conversation.</p>
-<p data-reveal>So we built deliberately, in public, with each new piece: chat bubbles, image sends, video sends, money sends, combinations of all of them checked at every stage rather than designed in a vacuum and approved at the end. Message states got the same treatment: sent, delivered, read, and reacted-to, each with distinct, tested visual treatment.</p></div></section>
-<section class="msec" id="s4"><h2 class="display" data-liquid>What was shipped</h2>
-<div class="mbody"><h3 class="msub msub--i" data-reveal><span class="msub__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M 18 9 C 18 4.029 13.971 0 9 0 C 6.484 0.009 4.069 0.991 2.26 2.74 L 0 5" transform="translate(3 3)"/><path d="M 0 0 L 0 5 L 5 5" transform="translate(3 3)"/><path d="M 0 0 C 0 4.971 4.029 9 9 9 C 11.516 8.991 13.931 8.009 15.74 6.26 L 18 4" transform="translate(3 12)"/><path d="M 0 0 L 5 0 L 5 5" transform="translate(16 16)"/><path d="M 0 1 C 0 0.448 0.448 0 1 0 C 1.552 0 2 0.448 2 1 C 2 1.552 1.552 2 1 2 C 0.448 2 0 1.552 0 1 Z" transform="translate(11 11)"/></svg></span><span>End to end chat experience</span></h3>
-<p data-reveal>A full chat-and-payments experience on Paytm&#x27;s homepage: text, image, video, and money in one conversation thread, group chat with bill-splitting and group savings, and a foundation meant to eventually carry investment conversations too. A new component category added permanently to Paytm&#x27;s design system, not a one-off feature.</p>
-<h3 class="msub msub--i" data-reveal><span class="msub__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M 14 6 L 14 4 C 14 1.791 12.209 0 10 0 L 4 0 C 1.791 0 0 1.791 0 4 L 0 6" transform="translate(2 15)"/><path d="M 0 0 C 1.764 0.457 2.996 2.049 2.996 3.872 C 2.996 5.695 1.764 7.287 0 7.744" transform="translate(16 3.128)"/><path d="M 3 5.87 L 3 3.87 C 2.999 2.047 1.765 0.456 0 0" transform="translate(19 15.13)"/><path d="M 0 4 C 0 1.791 1.791 0 4 0 C 6.209 0 8 1.791 8 4 C 8 6.209 6.209 8 4 8 C 1.791 8 0 6.209 0 4 Z" transform="translate(5 3)"/></svg></span><span>Group bill-splitting</span></h3>
-<p data-reveal>The obvious solution is a form: enter amounts, assign people, send requests. We wanted something that felt like what splitting a bill actually feels like.</p>
-<p data-reveal>So we built a pizza visualization: a shared bill shown as a pizza divided into slices (eight, in our design), portioned across three or four people based on who owed what share. Adjust the slices, adjust the payment split. It turned a financial form into something that looked like what you were actually doing at the table.</p>
-<h3 class="msub msub--i" data-reveal><span class="msub__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M 0 0 C 1.3 2.281 1.3 5.079 0 7.36" transform="translate(6 8.32)"/><path d="M 0 0 C 2.032 3.593 2.032 7.987 0 11.58" transform="translate(9.46 6.21)"/><path d="M 0 0 C 2.803 4.893 2.807 10.904 0.01 15.8" transform="translate(12.91 4.1)"/><path d="M 0 0 C 3.54 6.197 3.54 13.803 0 20" transform="translate(16.37 2)"/></svg></span><span>Reactions and stickers</span></h3>
-<p data-reveal>Paytm Chat launched with a set of custom illustrated stickers. Built with the motion team, so sending money could carry an emotion, not just a transaction. Send someone money, and the interface could react automatically.</p>
-<p data-reveal>Every send also triggered an instant confirmation message stating exactly how much was sent and how fast. A small, deliberate detail proving Paytm&#x27;s core promise: this is instant.</p>
-<p data-reveal>Ideas (everything, good or bad), Product Goals (merged into real-world actions), Users (scenarios)</p>
-<div class="mcar" data-car data-reveal role="region" aria-roledescription="carousel" aria-label="Image carousel"><ul class="mcar__track" tabindex="0"><li class="mcar__s" aria-label="1 of 3"><img src="../framerusercontent.com/images/DWLGu0ilOL38e4pXRIANuqBJdtg__Q__width__E__4020__A__height__E__2824.min.webp" alt="Paytm Chat case study: Reactions and stickers" loading="lazy"></li><li class="mcar__s" aria-label="2 of 3"><img src="../framerusercontent.com/images/BC5RMpgKK1Ed6lZcQwjsxG8JoM__Q__width__E__4020__A__height__E__2820.min.webp" alt="Paytm Chat case study: Reactions and stickers" loading="lazy"></li><li class="mcar__s" aria-label="3 of 3"><img src="../framerusercontent.com/images/mQyARWYZmELXoQhd2oHUhqtyHIY__Q__width__E__4020__A__height__E__2824.min.webp" alt="Paytm Chat case study: Reactions and stickers" loading="lazy"></li></ul><div class="mcar__ui"><span class="mcar__n kicker"><b>01</b> / 03</span><button class="mcar__b" data-prev aria-label="Previous image"><span>&larr;</span></button><button class="mcar__b" data-next aria-label="Next image"><span>&rarr;</span></button></div></div></div></section>
-<section class="msec" id="s5"><h2 class="display" data-liquid>The result</h2>
-<div class="mbody"><div class="statrow" data-reveal><span class="kicker">Monthly Users Touch this Homepage 6 months Start to Launch</span><span class="statrow__v">$500M+</span></div>
-<p data-reveal>Post-launch, the team ran A/B tests through CleverTap with the research team to refine the experience further — I&#x27;d moved to Paytm&#x27;s design systems team by that point, so I can speak to what shipped, not to how those later tests changed it.</p>
-<div class="callout" data-reveal><span class="kicker">NOTE FROM FUTURE SAMARTH</span><p>We designed every message state (sent, delivered, read, reacted) in real depth, and I still think that level of care is why the experience felt trustworthy fast in a category (payments) where trust is the entire game.</p></div>
-<p data-reveal>If I did it again, I&#x27;d push to stay through the A/B testing phase. I built the foundation and handed off before seeing what the data actually said about it, and that&#x27;s the one part of this project I never got to close the loop on.</p></div></section>
+<section class="msec bare" id="s0">
+<div class="mbody"><figure class="mfig c-a" data-reveal=""><img alt="Paytm Chat case study screen" loading="lazy" src="../framerusercontent.com/images/Gp546S1zKuQYpMTXluK20aAlus__Q__width__E__1515__A__height__E__795.png"/></figure></div></section>
+<section class="msec" id="s1"><h2 class="display" data-liquid="">The Problem</h2>
+<div class="mbody"><p data-reveal="">I joined Paytm in 2020, right as UPI; India's real-time payments rail was reshaping the market. Paytm had been the default way to send money in India for years. Then Google Pay integrated UPI and added something Paytm didn't have: you could chat with someone while paying them. Users started migrating.</p>
+<p data-reveal="">Paytm's answer was to bring that same idea to its own homepage: a surface that over 500 million people touch every month. Whatever shipped there wasn't a feature update. It was a brand statement.</p></div></section>
+<section class="msec" id="s2"><h2 class="display" data-liquid="">The Brief</h2>
+<div class="mbody"><h3 class="msub msub--i" data-reveal=""><span class="msub__ic"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="M 10.001 3.009 C 10.004 1.92 9.417 0.915 8.467 0.383 C 7.517 -0.149 6.354 -0.125 5.427 0.446 C 4.5 1.017 3.955 2.046 4.004 3.134 C 2.813 3.44 1.829 4.277 1.336 5.404 C 0.842 6.53 0.895 7.821 1.478 8.904 C 0.451 9.738 -0.097 11.026 0.014 12.345 C 0.125 13.663 0.882 14.841 2.034 15.492 C 1.843 16.97 2.489 18.431 3.711 19.284 C 4.932 20.137 6.527 20.241 7.848 19.552 C 9.17 18.864 9.999 17.499 10.001 16.009 Z" transform="translate(1.999 1.991)"></path><path d="M 0 4 C 1.717 3.396 2.901 1.817 3 0" transform="translate(9 9)"></path><path d="M 0 0 C 0.02 0.484 0.156 0.955 0.398 1.375" transform="translate(6.003 5.125)"></path><path d="M 0 0.396 C 0.183 0.247 0.379 0.114 0.585 0" transform="translate(3.477 10.5)"></path><path d="M 1.967 0.516 C 1.278 0.516 0.6 0.339 0 0" transform="translate(4.033 17.484)"></path><path d="M 0 0 L 4 0" transform="translate(12 13)"></path><path d="M 0 0 L 6 0 C 7.105 0 8 0.895 8 2 L 8 3" transform="translate(12 18)"></path><path d="M 0 0 L 8 0" transform="translate(12 8)"></path><path d="M 0 5 L 0 2 C 0 0.895 0.895 0 2 0" transform="translate(16 3)"></path><path d="M 0 0.5 C 0 0.224 0.224 0 0.5 0 C 0.776 0 1 0.224 1 0.5 C 1 0.776 0.776 1 0.5 1 C 0.224 1 0 0.776 0 0.5 Z" transform="translate(15.5 12.5)"></path><path d="M 0 0.5 C 0 0.224 0.224 0 0.5 0 C 0.776 0 1 0.224 1 0.5 C 1 0.776 0.776 1 0.5 1 C 0.224 1 0 0.776 0 0.5 Z" transform="translate(17.5 2.5)"></path><path d="M 0 0.5 C 0 0.224 0.224 0 0.5 0 C 0.776 0 1 0.224 1 0.5 C 1 0.776 0.776 1 0.5 1 C 0.224 1 0 0.776 0 0.5 Z" transform="translate(19.5 20.5)"></path><path d="M 0 0.5 C 0 0.224 0.224 0 0.5 0 C 0.776 0 1 0.224 1 0.5 C 1 0.776 0.776 1 0.5 1 C 0.224 1 0 0.776 0 0.5 Z" transform="translate(19.5 7.5)"></path></svg></span><span>Understanding the Domain</span></h3>
+<p data-reveal="">We didn't just want chat-plus-payments. We wanted to go further than Google Pay had: bill splitting, group chats, group savings pools, and eventually using the same surface for conversations about investing — UPI as a starting point, not the whole idea.</p></div></section>
+<section class="msec" id="s3"><h2 class="display" data-liquid="">The Caveat</h2>
+<div class="mbody"><p data-reveal="">Every component we built had to go back into Paytm's core design system; which meant every one of them needed legal, business, and management sign-off before it shipped.</p>
+<p data-reveal="">Paytm had never had chat before. There was no bubble style, no message-state pattern, nothing to extend: we were defining primitives for the first time, in a domain (payments) that's about as regulated as consumer software gets in India. That's a real constraint most chat products never face: a "send" button isn't just a UX decision, it's a compliance conversation.</p>
+<p data-reveal="">So we built deliberately, in public, with each new piece: chat bubbles, image sends, video sends, money sends, combinations of all of them checked at every stage rather than designed in a vacuum and approved at the end. Message states got the same treatment: sent, delivered, read, and reacted-to, each with distinct, tested visual treatment.</p></div></section>
+<section class="msec" id="s4"><h2 class="display" data-liquid="">What was shipped</h2>
+<div class="mbody"><div class="mcards n3 mcols"><div class="mcard"><h3 class="msub msub--i" data-reveal=""><span class="msub__ic"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="M 18 9 C 18 4.029 13.971 0 9 0 C 6.484 0.009 4.069 0.991 2.26 2.74 L 0 5" transform="translate(3 3)"></path><path d="M 0 0 L 0 5 L 5 5" transform="translate(3 3)"></path><path d="M 0 0 C 0 4.971 4.029 9 9 9 C 11.516 8.991 13.931 8.009 15.74 6.26 L 18 4" transform="translate(3 12)"></path><path d="M 0 0 L 5 0 L 5 5" transform="translate(16 16)"></path><path d="M 0 1 C 0 0.448 0.448 0 1 0 C 1.552 0 2 0.448 2 1 C 2 1.552 1.552 2 1 2 C 0.448 2 0 1.552 0 1 Z" transform="translate(11 11)"></path></svg></span><span>End to end chat experience</span></h3><p data-reveal="">A full chat-and-payments experience on Paytm's homepage: text, image, video, and money in one conversation thread, group chat with bill-splitting and group savings, and a foundation meant to eventually carry investment conversations too. A new component category added permanently to Paytm's design system, not a one-off feature.</p></div><div class="mcard"><h3 class="msub msub--i" data-reveal=""><span class="msub__ic"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="M 14 6 L 14 4 C 14 1.791 12.209 0 10 0 L 4 0 C 1.791 0 0 1.791 0 4 L 0 6" transform="translate(2 15)"></path><path d="M 0 0 C 1.764 0.457 2.996 2.049 2.996 3.872 C 2.996 5.695 1.764 7.287 0 7.744" transform="translate(16 3.128)"></path><path d="M 3 5.87 L 3 3.87 C 2.999 2.047 1.765 0.456 0 0" transform="translate(19 15.13)"></path><path d="M 0 4 C 0 1.791 1.791 0 4 0 C 6.209 0 8 1.791 8 4 C 8 6.209 6.209 8 4 8 C 1.791 8 0 6.209 0 4 Z" transform="translate(5 3)"></path></svg></span><span>Group bill-splitting</span></h3><p data-reveal="">The obvious solution is a form: enter amounts, assign people, send requests. We wanted something that felt like what splitting a bill actually feels like.</p><p data-reveal="">So we built a pizza visualization: a shared bill shown as a pizza divided into slices (eight, in our design), portioned across three or four people based on who owed what share. Adjust the slices, adjust the payment split. It turned a financial form into something that looked like what you were actually doing at the table.</p></div><div class="mcard"><h3 class="msub msub--i" data-reveal=""><span class="msub__ic"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="M 0 0 C 1.3 2.281 1.3 5.079 0 7.36" transform="translate(6 8.32)"></path><path d="M 0 0 C 2.032 3.593 2.032 7.987 0 11.58" transform="translate(9.46 6.21)"></path><path d="M 0 0 C 2.803 4.893 2.807 10.904 0.01 15.8" transform="translate(12.91 4.1)"></path><path d="M 0 0 C 3.54 6.197 3.54 13.803 0 20" transform="translate(16.37 2)"></path></svg></span><span>Reactions and stickers</span></h3><p data-reveal="">Paytm Chat launched with a set of custom illustrated stickers. Built with the motion team, so sending money could carry an emotion, not just a transaction. Send someone money, and the interface could react automatically.</p><p data-reveal="">Every send also triggered an instant confirmation message stating exactly how much was sent and how fast. A small, deliberate detail proving Paytm's core promise: this is instant.</p><p data-reveal="">Ideas (everything, good or bad), Product Goals (merged into real-world actions), Users (scenarios)</p></div></div>
 
+
+
+
+
+
+
+
+<div aria-label="Image carousel" aria-roledescription="carousel" class="mcar" data-car="" data-reveal="" role="region"><ul class="mcar__track" tabindex="0"><li aria-label="1 of 3" class="mcar__s"><img alt="Paytm Chat case study: Reactions and stickers" loading="lazy" src="../framerusercontent.com/images/DWLGu0ilOL38e4pXRIANuqBJdtg__Q__width__E__4020__A__height__E__2824.min.webp"/></li><li aria-label="2 of 3" class="mcar__s"><img alt="Paytm Chat case study: Reactions and stickers" loading="lazy" src="../framerusercontent.com/images/BC5RMpgKK1Ed6lZcQwjsxG8JoM__Q__width__E__4020__A__height__E__2820.min.webp"/></li><li aria-label="3 of 3" class="mcar__s"><img alt="Paytm Chat case study: Reactions and stickers" loading="lazy" src="../framerusercontent.com/images/mQyARWYZmELXoQhd2oHUhqtyHIY__Q__width__E__4020__A__height__E__2824.min.webp"/></li></ul><div class="mcar__ui"><span class="mcar__n kicker"><b>01</b> / 03</span><button aria-label="Previous image" class="mcar__b" data-prev=""><span>←</span></button><button aria-label="Next image" class="mcar__b" data-next=""><span>→</span></button></div></div></div></section>
+<section class="msec mres" id="s5"><h2 class="display" data-liquid="">The result</h2>
+<div class="mbody"><div class="statrow" data-reveal=""><span class="kicker">Monthly Users Touch this Homepage 6 months Start to Launch</span><span class="statrow__v">$500M+</span></div>
+<p data-reveal="">Post-launch, the team ran A/B tests through CleverTap with the research team to refine the experience further — I'd moved to Paytm's design systems team by that point, so I can speak to what shipped, not to how those later tests changed it.</p>
+<div class="callout" data-reveal=""><span class="kicker">NOTE FROM FUTURE SAMARTH</span><p>We designed every message state (sent, delivered, read, reacted) in real depth, and I still think that level of care is why the experience felt trustworthy fast in a category (payments) where trust is the entire game.</p></div>
+<p data-reveal="">If I did it again, I'd push to stay through the A/B testing phase. I built the foundation and handed off before seeing what the data actually said about it, and that's the one part of this project I never got to close the loop on.</p></div></section>
 </div>
 </div>
-<section class="mmore band" aria-label="Next case studies">
-  <div class="container mmore__head"><h2 class="display" data-liquid>Next case studies</h2><a class="mmore__all" href="../case-studies.html">View all <span aria-hidden="true">&#8599;</span></a></div>
-  <div class="container mmore__grid"><article class="wcard" data-href="makemytrip.html" data-cursor-pill="Open" data-reveal>
-  <a class="wcard__frame" href="makemytrip.html"><span class="wcard__img"><img src="../framerusercontent.com/images/7cjfSGTbQshPfoWMVQWy7JZZc__Q__width__E__1823__A__height__E__1164.png" alt="MakeMyTrip" loading="lazy"></span></a>
-  <div class="wcard__cap">
-    <span class="wcard__no">(04)</span>
-    <h3 class="wcard__t"><a href="makemytrip.html">MakeMyTrip</a></h3>
-    <p class="wcard__d muted">Cutting checkout time 72% for 82M monthly travellers</p>
-    <div class="chips"><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">Conversation</span><span class="chip">Mobile</span></div>
-    <a class="wcard__open" href="makemytrip.html">Open <span aria-hidden="true">&#8599;</span></a>
-  </div>
-</article><article class="wcard" data-href="airtel.html" data-cursor-pill="Open" data-reveal>
-  <a class="wcard__frame" href="airtel.html"><span class="wcard__img"><img src="../framerusercontent.com/images/5Jt6vsm9SeC8vmtYYF1WS6p30A__Q__width__E__1823__A__height__E__1095.png" alt="Airtel" loading="lazy"></span></a>
-  <div class="wcard__cap">
-    <span class="wcard__no">(05)</span>
-    <h3 class="wcard__t"><a href="airtel.html">Airtel</a></h3>
-    <p class="wcard__d muted">Helping 1M+ merchants find what they need, 14% faster</p>
-    <div class="chips"><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">icon Systyems</span><span class="chip">Accessibility</span></div>
-    <a class="wcard__open" href="airtel.html">Open <span aria-hidden="true">&#8599;</span></a>
-  </div>
-</article><article class="wcard" data-href="winuall.html" data-cursor-pill="Open" data-reveal>
-  <a class="wcard__frame" href="winuall.html"><span class="wcard__img"><img src="../framerusercontent.com/images/3VlKHvXp1y7LO2HutdiwKw6mbY__Q__width__E__1863__A__height__E__1183.png" alt="Winuall" loading="lazy"></span></a>
-  <div class="wcard__cap">
-    <span class="wcard__no">(06)</span>
-    <h3 class="wcard__t"><a href="winuall.html">Winuall</a></h3>
-    <p class="wcard__d muted">One system, four products, built solo</p>
-    <div class="chips"><span class="chip">Design Systems</span><span class="chip">UX Designs</span><span class="chip">Freelance</span></div>
-    <a class="wcard__open" href="winuall.html">Open <span aria-hidden="true">&#8599;</span></a>
-  </div>
+<section aria-label="Next case studies" class="mmore band">
+<div class="container mmore__head"><h2 class="display" data-liquid="">Next case studies</h2><a class="mmore__all" href="../case-studies.html">View all <span aria-hidden="true">↗</span></a></div>
+<div class="container mmore__grid"><article class="wcard" data-cursor-pill="Open" data-href="makemytrip.html" data-reveal="">
+<a class="wcard__frame" href="makemytrip.html"><span class="wcard__img"><img alt="MakeMyTrip" loading="lazy" src="../framerusercontent.com/images/7cjfSGTbQshPfoWMVQWy7JZZc__Q__width__E__1823__A__height__E__1164.png"/></span></a>
+<div class="wcard__cap">
+<span class="wcard__no">(04)</span>
+<h3 class="wcard__t"><a href="makemytrip.html">MakeMyTrip</a></h3>
+<p class="wcard__d muted">Cutting checkout time 72% for 82M monthly travellers</p>
+<div class="chips"><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">Conversation</span><span class="chip">Mobile</span></div>
+<a class="wcard__open" href="makemytrip.html">Open <span aria-hidden="true">↗</span></a>
+</div>
+</article><article class="wcard" data-cursor-pill="Open" data-href="airtel.html" data-reveal="">
+<a class="wcard__frame" href="airtel.html"><span class="wcard__img"><img alt="Airtel" loading="lazy" src="../framerusercontent.com/images/5Jt6vsm9SeC8vmtYYF1WS6p30A__Q__width__E__1823__A__height__E__1095.png"/></span></a>
+<div class="wcard__cap">
+<span class="wcard__no">(05)</span>
+<h3 class="wcard__t"><a href="airtel.html">Airtel</a></h3>
+<p class="wcard__d muted">Helping 1M+ merchants find what they need, 14% faster</p>
+<div class="chips"><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">icon Systyems</span><span class="chip">Accessibility</span></div>
+<a class="wcard__open" href="airtel.html">Open <span aria-hidden="true">↗</span></a>
+</div>
+</article><article class="wcard" data-cursor-pill="Open" data-href="winuall.html" data-reveal="">
+<a class="wcard__frame" href="winuall.html"><span class="wcard__img"><img alt="Winuall" loading="lazy" src="../framerusercontent.com/images/3VlKHvXp1y7LO2HutdiwKw6mbY__Q__width__E__1863__A__height__E__1183.png"/></span></a>
+<div class="wcard__cap">
+<span class="wcard__no">(06)</span>
+<h3 class="wcard__t"><a href="winuall.html">Winuall</a></h3>
+<p class="wcard__d muted">One system, four products, built solo</p>
+<div class="chips"><span class="chip">Design Systems</span><span class="chip">UX Designs</span><span class="chip">Freelance</span></div>
+<a class="wcard__open" href="winuall.html">Open <span aria-hidden="true">↗</span></a>
+</div>
 </article></div>
 </section>
 </main>
-<div class="comic-drawer" aria-hidden="true"><div class="comic-drawer__scrim" data-comic-close></div><aside class="comic-drawer__panel" role="dialog" aria-modal="true" aria-label="Comic strip" tabindex="-1"><header class="comic-drawer__head"><span class="kicker">Comic strip</span><button class="comic-drawer__x" type="button" data-comic-close aria-label="Close comic strip"><span></span><span></span></button></header><div class="comic-drawer__body" data-lenis-prevent><h2 class="display">Paytm Chat</h2><div class="comic-drawer__strip" data-comic-strip><img src="../assets/img/comics/paytm-chat.webp" width="1024" height="572" alt="Comic strip summarising the project" loading="lazy" decoding="async"></div><p class="comic-drawer__note muted">Note: AI generated</p></div></aside></div>
-
+<div aria-hidden="true" class="comic-drawer"><div class="comic-drawer__scrim" data-comic-close=""></div><aside aria-label="Comic strip" aria-modal="true" class="comic-drawer__panel" role="dialog" tabindex="-1"><header class="comic-drawer__head"><span class="kicker">Comic strip</span><button aria-label="Close comic strip" class="comic-drawer__x" data-comic-close="" type="button"><span></span><span></span></button></header><div class="comic-drawer__body" data-lenis-prevent=""><h2 class="display">Paytm Chat</h2><div class="comic-drawer__strip" data-comic-strip=""><img alt="Comic strip summarising the project" decoding="async" height="572" loading="lazy" src="../assets/img/comics/paytm-chat.webp" width="1024"/></div><p class="comic-drawer__note muted">Note: AI generated</p></div></aside></div>
 <section class="contact band" id="contact">
-  <div class="contact__inner container">
-    <h2 class="display" data-liquid>Always up for a conversation about UX, design systems or AI-native tooling</h2>
-    <div class="links" data-reveal><a href="mailto:contact@samarthnayyar.com">Get in touch</a><a href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener" data-cursor-pill="PDF">Download Resume</a></div>
-    
-  </div>
+<div class="contact__inner container">
+<h2 class="display" data-liquid="">Always up for a conversation about UX, design systems or AI-native tooling</h2>
+<div class="links" data-reveal=""><a href="mailto:contact@samarthnayyar.com">Get in touch</a><a data-cursor-pill="PDF" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" rel="noopener" target="_blank">Download Resume</a></div>
+</div>
 </section>
 <footer class="footer">
-  <p class="footer__note">&copy; 2026 Samarth Nayyar. Powered by Caffeine and the love for design.</p>
-  <div class="footer__meta"><span>San Francisco &middot; <span data-local-time></span></span><a class="footer__top" href="#top">Back to top <span aria-hidden="true">&uarr;</span></a></div>
+<p class="footer__note">© 2026 Samarth Nayyar. Powered by Caffeine and the love for design.</p>
+<div class="footer__meta"><span>San Francisco · <span data-local-time=""></span></span><a class="footer__top" href="#top">Back to top <span aria-hidden="true">↑</span></a></div>
 </footer>
 </body>
 </html>

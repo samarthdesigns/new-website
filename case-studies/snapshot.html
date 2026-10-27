@@ -1,157 +1,155 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Snapshot: Content-First Photo App | Case Study by Samarth Nayyar</title>
-<meta name="description" content="A content-first photo app that deliberately excluded a social feed, raising SUS scores from 76.25 to 82.27 through iterative testing.">
-<meta property="og:title" content="Snapshot: Content-First Photo App | Case Study by Samarth Nayyar">
-<meta property="og:description" content="A content-first photo app that deliberately excluded a social feed, raising SUS scores from 76.25 to 82.27 through iterative testing.">
-<meta property="og:image" content="https://samarthnayyar.com/framerusercontent.com/assets/p53xzYnDP6222wRMedMBfN185w.png">
-<link rel="canonical" href="https://samarthnayyar.com/case-studies/snapshot.html">
-<meta property="og:url" content="https://samarthnayyar.com/case-studies/snapshot.html">
-<meta property="og:type" content="article">
-<meta property="og:site_name" content="Samarth Nayyar">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Snapshot: Content-First Photo App | Case Study by Samarth Nayyar">
-<meta name="author" content="Samarth Nayyar">
-<meta name="robots" content="index,follow,max-image-preview:large">
-<meta property="og:locale" content="en_US">
-<meta name="theme-color" content="#f6f6f4">
-<meta name="twitter:description" content="A content-first photo app that deliberately excluded a social feed, raising SUS scores from 76.25 to 82.27 through iterative testing.">
-<meta name="twitter:image" content="https://samarthnayyar.com/framerusercontent.com/assets/p53xzYnDP6222wRMedMBfN185w.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
-<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<link rel="preload" href="../assets/fonts/GeistPixel-VF.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/css/base.css?v=29">
-<link rel="stylesheet" href="../assets/css/cs.css?v=29">
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js" defer></script>
-<script src="../assets/js/base.js?v=29" defer></script>
-<script src="../assets/js/cs.js?v=29" defer></script>
+<meta content="A content-first photo app that deliberately excluded a social feed, raising SUS scores from 76.25 to 82.27 through iterative testing." name="description"/>
+<meta content="Snapshot: Content-First Photo App | Case Study by Samarth Nayyar" property="og:title"/>
+<meta content="A content-first photo app that deliberately excluded a social feed, raising SUS scores from 76.25 to 82.27 through iterative testing." property="og:description"/>
+<meta content="https://samarthnayyar.com/framerusercontent.com/assets/p53xzYnDP6222wRMedMBfN185w.png" property="og:image"/>
+<link href="https://samarthnayyar.com/case-studies/snapshot.html" rel="canonical"/>
+<meta content="https://samarthnayyar.com/case-studies/snapshot.html" property="og:url"/>
+<meta content="article" property="og:type"/>
+<meta content="Samarth Nayyar" property="og:site_name"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Snapshot: Content-First Photo App | Case Study by Samarth Nayyar" name="twitter:title"/>
+<meta content="Samarth Nayyar" name="author"/>
+<meta content="index,follow,max-image-preview:large" name="robots"/>
+<meta content="en_US" property="og:locale"/>
+<meta content="#f6f6f4" name="theme-color"/>
+<meta content="A content-first photo app that deliberately excluded a social feed, raising SUS scores from 76.25 to 82.27 through iterative testing." name="twitter:description"/>
+<meta content="https://samarthnayyar.com/framerusercontent.com/assets/p53xzYnDP6222wRMedMBfN185w.png" name="twitter:image"/>
+<link href="../assets/img/favicon-32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="../assets/img/apple-touch-icon.png" rel="apple-touch-icon"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet"/>
+<link as="font" crossorigin="" href="../assets/fonts/GeistPixel-VF.woff2" rel="preload" type="font/woff2"/>
+<link href="../assets/css/base.css?v=37" rel="stylesheet"/>
+<link href="../assets/css/cs.css?v=37" rel="stylesheet"/>
+<script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js"></script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js"></script>
+<script defer="" src="../assets/js/base.js?v=37"></script>
+<script defer="" src="../assets/js/cs.js?v=37"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"Snapshot: Content-First Photo App","description":"A content-first photo app that deliberately excluded a social feed, raising SUS scores from 76.25 to 82.27 through iterative testing.","image":"https://samarthnayyar.com/framerusercontent.com/assets/p53xzYnDP6222wRMedMBfN185w.png","url":"https://samarthnayyar.com/case-studies/snapshot.html","mainEntityOfPage":"https://samarthnayyar.com/case-studies/snapshot.html","inLanguage":"en-US","author":{"@id":"https://samarthnayyar.com/#person"},"publisher":{"@id":"https://samarthnayyar.com/#person"},"about":"Product design case study"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://samarthnayyar.com/"},{"@type":"ListItem","position":2,"name":"Work","item":"https://samarthnayyar.com/case-studies.html"},{"@type":"ListItem","position":3,"name":"Snapshot","item":"https://samarthnayyar.com/case-studies/snapshot.html"}]},{"@type":"Person","@id":"https://samarthnayyar.com/#person","name":"Samarth Nayyar","jobTitle":"Product Designer","url":"https://samarthnayyar.com/","email":"mailto:contact@samarthnayyar.com","image":"https://samarthnayyar.com/framerusercontent.com/assets/IPRaE8F5gCIqECKUPiKi1rzOS8E.png","address":{"@type":"PostalAddress","addressLocality":"San Francisco","addressRegion":"CA","addressCountry":"US"},"knowsAbout":["Product Design","UX Design","Design Systems","AI-native product design","Interaction Design","Prototyping","User Research","Fintech UX"]}]}</script>
-<script defer src="https://cloud.umami.is/script.js" data-website-id="12ea2061-77c4-4a85-aa50-0a532e9b67d4"></script></head>
-<body class="pg-cs" data-lenis="{&quot;lerp&quot;: 0.09}">
+<script data-website-id="12ea2061-77c4-4a85-aa50-0a532e9b67d4" defer="" src="https://cloud.umami.is/script.js"></script></head>
+<body class="pg-cs" data-lenis='{"lerp": 0.09}'>
 <div class="navbar"><header class="nav">
-  <a class="nav__brand" href="../index.html" aria-label="Samarth Nayyar, home">Samarth</a>
-  <nav class="nav__links" aria-label="Primary"><a class="" href="../index.html">Index</a><a class=" is-on" href="../case-studies.html">Work</a><a class="" href="../story.html">Story</a><a class="" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener">Resume</a></nav>
-  <button class="nav__music" type="button" aria-pressed="false" aria-label="Listen to what I like (plays music)"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="nav__music-t"><span class="nav__music-l">Listen to what I like</span></span></button>
+<a aria-label="Samarth Nayyar, home" class="nav__brand" href="../index.html">Samarth</a>
+<nav aria-label="Primary" class="nav__links"><a class="" href="../index.html">Index</a><a class="is-on" href="../case-studies.html">Work</a><a class="" href="../story.html">Story</a><a class="" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" rel="noopener" target="_blank">Resume</a></nav>
+<button aria-label="Listen to what I like (plays music)" aria-pressed="false" class="nav__music" type="button"><span aria-hidden="true" class="eq"><i></i><i></i><i></i><i></i></span><span class="nav__music-t"><span class="nav__music-l">Listen to what I like</span></span></button>
 </header></div>
 <div class="navbar-spacer"></div>
-<div class="progress" aria-hidden="true"><span class="progress__v">0%</span><span class="progress__line"><i></i></span></div>
-<div class="cursor-pill" aria-hidden="true"><span class="cursor-pill__body"></span><span class="cursor-pill__t"></span></div>
+<div aria-hidden="true" class="progress"><span class="progress__v">0%</span><span class="progress__line"><i></i></span></div>
+<div aria-hidden="true" class="cursor-pill"><span class="cursor-pill__body"></span><span class="cursor-pill__t"></span></div>
 <main id="top">
 <header class="chero hero">
-  <div class="container">
-    <span class="crumb kicker" data-intro-item><a href="../case-studies.html">&larr; Case Studies</a><span>(10 / 14)</span></span>
-    <h1 class="chero__t" data-intro-lines>Snapshot</h1>
-    <div class="chero__row">
-      <p class="chero__lede" data-intro-item>Real-time feedback while you shoot, not after</p>
-      <div class="logo-sq"><img src="../framerusercontent.com/images/iStzpCwctgHBrcZ4Dawca0fEycU__Q__width__E__700__A__height__E__394.png" alt="Snapshot logo"></div>
-    </div>
-    <div class="chips" data-intro-item><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">Shadowing</span><span class="chip">Design Systems</span></div>
-    <div class="comic" data-intro-item><p class="muted">Not everyone like&#x27;s to read to much nowadays (thanks TikTok). See a comic strip?</p><button class="cta" type="button" data-comic-open><span>Comic Strip</span></button></div>
-  </div>
+<div class="container">
+<span class="crumb kicker" data-intro-item=""><a href="../case-studies.html">← Case Studies</a><span>(10 / 14)</span></span>
+<h1 class="chero__t" data-intro-lines="">Snapshot</h1>
+<div class="chero__row">
+<p class="chero__lede" data-intro-item="">Real-time feedback while you shoot, not after</p>
+<div class="logo-sq"><img alt="Snapshot logo" src="../framerusercontent.com/images/iStzpCwctgHBrcZ4Dawca0fEycU__Q__width__E__700__A__height__E__394.png"/></div>
+</div>
+<div class="chips" data-intro-item=""><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">Shadowing</span><span class="chip">Design Systems</span></div>
+<div class="comic" data-intro-item=""><p class="muted">Not everyone like's to read to much nowadays (thanks TikTok). See a comic strip?</p><button class="cta" data-comic-open="" type="button"><span>Comic Strip</span></button></div>
+</div>
 </header>
 <section class="mfacts band"><div class="container mfacts__grid">
-  <div class="mtable" data-reveal><div class="tr"><span class="th">Timeline</span><span class="td">2023</span></div><div class="tr"><span class="th">Role</span><span class="td">Product Designer</span></div><div class="tr"><span class="th">Tools</span><span class="td">Figma · After Effects · Illustrator</span></div></div>
-  <div class="mtable stats" data-reveal><div class="tr"><span class="th">Interviews</span><span class="td">10</span></div><div class="tr"><span class="th">Survey Responses 76.25 to 82.27 Jump in SUS</span><span class="td">80+</span></div></div>
+<div class="mtable" data-reveal=""><div class="tr"><span class="th">Timeline</span><span class="td">2023</span></div><div class="tr"><span class="th">Role</span><span class="td">Product Designer</span></div><div class="tr"><span class="th">Tools</span><span class="td">Figma · After Effects · Illustrator</span></div></div>
+<div class="mtable stats" data-reveal=""><div class="tr"><span class="th">Interviews</span><span class="td">10</span></div><div class="tr"><span class="th">Survey responses</span><span class="td">80+</span></div><div class="tr"><span class="th">Jump in SUS</span><span class="td">76.25 → 82.27</span></div></div>
 </div></section>
 <div class="mwrap container">
 <aside class="maside"><div class="aside-stick">
-  <nav class="mindex">
-    <span class="kicker hd">Contents</span>
-    <a class="ni main" href="#top"><span class="no">&#8866;</span><span>Snapshot</span><i class="prog"></i></a>
-    <a class="ni" href="#s1" data-sec="s1"><span class="no">01</span><span>The Problem</span><i class="prog"></i></a><a class="ni" href="#s2" data-sec="s2"><span class="no">02</span><span>Research</span><i class="prog"></i></a><a class="ni" href="#s3" data-sec="s3"><span class="no">03</span><span>The decision</span><i class="prog"></i></a><a class="ni" href="#s4" data-sec="s4"><span class="no">04</span><span>Process</span><i class="prog"></i></a><a class="ni" href="#s5" data-sec="s5"><span class="no">05</span><span>What was shipped</span><i class="prog"></i></a><a class="ni" href="#s6" data-sec="s6"><span class="no">06</span><span>The result</span><i class="prog"></i></a>
-  </nav>
-  <nav class="mindex mothers"><span class="kicker hd">Case Studies</span><a class="ni" href="mphasis-blinkux.html"><span class="no">01</span><span>Blink UX</span></a><a class="ni" href="insider-vibes.html"><span class="no">02</span><span>Paytm Insider</span></a><a class="ni" href="paytm-chat.html"><span class="no">03</span><span>Paytm Chat</span></a><a class="ni" href="makemytrip.html"><span class="no">04</span><span>MakeMyTrip</span></a><a class="ni" href="airtel.html"><span class="no">05</span><span>Airtel</span></a><a class="ni" href="winuall.html"><span class="no">06</span><span>Winuall</span></a><a class="ni" href="poll-police.html"><span class="no">07</span><span>Poll Police</span></a><a class="ni" href="hope-house.html"><span class="no">08</span><span>Hope House</span></a><a class="ni" href="planteria.html"><span class="no">09</span><span>Planteria</span></a><a class="ni is-on" href="snapshot.html"><span class="no">10</span><span>Snapshot</span></a><a class="ni" href="storewell.html"><span class="no">11</span><span>Storewell</span></a><a class="ni" href="moneylingo.html"><span class="no">12</span><span>MoneyLingo</span></a><a class="ni" href="divergent-minds-convergent-design.html"><span class="no">13</span><span>Divergent Minds, Convergent Designs</span></a><a class="ni" href="group-alarm.html"><span class="no">14</span><span>Group Alarm</span></a></nav>
+<nav class="mindex">
+<span class="kicker hd">Contents</span>
+<a class="ni main" href="#top"><span class="no">⊢</span><span>Snapshot</span><i class="prog"></i></a>
+<a class="ni" data-sec="s1" href="#s1"><span class="no">01</span><span>The Problem</span><i class="prog"></i></a><a class="ni" data-sec="s2" href="#s2"><span class="no">02</span><span>Research</span><i class="prog"></i></a><a class="ni" data-sec="s3" href="#s3"><span class="no">03</span><span>The decision</span><i class="prog"></i></a><a class="ni" data-sec="s4" href="#s4"><span class="no">04</span><span>Process</span><i class="prog"></i></a><a class="ni" data-sec="s5" href="#s5"><span class="no">05</span><span>What was shipped</span><i class="prog"></i></a><a class="ni" data-sec="s6" href="#s6"><span class="no">06</span><span>The result</span><i class="prog"></i></a>
+</nav>
+<nav class="mindex mothers"><span class="kicker hd">Case Studies</span><a class="ni" href="mphasis-blinkux.html"><span class="no">01</span><span>Blink UX</span></a><a class="ni" href="insider-vibes.html"><span class="no">02</span><span>Paytm Insider</span></a><a class="ni" href="paytm-chat.html"><span class="no">03</span><span>Paytm Chat</span></a><a class="ni" href="makemytrip.html"><span class="no">04</span><span>MakeMyTrip</span></a><a class="ni" href="airtel.html"><span class="no">05</span><span>Airtel</span></a><a class="ni" href="winuall.html"><span class="no">06</span><span>Winuall</span></a><a class="ni" href="poll-police.html"><span class="no">07</span><span>Poll Police</span></a><a class="ni" href="hope-house.html"><span class="no">08</span><span>Hope House</span></a><a class="ni" href="planteria.html"><span class="no">09</span><span>Planteria</span></a><a class="ni is-on" href="snapshot.html"><span class="no">10</span><span>Snapshot</span></a><a class="ni" href="storewell.html"><span class="no">11</span><span>Storewell</span></a><a class="ni" href="moneylingo.html"><span class="no">12</span><span>MoneyLingo</span></a><a class="ni" href="divergent-minds-convergent-design.html"><span class="no">13</span><span>Divergent Minds, Convergent Designs</span></a><a class="ni" href="group-alarm.html"><span class="no">14</span><span>Group Alarm</span></a></nav>
 </div></aside>
 <div class="mmain">
-  <section class="msec bare" id="s0">
-<div class="mbody"><figure class="mfig c-a" data-reveal><img src="../framerusercontent.com/images/gIszQI4GlKWgguu6gjotr8ZQs__Q__width__E__3525__A__height__E__2518.min.webp" alt="Snapshot case study screen" loading="lazy"></figure></div></section>
-<section class="msec" id="s1"><h2 class="display" data-liquid>The Problem</h2>
-<div class="mbody"><p data-reveal>There are hundreds of photo apps, and almost none of them help you take a better photo. Every suggestion arrives afterwards, in edit mode; which is exactly the wrong moment. The critical time is while you&#x27;re holding the camera up.</p>
-<p data-reveal>Our starting concept came from a shared interest in music, photography, and film: recreate famous photos and movie scenes based on where you&#x27;re standing. That grew into something wider: templates, pose guidance, and real-time feedback.</p></div></section>
-<section class="msec" id="s2"><h2 class="display" data-liquid>Research</h2>
-<div class="mbody"><h3 class="msub msub--i" data-reveal><span class="msub__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M 0 8.001 C 0 5.375 1.288 2.916 3.448 1.421 C 5.608 -0.073 8.363 -0.412 10.821 0.514" transform="translate(2 12.999)"/><path d="M 8.377 3.626 C 9.207 2.797 9.207 1.452 8.377 0.622 C 7.547 -0.207 6.203 -0.207 5.373 0.622 L 1.363 4.634 C 1.125 4.872 0.951 5.165 0.857 5.488 L 0.02 8.358 C -0.031 8.533 0.017 8.723 0.146 8.852 C 0.276 8.981 0.465 9.029 0.64 8.978 L 3.51 8.141 C 3.833 8.047 4.126 7.873 4.364 7.635 Z" transform="translate(13.001 13)"/><path d="M 0 5 C 0 2.239 2.239 0 5 0 C 7.761 0 10 2.239 10 5 C 10 7.761 7.761 10 5 10 C 2.239 10 0 7.761 0 5 Z" transform="translate(5 3)"/></svg></span><span>10 Interviews</span></h3>
-<p data-reveal>With people across a range of photography skill, friends and family included. What devices, when they shoot, what frustrates them. People overwhelmingly use phones, shoot most when travelling or somewhere new, and want something nice enough to share — but not everyone&#x27;s a professional and the effort is real.</p>
-<h3 class="msub msub--i" data-reveal><span class="msub__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M 0 0 L 8 0" transform="translate(13 5)"/><path d="M 0 0 L 8 0" transform="translate(13 12)"/><path d="M 0 0 L 8 0" transform="translate(13 19)"/><path d="M 0 2 L 2 4 L 6 0" transform="translate(3 15)"/><path d="M 1 6 C 0.448 6 0 5.552 0 5 L 0 1 C 0 0.448 0.448 0 1 0 L 5 0 C 5.552 0 6 0.448 6 1 L 6 5 C 6 5.552 5.552 6 5 6 Z" transform="translate(3 4)"/></svg></span><span>Qualtrics Survey</span></h3>
-<p data-reveal>80+ responses, asking what apps they use, what their goals are, which features they&#x27;d want, and to rank those features. We selected nine essential features from it.</p>
-<p data-reveal>Ideas (everything, good or bad), Product Goals (merged into real-world actions), Users (scenarios)</p>
-<p data-reveal>80+ responses, asking what apps they use, what their goals are, which features they&#x27;d want, and to rank those features. We selected nine essential features from it.</p>
-<h3 class="msub msub--i" data-reveal><span class="msub__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M 18 0 L 0 0" transform="translate(3 5)"/><path d="M 7 0 L 0 0" transform="translate(3 12)"/><path d="M 7 0 L 0 0" transform="translate(3 19)"/><path d="M 0 3 C 0 1.343 1.343 0 3 0 C 4.657 0 6 1.343 6 3 C 6 4.657 4.657 6 3 6 C 1.343 6 0 4.657 0 3 Z" transform="translate(14 12)"/><path d="M 1.9 1.9 L 0 0" transform="translate(19.1 17.1)"/></svg></span><span>Competitive Analysis</span></h3>
-<p data-reveal>Across Instagram, Snapchat, TikTok, VSCO, AiryCam, and Ulike confirmed the gap: nobody was doing real-time guidance during capture.</p>
-<div class="mcar" data-car data-reveal role="region" aria-roledescription="carousel" aria-label="Image carousel"><ul class="mcar__track" tabindex="0"><li class="mcar__s" aria-label="1 of 2"><img src="../framerusercontent.com/images/ma9Qk1bkOr38gywKWi2eNNBmOE__Q__width__E__2809__A__height__E__2265.min.webp" alt="Snapshot case study: Competitive Analysis" loading="lazy"></li><li class="mcar__s" aria-label="2 of 2"><img src="../framerusercontent.com/images/AhP9NYA6OklgfQ2gR0IZKtj937g__Q__width__E__1868__A__height__E__1109.png" alt="Snapshot case study: Competitive Analysis" loading="lazy"></li></ul><div class="mcar__ui"><span class="mcar__n kicker"><b>01</b> / 02</span><button class="mcar__b" data-prev aria-label="Previous image"><span>&larr;</span></button><button class="mcar__b" data-next aria-label="Next image"><span>&rarr;</span></button></div></div></div></section>
-<section class="msec" id="s3"><h2 class="display" data-liquid>The decision</h2>
-<div class="mbody"><div class="callout" data-reveal><span class="kicker">WE CUT THE COMMUNITY FEED</span><p>For a photo app this is close to heresy; social is the obvious growth engine, and every competitor we studied leaned on it. We chose content creation over social networking and deliberately left the feed out. The product does one thing: help you take a better picture. Adding a feed would have made it a worse version of six apps that already exist.</p></div>
-<div class="callout" data-reveal><span class="kicker">WE KEPT TEMPLATES CONTRARY TO SURVEY RESULTS</span><p>Only 38% ranked photo/video templates as high priority, under our own bar. We kept the feature anyway, because it was the differentiator and because a survey measures what people can imagine, not what they&#x27;d use once it existed. The concept tests backed that up: pose recommendations and spot suggestions were what people responded to most.</p></div></div></section>
-<section class="msec" id="s4"><h2 class="display" data-liquid>Process</h2>
-<div class="mbody"><h3 class="msub msub--i" data-reveal><span class="msub__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M 0 0 L 8 0" transform="translate(13 21)"/><path d="M 0 0 L 4 4" transform="translate(15 5)"/><path d="M 19.174 4.812 C 20.275 3.712 20.275 1.927 19.174 0.826 C 18.074 -0.275 16.289 -0.275 15.188 0.825 L 1.842 14.174 C 1.61 14.406 1.438 14.691 1.342 15.004 L 0.021 19.356 C -0.032 19.533 0.017 19.723 0.147 19.853 C 0.277 19.983 0.468 20.031 0.644 19.978 L 4.997 18.658 C 5.31 18.563 5.595 18.392 5.827 18.161 Z" transform="translate(2 2)"/></svg></span><span>Crazy 8s</span></h3>
-<p data-reveal>Eight sketches each in eight minutes, then presenting to find common themes. Camera flow, search, and map integration surfaced immediately.</p>
-<p data-reveal>Then wireframes, then concept testing with hand-drawn sketches deliberately kept rough so people understood it was a work in progress and felt free to criticise it.</p>
-<figure class="mfig c-b" data-reveal><img src="../framerusercontent.com/images/jlEg7a8hsbFz1Rxud0PcZVkFtw__Q__width__E__3761__A__height__E__2004.min.webp" alt="Snapshot case study: Crazy 8s" loading="lazy"></figure>
-<h3 class="msub msub--i" data-reveal><span class="msub__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M 0 0 L 5 0 L 5 5" transform="translate(16 3)"/><path d="M 0 2 L 2 2 C 3.105 2 4 1.105 4 0" transform="translate(17 19)"/><path d="M 0 0 L 0 3" transform="translate(21 12)"/><path d="M 5 0 L 0 5" transform="translate(16 3)"/><path d="M 0 4 L 0 2 C 0 0.895 0.895 0 2 0" transform="translate(3 3)"/><path d="M 0 4.499 L 4.144 0.355 C 4.371 0.128 4.679 0 5 0 C 5.321 0 5.629 0.128 5.856 0.355 L 8 2.499" transform="translate(5 16.501)"/><path d="M 0 0 L 3 0" transform="translate(9 3)"/><path d="M 1 10 C 0.448 10 0 9.552 0 9 L 0 1 C 0 0.448 0.448 0 1 0 L 9 0 C 9.552 0 10 0.448 10 1 L 10 9 C 10 9.552 9.552 10 9 10 Z" transform="translate(3 11)"/></svg></span><span>Medium Fidelity</span></h3>
-<p data-reveal>Moderated usability testing over Zoom and Figma, thinking aloud. SUS: 76.25. Above the 68 average, not good enough. We fixed four things: specific search instructions like &quot;Search Barton Springs&quot;, a progress indicator, clearer real-time feedback, and a browsing function in maps.</p>
-<figure class="mfig c-c" data-reveal><img src="../framerusercontent.com/images/hjIa7ilIz1uklZ7wuHBjGLaLik__Q__width__E__1352__A__height__E__1161.min.webp" alt="Snapshot case study: Medium Fidelity" loading="lazy"></figure></div></section>
-<section class="msec" id="s5"><h2 class="display" data-liquid>What was shipped</h2>
-<div class="mbody"><h3 class="msub msub--i" data-reveal><span class="msub__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M 9.527 0.295 C 9.616 0.114 9.8 0 10.002 0 C 10.203 0 10.387 0.114 10.477 0.295 L 12.787 4.974 C 13.096 5.599 13.692 6.033 14.382 6.134 L 19.548 6.89 C 19.747 6.919 19.913 7.059 19.976 7.251 C 20.038 7.442 19.986 7.653 19.842 7.794 L 16.106 11.432 C 15.606 11.919 15.377 12.622 15.495 13.31 L 16.377 18.45 C 16.412 18.65 16.33 18.852 16.166 18.971 C 16.002 19.09 15.785 19.105 15.606 19.01 L 10.988 16.582 C 10.37 16.258 9.632 16.258 9.015 16.582 L 4.398 19.01 C 4.219 19.105 4.002 19.089 3.838 18.97 C 3.674 18.851 3.593 18.649 3.628 18.45 L 4.509 13.311 C 4.627 12.622 4.398 11.919 3.898 11.432 L 0.162 7.795 C 0.016 7.654 -0.037 7.443 0.026 7.25 C 0.088 7.057 0.255 6.917 0.456 6.889 L 5.621 6.134 C 6.312 6.033 6.909 5.6 7.218 4.974 Z" transform="translate(1.998 2)"/></svg></span><span>High Fidelity Designs</span></h3>
-<p data-reveal>Building upon our mid-fidelity screens, we elevated the design to a high-fidelity level. We developed a design system, incorporating a color palette and iconography for a cohesive visual identity. High-fidelity screens aimed to enhance the app&#x27;s visual appeal while maintaining user-friendliness.</p>
-<h3 class="msub msub--i" data-reveal><span class="msub__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M 0 2 L 2 4 L 6 0" transform="translate(8 9)"/><path d="M 0 8 C 0 3.582 3.582 0 8 0 C 12.418 0 16 3.582 16 8 C 16 12.418 12.418 16 8 16 C 3.582 16 0 12.418 0 8 Z" transform="translate(3 3)"/><path d="M 4.3 4.3 L 0 0" transform="translate(16.7 16.7)"/></svg></span><span>Unmoderated Usability Testing</span></h3>
-<p data-reveal>With high-fidelity screens in place, we conducted unmoderated usability testing using UserTesting.com. This phase involved 10 participants who completed specific tasks within the app. The feedback gathered helped fine-tune the app, addressing issues like instruction clarity and user understanding of features. Achieving an SUS score of 82.27 indicated improved usability</p>
-<div class="mcar" data-car data-reveal role="region" aria-roledescription="carousel" aria-label="Image carousel"><ul class="mcar__track" tabindex="0"><li class="mcar__s" aria-label="1 of 2"><img src="../framerusercontent.com/images/O2AYZQ5agdMckbktaP2UNge9ys__Q__width__E__4096__A__height__E__3902.min.webp" alt="Snapshot case study: Unmoderated Usability Testing" loading="lazy"></li><li class="mcar__s" aria-label="2 of 2"><img src="../framerusercontent.com/images/DJYcJVATxbX80bUM4aSC1IMyngw__Q__width__E__3760__A__height__E__2152.min.webp" alt="Snapshot case study: Unmoderated Usability Testing" loading="lazy"></li></ul><div class="mcar__ui"><span class="mcar__n kicker"><b>01</b> / 02</span><button class="mcar__b" data-prev aria-label="Previous image"><span>&larr;</span></button><button class="mcar__b" data-next aria-label="Next image"><span>&rarr;</span></button></div></div></div></section>
-<section class="msec" id="s6"><h2 class="display" data-liquid>The result</h2>
-<div class="mbody"><div class="statrow" data-reveal><span class="kicker">Interviews</span><span class="statrow__v">10</span></div>
-<div class="statrow" data-reveal><span class="kicker">Survey Responses 76.25 to 82.27 Jump in SUS</span><span class="statrow__v">80+</span></div>
-<p data-reveal>Feedback was strong enough that some participants asked when they could actually use it. Error, action, and success colours were praised for clarity, and people specifically liked that the step messaging felt human. Icons around editing and saving still confused people.</p>
-<div class="callout" data-reveal><span class="kicker">NOTE FROM FUTURE SAMARTH</span><p>We tested with 10 and got a good SUS score, and I&#x27;d treat that with more suspicion now. A camera app lives or dies in real conditions; bad light, moving subjects, one hand full. Every test we ran was someone calmly holding a phone in a quiet room.</p></div></div></section>
+<section class="msec bare" id="s0">
+<div class="mbody"><figure class="mfig c-a" data-reveal=""><img alt="Snapshot case study screen" loading="lazy" src="../framerusercontent.com/images/gIszQI4GlKWgguu6gjotr8ZQs__Q__width__E__3525__A__height__E__2518.min.webp"/></figure></div></section>
+<section class="msec" id="s1"><h2 class="display" data-liquid="">The Problem</h2>
+<div class="mbody"><p data-reveal="">There are hundreds of photo apps, and almost none of them help you take a better photo. Every suggestion arrives afterwards, in edit mode; which is exactly the wrong moment. The critical time is while you're holding the camera up.</p>
+<p data-reveal="">Our starting concept came from a shared interest in music, photography, and film: recreate famous photos and movie scenes based on where you're standing. That grew into something wider: templates, pose guidance, and real-time feedback.</p></div></section>
+<section class="msec" id="s2"><h2 class="display" data-liquid="">Research</h2>
+<div class="mbody"><div class="mcards n3 mcols"><div class="mcard"><h3 class="msub msub--i" data-reveal=""><span class="msub__ic"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="M 0 8.001 C 0 5.375 1.288 2.916 3.448 1.421 C 5.608 -0.073 8.363 -0.412 10.821 0.514" transform="translate(2 12.999)"></path><path d="M 8.377 3.626 C 9.207 2.797 9.207 1.452 8.377 0.622 C 7.547 -0.207 6.203 -0.207 5.373 0.622 L 1.363 4.634 C 1.125 4.872 0.951 5.165 0.857 5.488 L 0.02 8.358 C -0.031 8.533 0.017 8.723 0.146 8.852 C 0.276 8.981 0.465 9.029 0.64 8.978 L 3.51 8.141 C 3.833 8.047 4.126 7.873 4.364 7.635 Z" transform="translate(13.001 13)"></path><path d="M 0 5 C 0 2.239 2.239 0 5 0 C 7.761 0 10 2.239 10 5 C 10 7.761 7.761 10 5 10 C 2.239 10 0 7.761 0 5 Z" transform="translate(5 3)"></path></svg></span><span>10 Interviews</span></h3><p data-reveal="">With people across a range of photography skill, friends and family included. What devices, when they shoot, what frustrates them. People overwhelmingly use phones, shoot most when travelling or somewhere new, and want something nice enough to share — but not everyone's a professional and the effort is real.</p></div><div class="mcard"><h3 class="msub msub--i" data-reveal=""><span class="msub__ic"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="M 0 0 L 8 0" transform="translate(13 5)"></path><path d="M 0 0 L 8 0" transform="translate(13 12)"></path><path d="M 0 0 L 8 0" transform="translate(13 19)"></path><path d="M 0 2 L 2 4 L 6 0" transform="translate(3 15)"></path><path d="M 1 6 C 0.448 6 0 5.552 0 5 L 0 1 C 0 0.448 0.448 0 1 0 L 5 0 C 5.552 0 6 0.448 6 1 L 6 5 C 6 5.552 5.552 6 5 6 Z" transform="translate(3 4)"></path></svg></span><span>Qualtrics Survey</span></h3><p data-reveal="">80+ responses, asking what apps they use, what their goals are, which features they'd want, and to rank those features. We selected nine essential features from it.</p><p data-reveal="">Ideas (everything, good or bad), Product Goals (merged into real-world actions), Users (scenarios)</p><p data-reveal="">80+ responses, asking what apps they use, what their goals are, which features they'd want, and to rank those features. We selected nine essential features from it.</p></div><div class="mcard"><h3 class="msub msub--i" data-reveal=""><span class="msub__ic"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="M 18 0 L 0 0" transform="translate(3 5)"></path><path d="M 7 0 L 0 0" transform="translate(3 12)"></path><path d="M 7 0 L 0 0" transform="translate(3 19)"></path><path d="M 0 3 C 0 1.343 1.343 0 3 0 C 4.657 0 6 1.343 6 3 C 6 4.657 4.657 6 3 6 C 1.343 6 0 4.657 0 3 Z" transform="translate(14 12)"></path><path d="M 1.9 1.9 L 0 0" transform="translate(19.1 17.1)"></path></svg></span><span>Competitive Analysis</span></h3><p data-reveal="">Across Instagram, Snapchat, TikTok, VSCO, AiryCam, and Ulike confirmed the gap: nobody was doing real-time guidance during capture.</p></div></div>
 
+
+
+
+
+
+
+<div aria-label="Image carousel" aria-roledescription="carousel" class="mcar" data-car="" data-reveal="" role="region"><ul class="mcar__track" tabindex="0"><li aria-label="1 of 2" class="mcar__s"><img alt="Snapshot case study: Competitive Analysis" loading="lazy" src="../framerusercontent.com/images/ma9Qk1bkOr38gywKWi2eNNBmOE__Q__width__E__2809__A__height__E__2265.min.webp"/></li><li aria-label="2 of 2" class="mcar__s"><img alt="Snapshot case study: Competitive Analysis" loading="lazy" src="../framerusercontent.com/images/AhP9NYA6OklgfQ2gR0IZKtj937g__Q__width__E__1868__A__height__E__1109.png"/></li></ul><div class="mcar__ui"><span class="mcar__n kicker"><b>01</b> / 02</span><button aria-label="Previous image" class="mcar__b" data-prev=""><span>←</span></button><button aria-label="Next image" class="mcar__b" data-next=""><span>→</span></button></div></div></div></section>
+<section class="msec" id="s3"><h2 class="display" data-liquid="">The decision</h2>
+<div class="mbody"><div class="callout" data-reveal=""><span class="kicker">WE CUT THE COMMUNITY FEED</span><p>For a photo app this is close to heresy; social is the obvious growth engine, and every competitor we studied leaned on it. We chose content creation over social networking and deliberately left the feed out. The product does one thing: help you take a better picture. Adding a feed would have made it a worse version of six apps that already exist.</p></div>
+<div class="callout" data-reveal=""><span class="kicker">WE KEPT TEMPLATES CONTRARY TO SURVEY RESULTS</span><p>Only 38% ranked photo/video templates as high priority, under our own bar. We kept the feature anyway, because it was the differentiator and because a survey measures what people can imagine, not what they'd use once it existed. The concept tests backed that up: pose recommendations and spot suggestions were what people responded to most.</p></div></div></section>
+<section class="msec" id="s4"><h2 class="display" data-liquid="">Process</h2>
+<div class="mbody"><h3 class="msub msub--i" data-reveal=""><span class="msub__ic"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="M 0 0 L 8 0" transform="translate(13 21)"></path><path d="M 0 0 L 4 4" transform="translate(15 5)"></path><path d="M 19.174 4.812 C 20.275 3.712 20.275 1.927 19.174 0.826 C 18.074 -0.275 16.289 -0.275 15.188 0.825 L 1.842 14.174 C 1.61 14.406 1.438 14.691 1.342 15.004 L 0.021 19.356 C -0.032 19.533 0.017 19.723 0.147 19.853 C 0.277 19.983 0.468 20.031 0.644 19.978 L 4.997 18.658 C 5.31 18.563 5.595 18.392 5.827 18.161 Z" transform="translate(2 2)"></path></svg></span><span>Crazy 8s</span></h3>
+<p data-reveal="">Eight sketches each in eight minutes, then presenting to find common themes. Camera flow, search, and map integration surfaced immediately.</p>
+<p data-reveal="">Then wireframes, then concept testing with hand-drawn sketches deliberately kept rough so people understood it was a work in progress and felt free to criticise it.</p>
+<figure class="mfig c-b" data-reveal=""><img alt="Snapshot case study: Crazy 8s" loading="lazy" src="../framerusercontent.com/images/jlEg7a8hsbFz1Rxud0PcZVkFtw__Q__width__E__3761__A__height__E__2004.min.webp"/></figure>
+<h3 class="msub msub--i" data-reveal=""><span class="msub__ic"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="M 0 0 L 5 0 L 5 5" transform="translate(16 3)"></path><path d="M 0 2 L 2 2 C 3.105 2 4 1.105 4 0" transform="translate(17 19)"></path><path d="M 0 0 L 0 3" transform="translate(21 12)"></path><path d="M 5 0 L 0 5" transform="translate(16 3)"></path><path d="M 0 4 L 0 2 C 0 0.895 0.895 0 2 0" transform="translate(3 3)"></path><path d="M 0 4.499 L 4.144 0.355 C 4.371 0.128 4.679 0 5 0 C 5.321 0 5.629 0.128 5.856 0.355 L 8 2.499" transform="translate(5 16.501)"></path><path d="M 0 0 L 3 0" transform="translate(9 3)"></path><path d="M 1 10 C 0.448 10 0 9.552 0 9 L 0 1 C 0 0.448 0.448 0 1 0 L 9 0 C 9.552 0 10 0.448 10 1 L 10 9 C 10 9.552 9.552 10 9 10 Z" transform="translate(3 11)"></path></svg></span><span>Medium Fidelity</span></h3>
+<p data-reveal="">Moderated usability testing over Zoom and Figma, thinking aloud. SUS: 76.25. Above the 68 average, not good enough. We fixed four things: specific search instructions like "Search Barton Springs", a progress indicator, clearer real-time feedback, and a browsing function in maps.</p>
+<figure class="mfig c-c" data-reveal=""><img alt="Snapshot case study: Medium Fidelity" loading="lazy" src="../framerusercontent.com/images/hjIa7ilIz1uklZ7wuHBjGLaLik__Q__width__E__1352__A__height__E__1161.min.webp"/></figure></div></section>
+<section class="msec" id="s5"><h2 class="display" data-liquid="">What was shipped</h2>
+<div class="mbody"><div class="mcards n2 mcols"><div class="mcard"><h3 class="msub msub--i" data-reveal=""><span class="msub__ic"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="M 9.527 0.295 C 9.616 0.114 9.8 0 10.002 0 C 10.203 0 10.387 0.114 10.477 0.295 L 12.787 4.974 C 13.096 5.599 13.692 6.033 14.382 6.134 L 19.548 6.89 C 19.747 6.919 19.913 7.059 19.976 7.251 C 20.038 7.442 19.986 7.653 19.842 7.794 L 16.106 11.432 C 15.606 11.919 15.377 12.622 15.495 13.31 L 16.377 18.45 C 16.412 18.65 16.33 18.852 16.166 18.971 C 16.002 19.09 15.785 19.105 15.606 19.01 L 10.988 16.582 C 10.37 16.258 9.632 16.258 9.015 16.582 L 4.398 19.01 C 4.219 19.105 4.002 19.089 3.838 18.97 C 3.674 18.851 3.593 18.649 3.628 18.45 L 4.509 13.311 C 4.627 12.622 4.398 11.919 3.898 11.432 L 0.162 7.795 C 0.016 7.654 -0.037 7.443 0.026 7.25 C 0.088 7.057 0.255 6.917 0.456 6.889 L 5.621 6.134 C 6.312 6.033 6.909 5.6 7.218 4.974 Z" transform="translate(1.998 2)"></path></svg></span><span>High Fidelity Designs</span></h3><p data-reveal="">Building upon our mid-fidelity screens, we elevated the design to a high-fidelity level. We developed a design system, incorporating a color palette and iconography for a cohesive visual identity. High-fidelity screens aimed to enhance the app's visual appeal while maintaining user-friendliness.</p></div><div class="mcard"><h3 class="msub msub--i" data-reveal=""><span class="msub__ic"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" viewbox="0 0 24 24"><path d="M 0 2 L 2 4 L 6 0" transform="translate(8 9)"></path><path d="M 0 8 C 0 3.582 3.582 0 8 0 C 12.418 0 16 3.582 16 8 C 16 12.418 12.418 16 8 16 C 3.582 16 0 12.418 0 8 Z" transform="translate(3 3)"></path><path d="M 4.3 4.3 L 0 0" transform="translate(16.7 16.7)"></path></svg></span><span>Unmoderated Usability Testing</span></h3><p data-reveal="">With high-fidelity screens in place, we conducted unmoderated usability testing using UserTesting.com. This phase involved 10 participants who completed specific tasks within the app. The feedback gathered helped fine-tune the app, addressing issues like instruction clarity and user understanding of features. Achieving an SUS score of 82.27 indicated improved usability</p></div></div>
+
+
+
+<div aria-label="Image carousel" aria-roledescription="carousel" class="mcar" data-car="" data-reveal="" role="region"><ul class="mcar__track" tabindex="0"><li aria-label="1 of 2" class="mcar__s"><img alt="Snapshot case study: Unmoderated Usability Testing" loading="lazy" src="../framerusercontent.com/images/O2AYZQ5agdMckbktaP2UNge9ys__Q__width__E__4096__A__height__E__3902.min.webp"/></li><li aria-label="2 of 2" class="mcar__s"><img alt="Snapshot case study: Unmoderated Usability Testing" loading="lazy" src="../framerusercontent.com/images/DJYcJVATxbX80bUM4aSC1IMyngw__Q__width__E__3760__A__height__E__2152.min.webp"/></li></ul><div class="mcar__ui"><span class="mcar__n kicker"><b>01</b> / 02</span><button aria-label="Previous image" class="mcar__b" data-prev=""><span>←</span></button><button aria-label="Next image" class="mcar__b" data-next=""><span>→</span></button></div></div></div></section>
+<section class="msec mres" id="s6"><h2 class="display" data-liquid="">The result</h2>
+<div class="mbody"><div class="statrow" data-reveal=""><span class="kicker">Interviews</span><span class="statrow__v">10</span></div>
+<div class="statrow" data-reveal=""><span class="kicker">Survey Responses 76.25 to 82.27 Jump in SUS</span><span class="statrow__v">80+</span></div>
+<p data-reveal="">Feedback was strong enough that some participants asked when they could actually use it. Error, action, and success colours were praised for clarity, and people specifically liked that the step messaging felt human. Icons around editing and saving still confused people.</p>
+<div class="callout" data-reveal=""><span class="kicker">NOTE FROM FUTURE SAMARTH</span><p>We tested with 10 and got a good SUS score, and I'd treat that with more suspicion now. A camera app lives or dies in real conditions; bad light, moving subjects, one hand full. Every test we ran was someone calmly holding a phone in a quiet room.</p></div></div></section>
 </div>
 </div>
-<section class="mmore band" aria-label="Next case studies">
-  <div class="container mmore__head"><h2 class="display" data-liquid>Next case studies</h2><a class="mmore__all" href="../case-studies.html">View all <span aria-hidden="true">&#8599;</span></a></div>
-  <div class="container mmore__grid"><article class="wcard" data-href="storewell.html" data-cursor-pill="Open" data-reveal>
-  <a class="wcard__frame" href="storewell.html"><span class="wcard__img"><img src="../framerusercontent.com/images/KFNlT3lC4TylqRIFfHJ13cZnaI__Q__width__E__1920__A__height__E__1080.png" alt="Storewell" loading="lazy"></span></a>
-  <div class="wcard__cap">
-    <span class="wcard__no">(11)</span>
-    <h3 class="wcard__t"><a href="storewell.html">Storewell</a></h3>
-    <p class="wcard__d muted">When you need fridge shelves, not folders</p>
-    <div class="chips"><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">Design Thinkings</span><span class="chip">Design Systems</span></div>
-    <a class="wcard__open" href="storewell.html">Open <span aria-hidden="true">&#8599;</span></a>
-  </div>
-</article><article class="wcard" data-href="moneylingo.html" data-cursor-pill="Open" data-reveal>
-  <a class="wcard__frame" href="moneylingo.html"><span class="wcard__img"><img src="../framerusercontent.com/images/TFltPwD6p8Eg7VfV6XWG7crE__Q__width__E__3514__A__height__E__1726.min.webp" alt="MoneyLingo" loading="lazy"></span></a>
-  <div class="wcard__cap">
-    <span class="wcard__no">(12)</span>
-    <h3 class="wcard__t"><a href="moneylingo.html">MoneyLingo</a></h3>
-    <p class="wcard__d muted">The board game that became a quiz</p>
-    <div class="chips"><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">Design Thinkings</span><span class="chip">Design Systems</span></div>
-    <a class="wcard__open" href="moneylingo.html">Open <span aria-hidden="true">&#8599;</span></a>
-  </div>
-</article><article class="wcard" data-href="divergent-minds-convergent-design.html" data-cursor-pill="Open" data-reveal>
-  <a class="wcard__frame" href="divergent-minds-convergent-design.html"><span class="wcard__img"><img src="../framerusercontent.com/images/X8OXPiFttllnYM7NzkXm4vtOlU__Q__width__E__1024__A__height__E__1024.min.webp" alt="Divergent Minds, Convergent Designs" loading="lazy"></span></a>
-  <div class="wcard__cap">
-    <span class="wcard__no">(13)</span>
-    <h3 class="wcard__t"><a href="divergent-minds-convergent-design.html">Divergent Minds, Convergent Designs</a></h3>
-    <p class="wcard__d muted">Research Paper</p>
-    <div class="chips"></div>
-    <a class="wcard__open" href="divergent-minds-convergent-design.html">Open <span aria-hidden="true">&#8599;</span></a>
-  </div>
+<section aria-label="Next case studies" class="mmore band">
+<div class="container mmore__head"><h2 class="display" data-liquid="">Next case studies</h2><a class="mmore__all" href="../case-studies.html">View all <span aria-hidden="true">↗</span></a></div>
+<div class="container mmore__grid"><article class="wcard" data-cursor-pill="Open" data-href="storewell.html" data-reveal="">
+<a class="wcard__frame" href="storewell.html"><span class="wcard__img"><img alt="Storewell" loading="lazy" src="../framerusercontent.com/images/KFNlT3lC4TylqRIFfHJ13cZnaI__Q__width__E__1920__A__height__E__1080.png"/></span></a>
+<div class="wcard__cap">
+<span class="wcard__no">(11)</span>
+<h3 class="wcard__t"><a href="storewell.html">Storewell</a></h3>
+<p class="wcard__d muted">When you need fridge shelves, not folders</p>
+<div class="chips"><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">Design Thinkings</span><span class="chip">Design Systems</span></div>
+<a class="wcard__open" href="storewell.html">Open <span aria-hidden="true">↗</span></a>
+</div>
+</article><article class="wcard" data-cursor-pill="Open" data-href="moneylingo.html" data-reveal="">
+<a class="wcard__frame" href="moneylingo.html"><span class="wcard__img"><img alt="MoneyLingo" loading="lazy" src="../framerusercontent.com/images/TFltPwD6p8Eg7VfV6XWG7crE__Q__width__E__3514__A__height__E__1726.min.webp"/></span></a>
+<div class="wcard__cap">
+<span class="wcard__no">(12)</span>
+<h3 class="wcard__t"><a href="moneylingo.html">MoneyLingo</a></h3>
+<p class="wcard__d muted">The board game that became a quiz</p>
+<div class="chips"><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">Design Thinkings</span><span class="chip">Design Systems</span></div>
+<a class="wcard__open" href="moneylingo.html">Open <span aria-hidden="true">↗</span></a>
+</div>
+</article><article class="wcard" data-cursor-pill="Open" data-href="divergent-minds-convergent-design.html" data-reveal="">
+<a class="wcard__frame" href="divergent-minds-convergent-design.html"><span class="wcard__img"><img alt="Divergent Minds, Convergent Designs" loading="lazy" src="../framerusercontent.com/images/X8OXPiFttllnYM7NzkXm4vtOlU__Q__width__E__1024__A__height__E__1024.min.webp"/></span></a>
+<div class="wcard__cap">
+<span class="wcard__no">(13)</span>
+<h3 class="wcard__t"><a href="divergent-minds-convergent-design.html">Divergent Minds, Convergent Designs</a></h3>
+<p class="wcard__d muted">Research Paper</p>
+<div class="chips"></div>
+<a class="wcard__open" href="divergent-minds-convergent-design.html">Open <span aria-hidden="true">↗</span></a>
+</div>
 </article></div>
 </section>
 </main>
-<div class="comic-drawer" aria-hidden="true"><div class="comic-drawer__scrim" data-comic-close></div><aside class="comic-drawer__panel" role="dialog" aria-modal="true" aria-label="Comic strip" tabindex="-1"><header class="comic-drawer__head"><span class="kicker">Comic strip</span><button class="comic-drawer__x" type="button" data-comic-close aria-label="Close comic strip"><span></span><span></span></button></header><div class="comic-drawer__body" data-lenis-prevent><h2 class="display">Snapshot</h2><div class="comic-drawer__strip" data-comic-strip><img src="../assets/img/comics/snapshot.webp" width="765" height="1024" alt="Comic strip summarising the project" loading="lazy" decoding="async"></div><p class="comic-drawer__note muted">Note: AI generated</p></div></aside></div>
-
+<div aria-hidden="true" class="comic-drawer"><div class="comic-drawer__scrim" data-comic-close=""></div><aside aria-label="Comic strip" aria-modal="true" class="comic-drawer__panel" role="dialog" tabindex="-1"><header class="comic-drawer__head"><span class="kicker">Comic strip</span><button aria-label="Close comic strip" class="comic-drawer__x" data-comic-close="" type="button"><span></span><span></span></button></header><div class="comic-drawer__body" data-lenis-prevent=""><h2 class="display">Snapshot</h2><div class="comic-drawer__strip" data-comic-strip=""><img alt="Comic strip summarising the project" decoding="async" height="1024" loading="lazy" src="../assets/img/comics/snapshot.webp" width="765"/></div><p class="comic-drawer__note muted">Note: AI generated</p></div></aside></div>
 <section class="contact band" id="contact">
-  <div class="contact__inner container">
-    <h2 class="display" data-liquid>Always up for a conversation about UX, design systems or AI-native tooling</h2>
-    <div class="links" data-reveal><a href="mailto:contact@samarthnayyar.com">Get in touch</a><a href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" target="_blank" rel="noopener" data-cursor-pill="PDF">Download Resume</a></div>
-    
-  </div>
+<div class="contact__inner container">
+<h2 class="display" data-liquid="">Always up for a conversation about UX, design systems or AI-native tooling</h2>
+<div class="links" data-reveal=""><a href="mailto:contact@samarthnayyar.com">Get in touch</a><a data-cursor-pill="PDF" href="https://docs.google.com/document/d/18T4BeOstWglm5ECAIuQ_VOgg8LBc92MZ/edit?usp=sharing&amp;ouid=107449157409953777248&amp;rtpof=true&amp;sd=true" rel="noopener" target="_blank">Download Resume</a></div>
+</div>
 </section>
 <footer class="footer">
-  <p class="footer__note">&copy; 2026 Samarth Nayyar. Powered by Caffeine and the love for design.</p>
-  <div class="footer__meta"><span>San Francisco &middot; <span data-local-time></span></span><a class="footer__top" href="#top">Back to top <span aria-hidden="true">&uarr;</span></a></div>
+<p class="footer__note">© 2026 Samarth Nayyar. Powered by Caffeine and the love for design.</p>
+<div class="footer__meta"><span>San Francisco · <span data-local-time=""></span></span><a class="footer__top" href="#top">Back to top <span aria-hidden="true">↑</span></a></div>
 </footer>
 </body>
 </html>

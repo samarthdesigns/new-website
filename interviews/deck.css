@@ -107,9 +107,17 @@ button{font:inherit;color:inherit}
 .player{position:fixed;inset:0;display:grid;grid-template-rows:minmax(0,1fr) 56px;background:var(--d-bg)}
 .viewport{position:relative;overflow:hidden;min-height:0}
 .stage{width:1600px;height:900px;position:absolute;left:50%;top:50%;transform-origin:center center;transform:translate(-50%,-50%) scale(var(--s,1))}
-.slide{position:absolute;inset:0;padding:72px 96px 64px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transition:opacity .45s var(--liquid),visibility 0s .45s}
-.slide.is-on{opacity:1;visibility:visible;transition:opacity .45s var(--liquid)}
-.slide.is-on [data-r]{animation:up .8s var(--liquid) both;animation-delay:calc(var(--i,0)*70ms + 80ms)}
+.slide{--ease:cubic-bezier(.2,.7,.2,1);position:absolute;inset:0;padding:72px 96px 64px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .4s var(--ease),transform .4s var(--ease),visibility 0s .4s}
+.slide.is-on{opacity:1;visibility:visible;transform:none;transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.slide.is-on [data-r]{animation:rise .45s var(--ease) both;animation-delay:calc(var(--i,0)*40ms + 60ms)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .slide,.slide.is-on{transform:none;transition:opacity .2s linear,visibility 0s .2s}
+  .slide.is-on{transition:opacity .2s linear}
+  .slide.is-on [data-r]{animation:none}
+  .page,.gate__in{animation:none}
+  .car__track figure,.prog button::after,.pick,.row{transition:none}
+}
 .s-kick{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
 .s-kick .k b{color:var(--d-ink);font-weight:700}
 .s-title{font-size:58px;max-width:20ch;padding-bottom:.08em}

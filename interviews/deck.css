@@ -459,6 +459,17 @@ button{font:inherit;color:inherit}
 .cap.is-on::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:-120px;top:-160px;background:radial-gradient(color-mix(in srgb,var(--d-accent-ink) 16%,transparent),transparent 70%);animation:drift 14s ease-in-out infinite alternate}
 @keyframes drift{to{transform:translate(-260px,220px)}}
 @media (prefers-reduced-motion:reduce){.cap.is-on::before{animation:none}}
+.caps[data-tabs]{grid-template-columns:1fr;gap:16px}
+.caps__sw{justify-self:start;display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:var(--d-tile);border:1px solid var(--d-line)}
+.caps__sw button{font:inherit;font-size:15px;padding:10px 20px;border:0;border-radius:999px;background:none;color:var(--d-ink);cursor:pointer}
+.caps__sw button.is-on{background:var(--d-accent);color:var(--d-accent-ink)}
+.caps[data-tabs] .cap[hidden]{display:none}
+.caps[data-tabs] .cap ul{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.caps[data-tabs] .cap li{display:grid;grid-template-columns:auto 1fr;column-gap:12px;row-gap:4px;align-items:baseline;border-radius:16px;padding:18px 22px}
+.caps[data-tabs] .cap li:hover{scale:1.02}
+.caps[data-tabs] .cap li b{font-weight:500}
+.caps[data-tabs] .cap li small{grid-column:2;font-size:16px;line-height:1.4;opacity:.75}
+.player.is-narrow .caps[data-tabs] .cap ul{grid-template-columns:1fr}.player.is-narrow .caps[data-tabs] .cap li small{font-size:14px}
 .player.is-narrow .caps{grid-template-columns:1fr}.player.is-narrow .cap{padding:24px}.player.is-narrow .cap li{font-size:16px;padding:10px 16px 10px 12px}
 
 /* hidden slides: tagged in the normal view, skipped in fullscreen (deck.js) */

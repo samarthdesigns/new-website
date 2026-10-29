@@ -241,6 +241,15 @@
     };
     el.querySelectorAll('[data-d]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); show(at + +b.dataset.d); }));
   }
+  // Tabs inside a slide (What I bring): one panel at a time, switched by the viewer.
+  function tabs(el) {
+    const bs = [...el.querySelectorAll('[data-tab]')], ps = [...el.querySelectorAll('[data-panel]')];
+    bs.forEach((b, i) => b.addEventListener('click', e => {
+      e.stopPropagation();
+      bs.forEach((x, j) => { x.classList.toggle('is-on', j === i); x.setAttribute('aria-selected', j === i); });
+      ps.forEach((p, j) => { p.hidden = j !== i; });
+    }));
+  }
   function wake(slide) {
     slide.querySelectorAll('img[data-enc]').forEach(img => {
       const path = img.dataset.enc;
@@ -390,6 +399,7 @@
     stage.querySelectorAll('[data-widget="themes"]').forEach(themes);
     stage.querySelectorAll('[data-widget="pizza"]').forEach(pizza);
     stage.querySelectorAll('[data-car]').forEach(carousel);
+    stage.querySelectorAll('[data-tabs]').forEach(tabs);
     stage.querySelectorAll('.tools').forEach(t => { const sp = t.querySelectorAll(':scope>span'); sp.forEach((e, i) => e.style.setProperty('--a', i * 360 / sp.length - 90)); });
     let at = -1;
     // hidden slides show in the normal view; in fullscreen they're skipped and left out of the count

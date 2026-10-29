@@ -44,15 +44,39 @@
     });
   }
 
+  /* ---------- prefs kept in the URL query (?theme=agoda), so a shared link opens the same way */
+  const THEMES_OK = ['site', 'agoda'];
+  const pref = (k, def) => new URLSearchParams(location.search).get(k) || def;
+  function setPref(k, v, def) {
+    const q = new URLSearchParams(location.search);
+    v === def ? q.delete(k) : q.set(k, v);
+    history.replaceState(null, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash);
+  }
+  function applyTheme(t) {
+    if (!THEMES_OK.includes(t)) t = 'site';
+    document.documentElement.dataset.theme = t;
+    document.querySelectorAll('[data-th]').forEach(b => b.setAttribute('aria-pressed', b.dataset.th === t));
+    return t;
+  }
+  const themeSwitch = () => `<span class="tsw"><span class="seg" role="group" aria-label="Deck theme">${THEMES_OK.map(t =>
+    `<button data-th="${t}" aria-pressed="false">${t === 'site' ? 'Site' : 'Agoda'}</button>`).join('')}</span>
+    <span class="tsw__n">Agoda-inspired theme, not Agoda’s design system</span></span>`;
+  function bindTheme(root) {
+    root.querySelectorAll('[data-th]').forEach(b => b.addEventListener('click', () => setPref('theme', applyTheme(b.dataset.th), 'site')));
+    applyTheme(pref('theme', 'site'));
+  }
+  applyTheme(pref('theme', 'site'));
+
   /* ---------- helpers */
   const fmtDate = s => new Date(s + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   const pad = n => String(n).padStart(2, '0');
   const deckById = id => data.decks.find(d => d.id === id);
   const go = h => { location.hash = h; };
   function top(right = '') {
-    return `<header class="top"><a href="/" rel="nofollow">${data.owner}</a><div style="display:flex;gap:8px">${right}<button class="pill" data-lock><span class="dot"></span>Lock</button></div></header>`;
+    return `<header class="top"><a href="/" rel="nofollow">${data.owner}</a><div style="display:flex;gap:12px;align-items:center">${themeSwitch()}${right}<button class="pill" data-lock><span class="dot"></span>Lock</button></div></header>`;
   }
   function bindTop() {
+    bindTheme(app);
     app.querySelector('[data-lock]')?.addEventListener('click', () => { sessionStorage.removeItem(KEY); location.hash = ''; location.reload(); });
   }
 
@@ -212,7 +236,7 @@
     const list = secs.flatMap(([name, ss], si) => ss.map(s => ({ s, name, si })));
     const base = `#/${deck.id}/play/${ids.join(',')}/`;
     document.title = deck.company + ' deck · ' + data.owner;
-    app.innerHTML = `<div class="player"><div class="viewport"><div class="stage">${list.map((x, i) => slideHtml(x.s, x.name, i)).join('')}</div></div>
+    app.innerHTML = `<div class="player"><div class="deckbar">${themeSwitch()}</div><div class="viewport"><div class="stage">${list.map((x, i) => slideHtml(x.s, x.name, i)).join('')}</div></div>
       <nav class="chrome" aria-label="Slide controls"><div class="chrome__l"><b>${deck.company}</b><span></span></div>
         <div class="prog">${secs.map(([name, ss], si) => `<button style="--n:${ss.length}" data-sec="${si}" aria-label="Jump to ${name}" title="${name}"></button>`).join('')}</div>
         <div class="chrome__r"><span class="chrome__c"></span>
@@ -220,6 +244,7 @@
           <button class="ib" data-fs aria-label="Fullscreen (F)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5V1h4M11 1h4v4M15 11v4h-4M5 15H1v-4"/></svg></button>
           <button class="ib" data-x aria-label="Back to picker (Esc)">×</button></div></nav></div>`;
     const root = app.querySelector('.player'), vp = root.querySelector('.viewport'), stage = root.querySelector('.stage');
+    bindTheme(root);
     const slides = [...stage.children], secBtns = [...root.querySelectorAll('[data-sec]')];
     stage.querySelectorAll('[data-widget="themes"]').forEach(themes);
     stage.querySelectorAll('[data-widget="pizza"]').forEach(pizza);

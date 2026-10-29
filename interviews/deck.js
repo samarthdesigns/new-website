@@ -236,11 +236,12 @@
     const list = secs.flatMap(([name, ss], si) => ss.map(s => ({ s, name, si })));
     const base = `#/${deck.id}/play/${ids.join(',')}/`;
     document.title = deck.company + ' deck · ' + data.owner;
-    app.innerHTML = `<div class="player"><div class="deckbar">${themeSwitch()}</div><div class="viewport"><div class="stage">${list.map((x, i) => slideHtml(x.s, x.name, i)).join('')}</div></div>
+    app.innerHTML = `<div class="player"><div class="deckbar">${themeSwitch()}</div><div class="viewport"><div class="stage">${list.map((x, i) => slideHtml(x.s, x.name, i)).join('')}</div><aside class="notes" aria-live="polite" hidden><span class="k">Speaker notes · N to hide</span><p></p></aside></div>
       <nav class="chrome" aria-label="Slide controls"><div class="chrome__l"><b>${deck.company}</b><span></span></div>
         <div class="prog">${secs.map(([name, ss], si) => `<button style="--n:${ss.length}" data-sec="${si}" aria-label="Jump to ${name}" title="${name}"></button>`).join('')}</div>
         <div class="chrome__r"><span class="chrome__c"></span>
           <button class="ib" data-nav="-1" aria-label="Previous slide">‹</button><button class="ib" data-nav="1" aria-label="Next slide">›</button>
+          <button class="ib ib--t" data-notes aria-pressed="false" aria-label="Speaker notes (N)" title="Speaker notes (N)">N</button>
           <button class="ib" data-fs aria-label="Fullscreen (F)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5V1h4M11 1h4v4M15 11v4h-4M5 15H1v-4"/></svg></button>
           <button class="ib" data-x aria-label="Back to picker (Esc)">×</button></div></nav></div>`;
     const root = app.querySelector('.player'), vp = root.querySelector('.viewport'), stage = root.querySelector('.stage');
@@ -251,6 +252,14 @@
     stage.querySelectorAll('[data-car]').forEach(carousel);
     stage.querySelectorAll('.tools').forEach(t => { const sp = t.querySelectorAll(':scope>span'); sp.forEach((e, i) => e.style.setProperty('--a', i * 360 / sp.length - 90)); });
     let at = -1;
+    const notesEl = root.querySelector('.notes'), notesBtn = root.querySelector('[data-notes]');
+    const fillNotes = () => { notesEl.querySelector('p').innerHTML = list[at].s.notes || '<i>No notes on this slide.</i>'; };
+    const toggleNotes = () => {
+      notesEl.hidden = !notesEl.hidden;
+      notesBtn.setAttribute('aria-pressed', !notesEl.hidden);
+      if (!notesEl.hidden) fillNotes();
+    };
+    notesBtn.addEventListener('click', toggleNotes);
     const fit = () => {
       const narrow = innerWidth <= 760;
       root.classList.toggle('is-narrow', narrow);
@@ -263,6 +272,8 @@
       at = i;
       slides[at].classList.add('is-on');
       wake(slides[at]); if (slides[at + 1]) wake(slides[at + 1]);
+      if (!notesEl.hidden) fillNotes();
+      notesBtn.classList.toggle('has', !!list[at].s.notes);
       root.querySelector('.chrome__c').textContent = `${pad(at + 1)} / ${pad(list.length)}`;
       root.querySelector('.chrome__l span').textContent = list[at].name;
       secBtns.forEach((b, si) => {
@@ -286,6 +297,7 @@
       else if (k === 'Home') show(0);
       else if (k === 'End') show(list.length - 1);
       else if (k === 'f' || k === 'F') fs();
+      else if (k === 'n' || k === 'N') toggleNotes();
       else if (k === 'Escape' && !document.fullscreenElement) go('#/' + deck.id);
     };
     let tx = 0, ty = 0;

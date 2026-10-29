@@ -319,6 +319,14 @@ button{font:inherit;color:inherit}
 .ib:hover{background:var(--d-tile)}
 .ib svg{width:16px;height:16px}
 
+/* speaker notes (N) */
+.notes{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:4;width:min(760px,calc(100% - 32px));max-height:40%;overflow:auto;padding:16px 20px;border-radius:var(--d-radius);background:var(--d-ink);color:var(--d-bg);box-shadow:0 20px 50px -20px rgba(0,0,0,.45)}
+.notes .k{color:inherit;opacity:.6}
+.notes p{margin:8px 0 0;font-size:15px;line-height:1.55}
+.ib--t{font:700 13px var(--d-body)}
+.ib--t.has{position:relative}.ib--t.has::after{content:"";position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--d-hl)}
+.ib[aria-pressed="true"]{background:var(--d-ink);color:var(--d-bg);border-color:var(--d-ink)}
+
 /* narrow screens: slides become a scrolling column */
 @media (max-width:760px){
   .page{width:calc(100% - 40px);padding-top:20px}

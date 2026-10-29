@@ -390,20 +390,6 @@ button{font:inherit;color:inherit}
   .chrome{grid-template-columns:auto 1fr auto}.chrome__l span{display:none}.prog{width:100%}
 }
 
-/* How I work: one slide, two versions behind the With AI / Without AI switch */
-.hiw{width:100%;display:grid;gap:22px;align-self:center}
-.hiw__bar{display:flex;align-items:center;justify-content:space-between}
-.hiw__v{display:none;gap:26px}
-.hiw__v.is-on{display:grid;animation:hiwIn .45s cubic-bezier(.2,.7,.2,1)}
-@keyframes hiwIn{from{opacity:0;transform:translateY(8px)}}
-.hiw .principles div{padding-top:24px;padding-bottom:24px;gap:10px}
-.hiw .principles b{font-size:32px}
-.hiw .principles p{font-size:16px}
-.hiw__cav{display:grid;grid-template-columns:140px 1fr;gap:24px;align-items:start;padding:20px 24px;border-radius:var(--d-radius,16px);background:var(--d-tile)}
-.hiw__cav ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
-.hiw__cav li{font-size:16px;line-height:1.5;color:var(--d-text);padding-left:16px;position:relative}
-.hiw__cav li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--d-accent)}
-@media (max-width:760px){.hiw__cav,.hiw__cav ul{grid-template-columns:1fr}.hiw__bar{flex-wrap:wrap;gap:10px}}
 
 /* Voyage orbit: the dashed ring turns and the tools ride it, staying upright; the hub breathes. Pauses on hover. */
 @property --spin{syntax:'<angle>';inherits:true;initial-value:0deg}
@@ -421,17 +407,6 @@ button{font:inherit;color:inherit}
 @media (prefers-reduced-motion:reduce){.tools,.tools__hub,.tools__hub::after{animation:none}}
 .player.is-narrow .tools{animation:none}.player.is-narrow .tools::before,.player.is-narrow .tools__hub::after{display:none}
 .player.is-narrow .tools>span{transform:none}
-.hiw{gap:32px}
-.hiw__bar .k{font-size:14px}
-.hiw .seg{padding:4px}
-.hiw .seg button{height:44px;padding:0 22px;font-size:16px}
-.hiw .principles div{padding-top:36px;padding-bottom:36px;gap:14px}
-.hiw .principles b{font-size:40px}
-.hiw .principles p{font-size:19px}
-.hiw__cav{padding:28px 32px;grid-template-columns:160px 1fr}
-.hiw__cav .k{font-size:14px;padding-top:3px}
-.hiw__cav li{font-size:19px;padding-left:20px}
-.hiw__cav li::before{width:8px;height:8px}
 .tools::before{border:2px dashed color-mix(in srgb,var(--d-accent) 38%,transparent)}
 .tools__hub::after{border:1.5px dotted color-mix(in srgb,var(--d-accent) 60%,transparent)}
 
@@ -468,3 +443,26 @@ button{font:inherit;color:inherit}
 .slide:not(.is-on) *,.slide:not(.is-on) *::before,.slide:not(.is-on) *::after{animation-play-state:paused!important}
 @media (prefers-reduced-motion:reduce){.flow__c.is-gap::after,.ladder .is-next::after,.flow i.o::after,.funnel__row::after,.dg__out::after,.dg3 div,.steps::after,.steps div:last-child .steps__v::after,.tl .is-now .tl__y::before,.msg .rx{animation:none}.steps::after,.flow i.o::after,.funnel__row::after,.dg__out::after{display:none}}
 .player.is-narrow .steps::after{display:none}
+
+/* What I bring: two groups of capability pills; the AI group is the accent card with a slow drifting glow */
+.caps{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-self:center}
+.cap{position:relative;overflow:hidden;background:var(--d-tile);border-radius:var(--d-radius);padding:40px;display:grid;gap:24px;align-content:start}
+.cap .k{font-size:14px;position:relative}
+.cap ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:12px;position:relative}
+.cap li{display:inline-flex;align-items:center;gap:12px;padding:14px 22px 14px 16px;border-radius:999px;background:var(--d-card);border:1px solid var(--d-line);font-size:22px;line-height:1.2;color:var(--d-ink);transition:scale .3s cubic-bezier(.3,1.6,.5,1)}
+.cap li:hover{scale:1.04}
+.cap .pn{font-size:15px}
+.cap.is-on{background:var(--d-accent);color:var(--d-accent-ink)}
+.cap.is-on .k{color:inherit;opacity:.75}
+.cap.is-on li{background:color-mix(in srgb,var(--d-accent-ink) 12%,transparent);border-color:color-mix(in srgb,var(--d-accent-ink) 22%,transparent);color:var(--d-accent-ink)}
+.cap.is-on .pn{color:inherit;opacity:.6}
+.cap.is-on::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:-120px;top:-160px;background:radial-gradient(color-mix(in srgb,var(--d-accent-ink) 16%,transparent),transparent 70%);animation:drift 14s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(-260px,220px)}}
+@media (prefers-reduced-motion:reduce){.cap.is-on::before{animation:none}}
+.player.is-narrow .caps{grid-template-columns:1fr}.player.is-narrow .cap{padding:24px}.player.is-narrow .cap li{font-size:16px;padding:10px 16px 10px 12px}
+
+/* hidden slides: tagged in the normal view, skipped in fullscreen (deck.js) */
+.hid-tag{display:none;position:absolute;left:96px;top:22px;padding:5px 12px;border-radius:999px;border:1px dashed var(--d-mut);font:600 11px/1.3 var(--d-label);letter-spacing:.06em;text-transform:uppercase;color:var(--d-mut);background:var(--d-bg)}
+.slide.is-hidden .hid-tag{display:block}
+.player.is-fs .hid-tag{display:none}
+.ed__hide{display:flex;align-items:center;gap:10px}.ed__hide .ed__h{margin:0}.ed__hide .pill{flex:none}

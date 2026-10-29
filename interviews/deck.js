@@ -184,7 +184,7 @@
     // every image remembers its source in the deck data (data-o) so the editor can swap it; enc: sources decrypt on wake
     inner = inner.replace(/<img\b([^>]*?)\ssrc="([^"]+)"/g, (m, a, src) =>
       src.startsWith('enc:') ? `<img${a} data-o="${src}" data-enc="${src.slice(4)}"` : `<img${a} data-o="${src}" src="${src}"`);
-    return `<section class="slide t-${s.t === 'center' ? 'end' : s.t}" data-i="${i}" aria-roledescription="slide">${inner}${ai}</section>`;
+    return `<section class="slide t-${s.t === 'center' ? 'end' : s.t}${s.hidden ? ' is-hidden' : ''}" data-i="${i}" aria-roledescription="slide">${inner}${ai}<span class="hid-tag">Hidden · skipped in fullscreen</span></section>`;
   }
 
   /* ---------- widgets */
@@ -230,13 +230,6 @@
     draw();
   }
   // With AI / Without AI, on the How I work slide only: both versions are in the slide, the switch shows one. Kept in the URL as ?ai=off.
-  function vibeWidget(el) {
-    const set = v => {
-      el.querySelectorAll('[data-v]').forEach(n => n.matches('button') ? n.setAttribute('aria-pressed', n.dataset.v === v) : n.classList.toggle('is-on', n.dataset.v === v));
-    };
-    el.querySelectorAll('button[data-v]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); set(b.dataset.v); setPref('ai', b.dataset.v === 'plain' ? 'off' : 'on', 'on'); }));
-    set(vibe());
-  }
   function carousel(el) {
     const figs = [...el.querySelectorAll('figure')], cap = el.querySelector('.car__cap'), c = el.querySelector('[data-c]');
     let at = 0;
@@ -288,7 +281,7 @@
     if (!r.ok) throw new Error(`${path}: ${r.status} ${j.message || ''}`);
     return j.content?.sha;
   }
-  function editor(root, stage, list, cur, slideEl) {
+  function editor(root, stage, list, cur, slideEl, onHide) {
     const btn = root.querySelector('[data-edit]'), panel = root.querySelector('.ed'), file = root.querySelector('[data-file]');
     const st = panel.querySelector('.ed__s'), tok = panel.querySelector('.ed__tok'), saveB = panel.querySelector('[data-save]');
     let target = null;
@@ -344,6 +337,12 @@
         dirty = true; say('Image replaced. Unsaved changes'); sync();
       } catch (err) { say('Couldn’t use that image: ' + err.message); }
     });
+    panel.querySelector('[data-hide]').addEventListener('click', () => {
+      const x = list[cur()];
+      if (x.o.hidden) { delete x.o.hidden; delete x.s.hidden; } else x.o.hidden = x.s.hidden = true;
+      slideEl(cur()).classList.toggle('is-hidden', !!x.o.hidden);
+      dirty = true; say(x.o.hidden ? 'Slide hidden. Unsaved changes' : 'Slide shown. Unsaved changes'); sync(); onHide();
+    });
     panel.querySelector('[data-discard]').addEventListener('click', () => {
       if (dirty && !confirm('Throw away unsaved edits?')) return;
       dirty = false; editing = false; newBins.clear(); location.reload();
@@ -375,7 +374,7 @@
     const base = `#/${deck.id}/play/${ids.join(',')}/`;
     document.title = deck.company + ' deck · ' + data.owner;
     app.innerHTML = `<div class="player"><div class="deckbar">${themeSwitch(deck)}<button class="seg-b" data-edit aria-pressed="${editing}">Edit</button></div>
-      <div class="ed" hidden><div class="ed__s"></div><div class="ed__tok"></div><div class="ed__b">
+      <div class="ed" hidden><div class="ed__s"></div><div class="ed__tok"></div><div class="ed__hide"><button class="pill" data-hide>Hide this slide</button><span class="ed__h">Hidden slides stay in this view but are skipped in fullscreen.</span></div><div class="ed__b">
         <button class="pill" data-discard>Discard</button><button class="pill pill--on" data-save>Save &amp; publish</button></div></div>
       <input type="file" accept="image/*" data-file hidden><div class="viewport"><div class="stage">${list.map((x, i) => slideHtml(x.s, x.name, i)).join('')}</div><aside class="notes" aria-live="polite" hidden><span class="k">Speaker notes · N to hide</span><p data-f="notes" data-empty="No notes on this slide."></p></aside></div>
       <nav class="chrome" aria-label="Slide controls"><div class="chrome__l"><b>${deck.company}</b><span></span></div>
@@ -390,10 +389,26 @@
     const slides = [...stage.children], secBtns = [...root.querySelectorAll('[data-sec]')];
     stage.querySelectorAll('[data-widget="themes"]').forEach(themes);
     stage.querySelectorAll('[data-widget="pizza"]').forEach(pizza);
-    stage.querySelectorAll('[data-widget="vibe"]').forEach(vibeWidget);
     stage.querySelectorAll('[data-car]').forEach(carousel);
     stage.querySelectorAll('.tools').forEach(t => { const sp = t.querySelectorAll(':scope>span'); sp.forEach((e, i) => e.style.setProperty('--a', i * 360 / sp.length - 90)); });
     let at = -1;
+    // hidden slides show in the normal view; in fullscreen they're skipped and left out of the count
+    const ord = () => { const all = list.map((x, i) => i), o = all.filter(i => !(document.fullscreenElement && list[i].o.hidden)); return o.length ? o : all; };
+    const step = d => {
+      const o = ord(), p = o.indexOf(at);
+      show(p > -1 ? o[Math.max(0, Math.min(o.length - 1, p + d))] : d > 0 ? (o.find(i => i > at) ?? o.at(-1)) : (o.findLast(i => i < at) ?? o[0]));
+    };
+    const paint = () => {
+      const o = ord(), p = o.indexOf(at);
+      root.querySelector('.chrome__c').textContent = `${p > -1 ? pad(p + 1) : '–'} / ${pad(o.length)}`;
+      secBtns.forEach((b, si) => {
+        const idx = o.filter(k => list[k].si === si);
+        b.style.display = idx.length ? '' : 'none'; if (!idx.length) return;
+        b.style.setProperty('--n', idx.length);
+        b.style.setProperty('--f', idx.filter(k => k <= at).length / idx.length);
+      });
+      root.querySelector('[data-hide]').textContent = list[at].o.hidden ? 'Show this slide' : 'Hide this slide';
+    };
     const notesEl = root.querySelector('.notes'), notesBtn = root.querySelector('[data-notes]');
     const fillNotes = () => { notesEl.querySelector('p').innerHTML = list[at].s.notes || ''; };
     const toggleNotes = () => {
@@ -416,17 +431,13 @@
       wake(slides[at]); if (slides[at + 1]) wake(slides[at + 1]);
       if (!notesEl.hidden) fillNotes();
       notesBtn.classList.toggle('has', !!list[at].s.notes);
-      root.querySelector('.chrome__c').textContent = `${pad(at + 1)} / ${pad(list.length)}`;
       root.querySelector('.chrome__l span').textContent = list[at].name;
-      secBtns.forEach((b, si) => {
-        const idx = list.map((x, k) => x.si === si ? k : -1).filter(k => k > -1);
-        b.style.setProperty('--f', at > idx.at(-1) ? 1 : at < idx[0] ? 0 : (at - idx[0] + 1) / idx.length);
-      });
+      paint();
       history.replaceState(null, '', base + (at + 1));
       if (root.classList.contains('is-narrow')) vp.scrollTop = 0;
     };
-    root.querySelectorAll('[data-nav]').forEach(b => b.addEventListener('click', () => show(at + +b.dataset.nav)));
-    secBtns.forEach((b, si) => b.addEventListener('click', () => show(list.findIndex(x => x.si === si))));
+    root.querySelectorAll('[data-nav]').forEach(b => b.addEventListener('click', () => step(+b.dataset.nav)));
+    secBtns.forEach((b, si) => b.addEventListener('click', () => show(ord().find(k => list[k].si === si) ?? list.findIndex(x => x.si === si))));
     const fs = () => document.fullscreenElement ? document.exitFullscreen() : root.requestFullscreen?.().catch(() => {});
     root.querySelector('[data-fs]').addEventListener('click', fs);
     root.querySelector('[data-x]').addEventListener('click', () => go('#/' + deck.id));
@@ -434,10 +445,10 @@
       const t = e.target instanceof Element ? e.target : document.body;
       if (t.closest('input,select,textarea,[contenteditable="true"]') || e.metaKey || e.ctrlKey || e.altKey) return;
       const k = e.key;
-      if (k === 'ArrowRight' || k === 'PageDown' || (k === ' ' && !t.closest('button'))) { e.preventDefault(); show(at + 1); }
-      else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); show(at - 1); }
-      else if (k === 'Home') show(0);
-      else if (k === 'End') show(list.length - 1);
+      if (k === 'ArrowRight' || k === 'PageDown' || (k === ' ' && !t.closest('button'))) { e.preventDefault(); step(1); }
+      else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); step(-1); }
+      else if (k === 'Home') show(ord()[0]);
+      else if (k === 'End') show(ord().at(-1));
       else if (k === 'f' || k === 'F') fs();
       else if (k === 'n' || k === 'N') toggleNotes();
       else if (k === 'Escape' && !document.fullscreenElement) go('#/' + deck.id);
@@ -446,12 +457,14 @@
     const ts = e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; };
     const te = e => {
       const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
-      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && !(e.target instanceof Element && e.target.closest('.car,.pizza,.themes,.hiw'))) show(at + (dx < 0 ? 1 : -1));
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && !(e.target instanceof Element && e.target.closest('.car,.pizza,.themes'))) step(dx < 0 ? 1 : -1);
     };
     addEventListener('keydown', key); addEventListener('resize', fit);
     vp.addEventListener('touchstart', ts, { passive: true }); vp.addEventListener('touchend', te);
-    editor(root, stage, list, () => at, i => slides[i]);
-    player = () => { removeEventListener('keydown', key); removeEventListener('resize', fit); if (document.fullscreenElement) document.exitFullscreen(); };
+    const onFs = () => { root.classList.toggle('is-fs', !!document.fullscreenElement); if (document.fullscreenElement && list[at].o.hidden) step(1); paint(); };
+    document.addEventListener('fullscreenchange', onFs);
+    editor(root, stage, list, () => at, i => slides[i], paint);
+    player = () => { removeEventListener('keydown', key); removeEventListener('resize', fit); document.removeEventListener('fullscreenchange', onFs); if (document.fullscreenElement) document.exitFullscreen(); };
     fit();
     show((parseInt(n, 10) || 1) - 1);
   }

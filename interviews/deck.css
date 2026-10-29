@@ -33,6 +33,7 @@
 [data-theme="site"] .tsw__n{display:none}
 .deckbar{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:4;display:flex;gap:8px;align-items:center;padding:4px 12px 4px 4px;border-radius:999px;background:color-mix(in srgb,var(--d-bg) 88%,transparent);border:1px solid var(--d-line);backdrop-filter:blur(8px)}
 [data-theme="site"] .deckbar{padding-right:4px}
+.deckbar .seg+.tsw{padding-left:8px;border-left:1px solid var(--d-line)}
 html,body{height:100%}
 body{background:var(--d-bg);color:var(--d-ink);font-family:var(--d-body)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}

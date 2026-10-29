@@ -66,6 +66,11 @@
     applyTheme(pref('theme', 'site'));
   }
   applyTheme(pref('theme', 'site'));
+  // With AI / Without AI: slides can carry vibe.ai / vibe.plain field overrides. Kept in the URL as ?ai=off.
+  const vibe = () => pref('ai', 'on') === 'off' ? 'plain' : 'ai';
+  const withVibe = s => s.vibe ? { ...s, ...(s.vibe[vibe()] || {}) } : s;
+  const vibeSwitch = () => `<span class="seg" role="group" aria-label="AI in the story">${[['ai', 'With AI'], ['plain', 'Without AI']].map(([v, l]) =>
+    `<button data-vibe="${v}" aria-pressed="${vibe() === v}">${l}</button>`).join('')}</span>`;
 
   /* ---------- helpers */
   const fmtDate = s => new Date(s + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -233,10 +238,10 @@
     if (!ids.length) return go('#/' + deck.id);
     picks[deck.id] = ids;
     const secs = [['Intro', data.intro], ...ids.map(id => [data.caseStudies[id].name, data.caseStudies[id].slides]), ['Close', [data.outro]]];
-    const list = secs.flatMap(([name, ss], si) => ss.map(s => ({ s, name, si })));
+    const list = secs.flatMap(([name, ss], si) => ss.map(s => ({ s: withVibe(s), name, si })));
     const base = `#/${deck.id}/play/${ids.join(',')}/`;
     document.title = deck.company + ' deck · ' + data.owner;
-    app.innerHTML = `<div class="player"><div class="deckbar">${themeSwitch()}</div><div class="viewport"><div class="stage">${list.map((x, i) => slideHtml(x.s, x.name, i)).join('')}</div><aside class="notes" aria-live="polite" hidden><span class="k">Speaker notes · N to hide</span><p></p></aside></div>
+    app.innerHTML = `<div class="player"><div class="deckbar">${vibeSwitch()}${themeSwitch()}</div><div class="viewport"><div class="stage">${list.map((x, i) => slideHtml(x.s, x.name, i)).join('')}</div><aside class="notes" aria-live="polite" hidden><span class="k">Speaker notes · N to hide</span><p></p></aside></div>
       <nav class="chrome" aria-label="Slide controls"><div class="chrome__l"><b>${deck.company}</b><span></span></div>
         <div class="prog">${secs.map(([name, ss], si) => `<button style="--n:${ss.length}" data-sec="${si}" aria-label="Jump to ${name}" title="${name}"></button>`).join('')}</div>
         <div class="chrome__r"><span class="chrome__c"></span>
@@ -246,6 +251,11 @@
           <button class="ib" data-x aria-label="Back to picker (Esc)">×</button></div></nav></div>`;
     const root = app.querySelector('.player'), vp = root.querySelector('.viewport'), stage = root.querySelector('.stage');
     bindTheme(root);
+    root.querySelectorAll('[data-vibe]').forEach(b => b.addEventListener('click', () => {
+      if (b.dataset.vibe === vibe()) return;
+      setPref('ai', b.dataset.vibe === 'plain' ? 'off' : 'on', 'on');
+      route();
+    }));
     const slides = [...stage.children], secBtns = [...root.querySelectorAll('[data-sec]')];
     stage.querySelectorAll('[data-widget="themes"]').forEach(themes);
     stage.querySelectorAll('[data-widget="pizza"]').forEach(pizza);

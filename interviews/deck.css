@@ -389,3 +389,48 @@ button{font:inherit;color:inherit}
   .player.is-narrow .slide{padding-top:64px}
   .chrome{grid-template-columns:auto 1fr auto}.chrome__l span{display:none}.prog{width:100%}
 }
+
+/* How I work: one slide, two versions behind the With AI / Without AI switch */
+.hiw{width:100%;display:grid;gap:22px;align-self:center}
+.hiw__bar{display:flex;align-items:center;justify-content:space-between}
+.hiw__v{display:none;gap:26px}
+.hiw__v.is-on{display:grid;animation:hiwIn .45s cubic-bezier(.2,.7,.2,1)}
+@keyframes hiwIn{from{opacity:0;transform:translateY(8px)}}
+.hiw .principles div{padding-top:24px;padding-bottom:24px;gap:10px}
+.hiw .principles b{font-size:32px}
+.hiw .principles p{font-size:16px}
+.hiw__cav{display:grid;grid-template-columns:140px 1fr;gap:24px;align-items:start;padding:20px 24px;border-radius:var(--d-radius,16px);background:var(--d-tile)}
+.hiw__cav ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.hiw__cav li{font-size:16px;line-height:1.5;color:var(--d-text);padding-left:16px;position:relative}
+.hiw__cav li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--d-accent)}
+@media (max-width:760px){.hiw__cav,.hiw__cav ul{grid-template-columns:1fr}.hiw__bar{flex-wrap:wrap;gap:10px}}
+
+/* Voyage orbit: the dashed ring turns and the tools ride it, staying upright; the hub breathes. Pauses on hover. */
+@property --spin{syntax:'<angle>';inherits:true;initial-value:0deg}
+.tools{border-color:transparent;animation:orbit 48s linear infinite}
+.tools::before{content:"";position:absolute;inset:-1px;border-radius:50%;border:1.5px dashed var(--d-line);transform:rotate(var(--spin))}
+.tools>span{transform:rotate(calc(var(--a)*1deg + var(--spin))) translate(300px) rotate(calc(var(--a)*-1deg - var(--spin))) translate(-50%,-50%);transition:box-shadow .3s,scale .3s cubic-bezier(.3,1.6,.5,1);z-index:1}
+.tools>span:hover{scale:1.08;box-shadow:0 6px 18px rgba(0,0,0,.1)}
+.tools:hover{animation-play-state:paused}
+.tools__hub{animation:breathe 5s ease-in-out infinite;box-shadow:0 0 0 0 color-mix(in srgb,var(--d-accent) 30%,transparent)}
+.tools__hub::after{content:"";position:absolute;inset:-14px;border-radius:50%;border:1px dotted color-mix(in srgb,var(--d-accent) 45%,transparent);animation:orbitRev 30s linear infinite}
+@keyframes orbit{to{--spin:360deg}}
+@keyframes orbitRev{to{transform:rotate(-360deg)}}
+@keyframes breathe{50%{scale:1.035;box-shadow:0 0 0 18px color-mix(in srgb,var(--d-accent) 0%,transparent)}}
+.slide:not(.is-on) .tools,.slide:not(.is-on) .tools__hub,.slide:not(.is-on) .tools__hub::after{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){.tools,.tools__hub,.tools__hub::after{animation:none}}
+.player.is-narrow .tools{animation:none}.player.is-narrow .tools::before,.player.is-narrow .tools__hub::after{display:none}
+.player.is-narrow .tools>span{transform:none}
+.hiw{gap:32px}
+.hiw__bar .k{font-size:14px}
+.hiw .seg{padding:4px}
+.hiw .seg button{height:44px;padding:0 22px;font-size:16px}
+.hiw .principles div{padding-top:36px;padding-bottom:36px;gap:14px}
+.hiw .principles b{font-size:40px}
+.hiw .principles p{font-size:19px}
+.hiw__cav{padding:28px 32px;grid-template-columns:160px 1fr}
+.hiw__cav .k{font-size:14px;padding-top:3px}
+.hiw__cav li{font-size:19px;padding-left:20px}
+.hiw__cav li::before{width:8px;height:8px}
+.tools::before{border:2px dashed color-mix(in srgb,var(--d-accent) 38%,transparent)}
+.tools__hub::after{border:1.5px dotted color-mix(in srgb,var(--d-accent) 60%,transparent)}

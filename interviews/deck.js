@@ -85,8 +85,6 @@
   // With AI / Without AI: slides can carry vibe.ai / vibe.plain field overrides. Kept in the URL as ?ai=off.
   const vibe = () => pref('ai', 'on') === 'off' ? 'plain' : 'ai';
   const withVibe = s => s.vibe ? { ...s, ...(s.vibe[vibe()] || {}) } : s;
-  const vibeSwitch = () => `<span class="seg" role="group" aria-label="AI in the story">${[['ai', 'With AI'], ['plain', 'Without AI']].map(([v, l]) =>
-    `<button data-vibe="${v}" aria-pressed="${vibe() === v}">${l}</button>`).join('')}</span>`;
 
   /* ---------- helpers */
   const fmtDate = s => new Date(s + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -231,6 +229,14 @@
     el.querySelectorAll('path').forEach(p => p.addEventListener('click', () => { own[p.dataset.s] = (own[p.dataset.s] + 1) % who.length; draw(); }));
     draw();
   }
+  // With AI / Without AI, on the How I work slide only: both versions are in the slide, the switch shows one. Kept in the URL as ?ai=off.
+  function vibeWidget(el) {
+    const set = v => {
+      el.querySelectorAll('[data-v]').forEach(n => n.matches('button') ? n.setAttribute('aria-pressed', n.dataset.v === v) : n.classList.toggle('is-on', n.dataset.v === v));
+    };
+    el.querySelectorAll('button[data-v]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); set(b.dataset.v); setPref('ai', b.dataset.v === 'plain' ? 'off' : 'on', 'on'); }));
+    set(vibe());
+  }
   function carousel(el) {
     const figs = [...el.querySelectorAll('figure')], cap = el.querySelector('.car__cap'), c = el.querySelector('[data-c]');
     let at = 0;
@@ -368,7 +374,7 @@
     const list = secs.flatMap(([name, ss], si) => ss.map(s => ({ s: withVibe(s), o: s, name, si })));
     const base = `#/${deck.id}/play/${ids.join(',')}/`;
     document.title = deck.company + ' deck · ' + data.owner;
-    app.innerHTML = `<div class="player"><div class="deckbar">${vibeSwitch()}${themeSwitch(deck)}<button class="seg-b" data-edit aria-pressed="${editing}">Edit</button></div>
+    app.innerHTML = `<div class="player"><div class="deckbar">${themeSwitch(deck)}<button class="seg-b" data-edit aria-pressed="${editing}">Edit</button></div>
       <div class="ed" hidden><div class="ed__s"></div><div class="ed__tok"></div><div class="ed__b">
         <button class="pill" data-discard>Discard</button><button class="pill pill--on" data-save>Save &amp; publish</button></div></div>
       <input type="file" accept="image/*" data-file hidden><div class="viewport"><div class="stage">${list.map((x, i) => slideHtml(x.s, x.name, i)).join('')}</div><aside class="notes" aria-live="polite" hidden><span class="k">Speaker notes · N to hide</span><p data-f="notes" data-empty="No notes on this slide."></p></aside></div>
@@ -381,14 +387,10 @@
           <button class="ib" data-x aria-label="Back to picker (Esc)">×</button></div></nav></div>`;
     const root = app.querySelector('.player'), vp = root.querySelector('.viewport'), stage = root.querySelector('.stage');
     bindTheme(root, deck);
-    root.querySelectorAll('[data-vibe]').forEach(b => b.addEventListener('click', () => {
-      if (b.dataset.vibe === vibe()) return;
-      setPref('ai', b.dataset.vibe === 'plain' ? 'off' : 'on', 'on');
-      route();
-    }));
     const slides = [...stage.children], secBtns = [...root.querySelectorAll('[data-sec]')];
     stage.querySelectorAll('[data-widget="themes"]').forEach(themes);
     stage.querySelectorAll('[data-widget="pizza"]').forEach(pizza);
+    stage.querySelectorAll('[data-widget="vibe"]').forEach(vibeWidget);
     stage.querySelectorAll('[data-car]').forEach(carousel);
     stage.querySelectorAll('.tools').forEach(t => { const sp = t.querySelectorAll(':scope>span'); sp.forEach((e, i) => e.style.setProperty('--a', i * 360 / sp.length - 90)); });
     let at = -1;
@@ -444,7 +446,7 @@
     const ts = e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; };
     const te = e => {
       const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
-      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && !(e.target instanceof Element && e.target.closest('.car,.pizza,.themes'))) show(at + (dx < 0 ? 1 : -1));
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && !(e.target instanceof Element && e.target.closest('.car,.pizza,.themes,.hiw'))) show(at + (dx < 0 ? 1 : -1));
     };
     addEventListener('keydown', key); addEventListener('resize', fit);
     vp.addEventListener('touchstart', ts, { passive: true }); vp.addEventListener('touchend', te);

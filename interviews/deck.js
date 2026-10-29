@@ -67,20 +67,21 @@
     v === def ? q.delete(k) : q.set(k, v);
     history.replaceState(null, '', location.pathname + (q.toString() ? '?' + q : '') + location.hash);
   }
-  function applyTheme(t) {
-    if (!THEMES_OK.includes(t)) t = 'site';
+  // A company theme belongs to that company's deck only (deck.theme, or a theme named after the deck id). The hub is always the site theme.
+  const deckTheme = deck => deck && (deck.theme || (THEMES_OK.includes(deck.id) && deck.id !== 'site' ? deck.id : null));
+  function applyTheme(t, deck) {
+    if (!deck || t !== deckTheme(deck)) t = 'site';
     document.documentElement.dataset.theme = t;
     document.querySelectorAll('[data-th]').forEach(b => b.setAttribute('aria-pressed', b.dataset.th === t));
     return t;
   }
-  const themeSwitch = () => `<span class="tsw"><span class="seg" role="group" aria-label="Deck theme">${THEMES_OK.map(t =>
-    `<button data-th="${t}" aria-pressed="false">${t === 'site' ? 'Site' : 'Agoda'}</button>`).join('')}</span>
-    <span class="tsw__n">Agoda-inspired theme, not Agoda’s design system</span></span>`;
-  function bindTheme(root) {
-    root.querySelectorAll('[data-th]').forEach(b => b.addEventListener('click', () => setPref('theme', applyTheme(b.dataset.th), 'site')));
-    applyTheme(pref('theme', 'site'));
+  const themeSwitch = deck => { const t = deckTheme(deck); return t ? `<span class="tsw"><span class="seg" role="group" aria-label="Deck style">${[['site', 'Site style'], [t, deck.company + ' style']].map(([v, l]) =>
+    `<button data-th="${v}" aria-pressed="false">${l}</button>`).join('')}</span>
+    <span class="tsw__n">${deck.company}-inspired theme, not ${deck.company}’s design system</span></span>` : ''; };
+  function bindTheme(root, deck) {
+    root.querySelectorAll('[data-th]').forEach(b => b.addEventListener('click', () => setPref('theme', applyTheme(b.dataset.th, deck), 'site')));
+    applyTheme(pref('theme', 'site'), deck);
   }
-  applyTheme(pref('theme', 'site'));
   // With AI / Without AI: slides can carry vibe.ai / vibe.plain field overrides. Kept in the URL as ?ai=off.
   const vibe = () => pref('ai', 'on') === 'off' ? 'plain' : 'ai';
   const withVibe = s => s.vibe ? { ...s, ...(s.vibe[vibe()] || {}) } : s;
@@ -92,11 +93,11 @@
   const pad = n => String(n).padStart(2, '0');
   const deckById = id => data.decks.find(d => d.id === id);
   const go = h => { location.hash = h; };
-  function top(right = '') {
-    return `<header class="top"><a href="/" rel="nofollow">${data.owner}</a><div style="display:flex;gap:12px;align-items:center">${themeSwitch()}${right}<button class="pill" data-lock><span class="dot"></span>Lock</button></div></header>`;
+  function top(right = '', deck) {
+    return `<header class="top"><a href="/" rel="nofollow">${data.owner}</a><div style="display:flex;gap:12px;align-items:center">${themeSwitch(deck)}${right}<button class="pill" data-lock><span class="dot"></span>Lock</button></div></header>`;
   }
-  function bindTop() {
-    bindTheme(app);
+  function bindTop(deck) {
+    bindTheme(app, deck);
     app.querySelector('[data-lock]')?.addEventListener('click', () => { sessionStorage.removeItem(KEY); location.hash = ''; location.reload(); });
   }
 
@@ -122,7 +123,7 @@
   function picker(deck) {
     document.title = deck.company + ' · ' + data.owner;
     const sel = picks[deck.id] ||= [...deck.caseStudies];
-    app.innerHTML = `<div class="page">${top()}
+    app.innerHTML = `<div class="page">${top('', deck)}
       <section class="head"><div><a class="back" href="#/">← All decks</a><h1 class="disp" style="margin-top:18px">${deck.company}</h1></div>
         <p>Pick one or more case studies. They play in the order you pick them, after a three-slide intro and before the thank-you.</p></section>
       <div class="picks">${deck.caseStudies.map(id => { const c = data.caseStudies[id]; return `
@@ -132,7 +133,7 @@
           <span class="chips">${c.tags.map(t => `<span class="chip">${t}</span>`).join('')}</span></span></button>`; }).join('')}</div>
       <div class="bar"><span class="bar__s"></span><div class="bar__r">
         <button class="go" data-go>Start presenting →</button></div></div></div>`;
-    bindTop();
+    bindTop(deck);
     const sync = () => {
       app.querySelectorAll('.pick').forEach(b => {
         const n = sel.indexOf(b.dataset.cs);
@@ -367,7 +368,7 @@
     const list = secs.flatMap(([name, ss], si) => ss.map(s => ({ s: withVibe(s), o: s, name, si })));
     const base = `#/${deck.id}/play/${ids.join(',')}/`;
     document.title = deck.company + ' deck · ' + data.owner;
-    app.innerHTML = `<div class="player"><div class="deckbar">${vibeSwitch()}${themeSwitch()}<button class="seg-b" data-edit aria-pressed="${editing}">Edit</button></div>
+    app.innerHTML = `<div class="player"><div class="deckbar">${vibeSwitch()}${themeSwitch(deck)}<button class="seg-b" data-edit aria-pressed="${editing}">Edit</button></div>
       <div class="ed" hidden><div class="ed__s"></div><div class="ed__tok"></div><div class="ed__b">
         <button class="pill" data-discard>Discard</button><button class="pill pill--on" data-save>Save &amp; publish</button></div></div>
       <input type="file" accept="image/*" data-file hidden><div class="viewport"><div class="stage">${list.map((x, i) => slideHtml(x.s, x.name, i)).join('')}</div><aside class="notes" aria-live="polite" hidden><span class="k">Speaker notes · N to hide</span><p data-f="notes" data-empty="No notes on this slide."></p></aside></div>
@@ -379,7 +380,7 @@
           <button class="ib" data-fs aria-label="Fullscreen (F)"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 5V1h4M11 1h4v4M15 11v4h-4M5 15H1v-4"/></svg></button>
           <button class="ib" data-x aria-label="Back to picker (Esc)">×</button></div></nav></div>`;
     const root = app.querySelector('.player'), vp = root.querySelector('.viewport'), stage = root.querySelector('.stage');
-    bindTheme(root);
+    bindTheme(root, deck);
     root.querySelectorAll('[data-vibe]').forEach(b => b.addEventListener('click', () => {
       if (b.dataset.vibe === vibe()) return;
       setPref('ai', b.dataset.vibe === 'plain' ? 'off' : 'on', 'on');

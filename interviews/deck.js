@@ -188,26 +188,91 @@
   }
 
   /* ---------- widgets */
-  const THEMES = [
-    ['Base', { p: '#2b3d26', s: '#f6f6f4', c: '#ffffff', t: '#141414', r: '10px', f: 'var(--d-body)' }],
-    ['Theme A', { p: '#274e7a', s: '#eef2f7', c: '#ffffff', t: '#0f1d2e', r: '3px', f: 'var(--d-body)' }],
-    ['Theme B', { p: '#b5473a', s: '#faf3ee', c: '#ffffff', t: '#2a1612', r: '20px', f: 'Georgia, serif' }],
-    ['Theme C', { p: '#8b7cf6', s: '#17151f', c: '#24212f', t: '#f1eef9', r: '12px', f: 'var(--d-body)' }],
-  ];
+  // Same case-review screen in four token sets (representational)
+  const THEMES = ['Base', 'Theme A', 'Theme B', 'Theme C'];
+  const crSt = (c, t) => `<span class="cr__st ${c}">${t}</span>`;
+  const crDots = steps => `<div class="cr__dots">${steps.map(([bg, txt, track]) => `<i style="background:${bg}">${txt}</i><span style="background:${track}"></span>`).join('')}</div>`;
+  const crBase = () => {
+    const G = '#2e8b57', R = '#c6283b', N = '#c9ced8';
+    const row = (cls, n, title, st, extra = '') => `<tr class="${cls}"><td>${n}</td><td><b>${title}</b>${extra}</td><td>${st}</td></tr>`;
+    const sub = (cls, n, txt, st) => `<tr class="cr__sub ${cls}"><td></td><td>${n}. ${txt}</td><td>${st}</td></tr>`;
+    const meta = (l, chip) => `<div class="cr__meta">${l ? `<span class="cr__ln">${l}</span>` : '<span></span>'}<span>AI Agents used: <span class="cr__chip">${chip}</span></span></div>`;
+    const ex = (k, title, step, txt, chips) => `<div class="cr__ex ${k}"><div><b>${title}</b><span class="cr__badge" style="background:${k === 'bl' ? '#8e1b2b' : '#7d7432'}">${step}</span></div><p>${txt}</p><div class="cr__acts">${chips.map(c => `<span class="cr__chip">${c}</span>`).join('')}<em>Dismiss</em></div></div>`;
+    return `<div class="cr cr--base">
+      <div class="cr__hd"><span class="cr__back">← Back to Dashboard</span><span class="cr__av"><i></i>Dan James<u></u><span class="cr__asst">💬 Assistant</span></span></div>
+      <div class="cr__body"><div class="cr__card">
+        <div class="cr__prog"><p>43% (3 of 8 steps completed)</p>${crDots([[G, '✓', G], [G, '✓', R], [R, '✕', R], [R, '✕', N], [N, 5, N], [N, 6, N], [N, 7, N], [N, 8, N]])}</div>
+        <table><tr><th>Step</th><th>Process Details</th><th>Status</th></tr>
+          ${row('c', 1, 'Download Bank Feeds', crSt('ok', 'Completed'), meta('Hide all sub-steps (2) ⌃', 'Database Connect'))}
+          ${sub('c', 'a', 'Extract daily transaction reports from bank accounts', crSt('ok', 'Completed'))}
+          ${sub('c', 'b', 'Filter for deposits from property accounts', crSt('rv', 'Review Suggested'))}
+          ${row('', 2, 'Match Payments to Tenants', crSt('ok', 'Completed'), meta('Hide all sub-steps (2) ⌃', 'Information Logging'))}
+          ${sub('', 'a', 'Cross-reference deposit amounts and dates', crSt('ok', 'Completed'))}
+          ${sub('', 'b', 'Flag unmatched or partial payments', crSt('ok', 'Completed'))}
+          ${row('c', 3, 'Verify Payment Sources', crSt('rv', 'Review Suggested'), `<div class="cr__desc">Match ACH transfers to CRM records</div>${meta('', 'Database Connect')}`)}
+          ${row('r', 4, 'Record in Property Management System', crSt('ok', 'Completed'), meta('Hide all sub-steps (2) ⌃', 'Information Logging'))}
+          ${sub('r', 'a', 'Enter payment details (date, amount, method)', crSt('ok', 'Completed'))}
+          ${sub('r', 'b', 'Assign to correct property, unit, and lease term', crSt('bad', 'Review Needed'))}
+          ${row('', 5, 'Reconcile with Ledger', crSt('hold', 'On hold till review'), `<div class="cr__desc">Compare PMS entries with general ledger balances</div>${meta('', 'Information Logging')}`)}
+        </table></div>
+        <div class="cr__side">
+          <h4>C-6775 | Rent Collection &amp; Reconciliation</h4>
+          <p class="cr__desc">Ensures accurate tracking, recording, and reconciliation of rental payments across all managed properties—without tenant interaction</p>
+          <div class="cr__kv"><div><b>Created on:</b> 7/11/2026</div><div><b>Type:</b> Inquiry</div>
+            <div><b>Status:</b><span class="cr__pill" style="background:#fbe1e3;color:#b3233a">👁 Pending Review</span></div>
+            <div><b>Priority:</b><span class="cr__pill" style="background:#e3e9f3;color:#36445c">⚑ High</span></div></div>
+          <div class="cr__tabs"><span>Exceptions and Blockers (4)</span><span>Case History</span><em>AI Confidence: <b style="color:#c6283b">52%</b></em></div>
+          <h5>Blockers (1): <span style="text-transform:none;letter-spacing:0;font-weight:500">Stopping process completion</span></h5>
+          ${ex('bl', 'Failed Payment Recording in PMS', 'Step 4', 'Tried to record a confirmed payment in the Property Management System, but it failed; likely due to system error, duplicate entry flag, or incorrect unit mapping.', ['Try Again ↺', 'Open PMS ↗', 'Call Support'])}
+          <h5>Exceptions (3): <span style="text-transform:none;letter-spacing:0;font-weight:500">Potential verification needed</span></h5>
+          ${ex('ex', 'Unidentified Payment Source', 'Step 1', 'Found a payment without a clear tenant or unit link. Could be from a shared account, guarantor, or new resident not yet in system.', ['Review Source ↗', 'Match Manually'])}
+          ${ex('ex', 'Partial Rent Payment', 'Step 1', 'This payment is less than full rent but not marked as an approved partial. May need context before posting.', ['Verify Reason ↗', 'Flag for Ops'])}
+        </div></div></div>`;
+  };
+  const crTheme = (k, name) => {
+    const G = '#2e8b57', O = '#e8701a', A = 'var(--na)', tint = c => `color-mix(in srgb, ${c} 35%, #e4e6ea)`;
+    const dots = [[G, '✓'], [A, '⊘'], [G, '✓'], [G, '✓'], [O, '✕'], [A, '⊘'], [G, '✓']];
+    const sub = (n, txt, st) => `<tr class="cr__sub"><td></td><td>${n}. ${txt}</td><td>${st}</td></tr>`;
+    return `<div class="cr cr--t cr--${k}">
+      <div class="cr__hd"><span class="cr__logo">${name}</span><span class="cr__nav">DASHBOARD ⌄</span><span class="cr__av"><i></i>Dan James</span></div>
+      <div class="cr__top"><span class="cr__ln">← Back to Dashboard</span><span class="cr__btn cr__ok">Approve ✓</span><span class="cr__btn cr__no">Reject ✕</span></div>
+      <div class="cr__body"><div class="cr__card">
+        <div class="cr__prog"><p>100% (7 of 7 steps completed)</p>${crDots(dots.map(([c, t], i) => [c, t, tint((dots[i + 1] || dots[i])[0])]))}<span class="cr__conf">AI Confidence: <b>52%</b></span></div>
+        <table><tr><th>Step</th><th>Process Details</th><th>Status</th></tr>
+          <tr><td>1</td><td><b>Review service requests to identify duplicates - Start Agentic Flow Processing</b><div class="cr__meta"><span class="cr__ln">Show sub-steps (2) ⌃</span><span>AI Agents used: <span class="cr__chip">✎ Deduplication Agent</span></span></div></td><td>${crSt('ok', 'Completed')}</td></tr>
+          ${sub('a', 'Access Application 3AMI / 9TRN, navigate to SS/AG → Global Search → Money Movement', crSt('ok', 'Completed'))}
+          ${sub('b', 'Check for duplicate requests (Go to step 3 if no duplicates)', crSt('ok', 'Completed'))}
+          <tr><td>2</td><td><b>Notify requestor in case of duplicate request either to cancel or proceed with review</b><div class="cr__meta"><span class="cr__ln">Show sub-steps (4) ⌃</span><span>AI Agents used: <span class="cr__chip">✎ Requestor Communication Agent</span></span></div></td><td>${crSt('na', 'Not Applicable')}</td></tr>
+          ${sub('a', 'Draft email for requestor when duplicate detected or clarification needed, including SLA ETA for response', crSt('na', 'N/A'))}
+          ${sub('b', 'Requestor confirmation: Not a duplicate (Go to step 3)', crSt('na', 'N/A'))}
+          ${sub('c', 'Requestor confirmation: Duplicate - Cancel Request - Save proof of confirmation (Go to Step 7)', crSt('na', 'N/A'))}
+          ${sub('d', 'No confirmation within SLA - Cancel Request (Go to Step 7)', crSt('na', 'N/A'))}
+        </table></div>
+        <div class="cr__side">
+          <h4>C-ACH009201&nbsp;&nbsp;ACH Transfer Fulfillment</h4>
+          <div class="cr__grid"><div><b>Created On:</b>4/30/2026</div><div><b>Requestor:</b>Jamie Gittens</div><div><b>Account:</b>210929302</div><div><b>Client:</b>Karen Kim</div><div><b>SLA:</b>-</div><div><b>Status:</b><span style="color:var(--warn);font-weight:600">👁 Pending Review</span></div></div>
+          <span class="cr__ln">View SOP →</span><div class="cr__hr"></div>
+          <div class="cr__hrow"><b>Exceptions and Blockers (0)</b><span class="cr__ln">Open Case History →</span></div>
+          <div class="cr__box"><h5>Blockers (1)</h5>
+            <div class="cr__ex"><div><b>Insufficient Cash beyond SLA</b><span class="cr__badge">Step 5</span></div><div class="cr__acts"><span>Source ↗</span><span>Sent to Agent ✓</span><em>Dismiss</em></div></div>
+            <h5>Exceptions (0)</h5></div>
+        </div></div></div>`;
+  };
+  const CR = [crBase, () => crTheme('a', 'THEME A'), () => crTheme('b', 'Theme B'), () => crTheme('c', 'Theme C')];
   function themes(el) {
     el.className = 'themes';
-    el.innerHTML = `<div class="themes__seg" role="group" aria-label="Theme">${THEMES.map(([n], i) => `<button aria-pressed="${!i}" data-t="${i}">${n}</button>`).join('')}</div>
-      <div class="mock"><div class="mock__bar"><i></i>Client Portal<span>Dashboard · Reports · Settings</span></div><div class="mock__b">
-        <div class="mock__kpis"><div>Open cases<b>128</b></div><div>Resolved<b>94%</b></div><div>Avg. time<b>2.4d</b></div></div>
-        <div class="mock__chart">${[40, 62, 48, 75, 58, 88, 70, 95].map(h => `<i style="height:${h}%"></i>`).join('')}</div>
-        <div class="mock__row">Quarterly review ready<span class="mock__btn">Open</span></div></div></div>
-      <span class="k">Same components, four token sets. Sample themes, not client brands.</span>`;
-    const mock = el.querySelector('.mock');
+    el.innerHTML = `<div class="themes__seg" role="group" aria-label="Theme">${THEMES.map((n, i) => `<button aria-pressed="${!i}" data-t="${i}">${n}</button>`).join('')}</div>
+      <div class="themes__fit"></div>
+      <span class="k">Same screen, four token sets. Representational, not client brands.</span>`;
+    const fit = el.querySelector('.themes__fit');
+    const size = () => { const s = fit.firstElementChild; if (!s || !fit.clientWidth) return; const k = fit.clientWidth / 1360; s.style.transform = `scale(${k})`; fit.style.height = s.offsetHeight * k + 'px'; };
     const set = i => {
-      Object.entries(THEMES[i][1]).forEach(([k, v]) => mock.style.setProperty('--' + k, v));
+      fit.innerHTML = CR[i]();
       el.querySelectorAll('[data-t]').forEach(b => b.setAttribute('aria-pressed', b.dataset.t == i));
+      size();
     };
-    el.querySelectorAll('[data-t]').forEach(b => b.addEventListener('click', () => set(+b.dataset.t)));
+    el.querySelectorAll('[data-t]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); set(+b.dataset.t); }));
+    new ResizeObserver(size).observe(fit);
     set(0);
   }
   function pizza(el) {

@@ -229,33 +229,44 @@
           ${ex('ex', 'Partial Rent Payment', 'Step 1', 'This payment is less than full rent but not marked as an approved partial. May need context before posting.', ['Verify Reason ↗', 'Flag for Ops'])}
         </div></div></div>`;
   };
+  // Themes A, B, C: the Base case content in each theme's layout and chrome
   const crTheme = (k, name) => {
-    const G = '#2e8b57', O = '#e8701a', A = 'var(--na)', tint = c => `color-mix(in srgb, ${c} 35%, #e4e6ea)`;
-    const dots = [[G, '✓'], [A, '⊘'], [G, '✓'], [G, '✓'], [O, '✕'], [A, '⊘'], [G, '✓']];
+    const G = '#2e8b57', O = 'var(--warn)', N = '#c9ced8', tint = c => `color-mix(in srgb, ${c} 35%, #e4e6ea)`;
+    const dots = [[G, '✓'], [G, '✓'], [O, '✕'], [O, '✕'], [N, 5], [N, 6], [N, 7], [N, 8]];
+    const meta = (l, chip) => `<div class="cr__meta">${l ? `<span class="cr__ln">${l}</span>` : '<span></span>'}<span>AI Agents used: <span class="cr__chip">✎ ${chip}</span></span></div>`;
+    const row = (n, title, st, extra = '') => `<tr><td>${n}</td><td><b>${title}</b>${extra}</td><td>${st}</td></tr>`;
     const sub = (n, txt, st) => `<tr class="cr__sub"><td></td><td>${n}. ${txt}</td><td>${st}</td></tr>`;
+    const ex = (title, step, txt, acts) => `<div class="cr__ex"><div><b>${title}</b><span class="cr__badge">${step}</span></div><p>${txt}</p><div class="cr__acts">${acts.map(a => `<span>${a}</span>`).join('')}<em>Dismiss</em></div></div>`;
     return `<div class="cr cr--t cr--${k}">
       <div class="cr__hd"><span class="cr__logo">${name}</span><span class="cr__nav">DASHBOARD ⌄</span><span class="cr__av"><i></i>Dan James</span></div>
       <div class="cr__top"><span class="cr__ln">← Back to Dashboard</span><span class="cr__btn cr__ok">Approve ✓</span><span class="cr__btn cr__no">Reject ✕</span></div>
       <div class="cr__body"><div class="cr__card">
-        <div class="cr__prog"><p>100% (7 of 7 steps completed)</p>${crDots(dots.map(([c, t], i) => [c, t, tint((dots[i + 1] || dots[i])[0])]))}<span class="cr__conf">AI Confidence: <b>52%</b></span></div>
+        <div class="cr__prog"><p>43% (3 of 8 steps completed)</p>${crDots(dots.map(([c, t], i) => [c, t, tint((dots[i + 1] || dots[i])[0])]))}<span class="cr__conf">AI Confidence: <b>52%</b></span></div>
         <table><tr><th>Step</th><th>Process Details</th><th>Status</th></tr>
-          <tr><td>1</td><td><b>Review service requests to identify duplicates - Start Agentic Flow Processing</b><div class="cr__meta"><span class="cr__ln">Show sub-steps (2) ⌃</span><span>AI Agents used: <span class="cr__chip">✎ Deduplication Agent</span></span></div></td><td>${crSt('ok', 'Completed')}</td></tr>
-          ${sub('a', 'Access Application 3AMI / 9TRN, navigate to SS/AG → Global Search → Money Movement', crSt('ok', 'Completed'))}
-          ${sub('b', 'Check for duplicate requests (Go to step 3 if no duplicates)', crSt('ok', 'Completed'))}
-          <tr><td>2</td><td><b>Notify requestor in case of duplicate request either to cancel or proceed with review</b><div class="cr__meta"><span class="cr__ln">Show sub-steps (4) ⌃</span><span>AI Agents used: <span class="cr__chip">✎ Requestor Communication Agent</span></span></div></td><td>${crSt('na', 'Not Applicable')}</td></tr>
-          ${sub('a', 'Draft email for requestor when duplicate detected or clarification needed, including SLA ETA for response', crSt('na', 'N/A'))}
-          ${sub('b', 'Requestor confirmation: Not a duplicate (Go to step 3)', crSt('na', 'N/A'))}
-          ${sub('c', 'Requestor confirmation: Duplicate - Cancel Request - Save proof of confirmation (Go to Step 7)', crSt('na', 'N/A'))}
-          ${sub('d', 'No confirmation within SLA - Cancel Request (Go to Step 7)', crSt('na', 'N/A'))}
+          ${row(1, 'Download Bank Feeds', crSt('ok', 'Completed'), meta('Hide all sub-steps (2) ⌃', 'Database Connect'))}
+          ${sub('a', 'Extract daily transaction reports from bank accounts', crSt('ok', 'Completed'))}
+          ${sub('b', 'Filter for deposits from property accounts', crSt('rv', 'Review Suggested'))}
+          ${row(2, 'Match Payments to Tenants', crSt('ok', 'Completed'), meta('Hide all sub-steps (2) ⌃', 'Information Logging'))}
+          ${sub('a', 'Cross-reference deposit amounts and dates', crSt('ok', 'Completed'))}
+          ${sub('b', 'Flag unmatched or partial payments', crSt('ok', 'Completed'))}
+          ${row(3, 'Verify Payment Sources', crSt('rv', 'Review Suggested'), `<div class="cr__desc">Match ACH transfers to CRM records</div>${meta('', 'Database Connect')}`)}
+          ${row(4, 'Record in Property Management System', crSt('ok', 'Completed'), meta('Hide all sub-steps (2) ⌃', 'Information Logging'))}
+          ${sub('a', 'Enter payment details (date, amount, method)', crSt('ok', 'Completed'))}
+          ${sub('b', 'Assign to correct property, unit, and lease term', crSt('bad', 'Review Needed'))}
+          ${row(5, 'Reconcile with Ledger', crSt('hold', 'On hold till review'), `<div class="cr__desc">Compare PMS entries with general ledger balances</div>${meta('', 'Information Logging')}`)}
         </table></div>
         <div class="cr__side">
-          <h4>C-ACH009201&nbsp;&nbsp;ACH Transfer Fulfillment</h4>
-          <div class="cr__grid"><div><b>Created On:</b>4/30/2026</div><div><b>Requestor:</b>Jamie Gittens</div><div><b>Account:</b>210929302</div><div><b>Client:</b>Karen Kim</div><div><b>SLA:</b>-</div><div><b>Status:</b><span style="color:var(--warn);font-weight:600">👁 Pending Review</span></div></div>
-          <span class="cr__ln">View SOP →</span><div class="cr__hr"></div>
-          <div class="cr__hrow"><b>Exceptions and Blockers (0)</b><span class="cr__ln">Open Case History →</span></div>
+          <h4>C-6775&nbsp;&nbsp;Rent Collection &amp; Reconciliation</h4>
+          <p class="cr__desc">Ensures accurate tracking, recording, and reconciliation of rental payments across all managed properties—without tenant interaction</p>
+          <div class="cr__grid"><div><b>Created On:</b>7/11/2026</div><div><b>Type:</b>Inquiry</div><div><b>Status:</b><span style="color:var(--warn);font-weight:600">👁 Pending Review</span></div><div><b>Priority:</b>⚑ High</div></div>
+          <div class="cr__hr"></div>
+          <div class="cr__hrow"><b>Exceptions and Blockers (4)</b><span class="cr__ln">Open Case History →</span></div>
           <div class="cr__box"><h5>Blockers (1)</h5>
-            <div class="cr__ex"><div><b>Insufficient Cash beyond SLA</b><span class="cr__badge">Step 5</span></div><div class="cr__acts"><span>Source ↗</span><span>Sent to Agent ✓</span><em>Dismiss</em></div></div>
-            <h5>Exceptions (0)</h5></div>
+            ${ex('Failed Payment Recording in PMS', 'Step 4', 'Tried to record a confirmed payment in the Property Management System, but it failed; likely due to system error, duplicate entry flag, or incorrect unit mapping.', ['Try Again ↺', 'Open PMS ↗', 'Call Support'])}
+            <h5>Exceptions (3)</h5>
+            ${ex('Unidentified Payment Source', 'Step 1', 'Found a payment without a clear tenant or unit link. Could be from a shared account, guarantor, or new resident not yet in system.', ['Review Source ↗', 'Match Manually'])}
+            ${ex('Partial Rent Payment', 'Step 1', 'This payment is less than full rent but not marked as an approved partial. May need context before posting.', ['Verify Reason ↗', 'Flag for Ops'])}
+          </div>
         </div></div></div>`;
   };
   const CR = [crBase, () => crTheme('a', 'THEME A'), () => crTheme('b', 'Theme B'), () => crTheme('c', 'Theme C')];

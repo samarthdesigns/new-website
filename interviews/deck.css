@@ -477,3 +477,48 @@ button{font:inherit;color:inherit}
 .slide.is-hidden .hid-tag{display:block}
 .player.is-fs .hid-tag{display:none}
 .ed__hide{display:flex;align-items:center;gap:10px}.ed__hide .ed__h{margin:0}.ed__hide .pill{flex:none}
+/* White labelling: one coded case-review screen, three brand token sets (representational) */
+.wl{width:100%;display:grid;gap:12px;align-self:start}
+.wl__row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.wl__lab{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--d-mute,#888);border:1px dashed var(--d-line);border-radius:999px;padding:6px 12px}
+.wl [data-panel][hidden]{display:none}
+.wl__app{--top:#fff;--top-ink:#222;--logo:#222;--ok:#2563eb;--rej:#e8701a;--th:#f2f2f2;--th-ink:#333;--acc:#2563eb;--prog:#f4f5f7;--bad:#c2410c;--flag:transparent;
+  font:12px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif;color:#1f2328;background:#fff;border:1px solid #d9dce1;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.08);text-align:left}
+.wl__top{display:flex;align-items:center;gap:16px;padding:10px 16px;background:var(--top);color:var(--top-ink)}
+.wl__logo{font-weight:700;font-size:14px;color:var(--logo);letter-spacing:.04em;margin-right:auto}
+.wl__nav{opacity:.8}
+.wl__chat{display:none;padding:5px 12px;border-radius:999px;background:var(--acc);color:#fff;font-weight:600}
+.wl__av{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:700;background:rgba(127,127,127,.25)}
+.wl__body{display:grid;grid-template-columns:1fr 220px;gap:12px;padding:12px}
+.wl__main{display:grid;gap:10px;min-width:0}
+.wl__case{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.wl__case small{display:block;color:#6b7280}.wl__case b{font-size:15px}
+.wl__btns{display:flex;gap:8px}.wl__btns span{padding:6px 14px;border-radius:6px;color:#fff;font-weight:600}
+.wl__ok{background:var(--ok)}.wl__rej{background:var(--rej)}
+.wl__prog{display:grid;grid-template-columns:1fr auto;gap:6px 12px;background:var(--prog);border-radius:8px;padding:10px 12px}
+.wl__bar{grid-column:1/-1;display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.wl__bar i{height:6px;border-radius:3px;background:#d5d8de}.wl__bar i.d{background:var(--acc)}.wl__bar i.c{background:linear-gradient(90deg,var(--acc) 50%,#d5d8de 50%)}
+.wl__conf b{color:var(--acc)}
+.wl__tbl{border:1px solid #e3e5e8;border-radius:8px;overflow:hidden}
+.wl__th,.wl__tr{display:grid;grid-template-columns:1.6fr .8fr .8fr;gap:8px;padding:7px 12px;align-items:center}
+.wl__th{background:var(--th);color:var(--th-ink);font-weight:600;font-size:11px}
+.wl__tr{border-top:1px solid #eceef0}.wl__tr small{display:block;color:#6b7280;font-size:11px}
+.wl__tr.is-flag{background:var(--flag)}
+.wl__tr em{font-style:normal;font-size:11px;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--acc) 12%,#fff);color:var(--acc);font-weight:600}
+.wl .p{font-style:normal;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:600}
+.wl .p.ok{background:#e7f6ec;color:#1e7a3c}.wl .p.bad{background:color-mix(in srgb,var(--bad) 14%,#fff);color:var(--bad)}.wl .p.run{background:#eef2ff;color:#4338ca}
+.wl__rail{display:grid;gap:8px;align-content:start;border-left:1px solid #eceef0;padding-left:12px}
+.wl__ex{display:grid;gap:6px;padding:8px;border-radius:8px;background:#fff7ed;border:1px solid #fde3c7}
+.wl__ex div{display:flex;flex-wrap:wrap;gap:4px}.wl__ex i{font-style:normal;font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid #d9dce1;background:#fff}
+/* Wells Fargo */
+.wl--wf{--top:#b31e22;--top-ink:#fff;--logo:#ffcd41;--ok:#8a1c1c;--rej:#e8701a;--th:#1f2a44;--th-ink:#fff;--acc:#b31e22;--prog:#eef0f2}
+/* NorthStar Assistant */
+.wl--ns{--top:#0f1b33;--top-ink:#e6ecf5;--logo:#fff;--ok:#19a596;--acc:#19a596;--th:#efe6d6;--th-ink:#3a2f1e;--bad:#c62828;--flag:#fdecec;--prog:#f5f2ec}
+.wl--ns .wl__top{background:radial-gradient(rgba(255,255,255,.12) 1px,transparent 1.5px) 0 0/12px 12px,var(--top)}
+.wl--ns .wl__chat{display:inline-block}
+.wl--ns .p.ok,.wl--ns .p.run{background:#fdecec;color:#c62828}
+/* Unity Bank */
+.wl--ub{--top:#fff;--top-ink:#334;--logo:#0f5d63;--ok:#1f9d55;--acc:#0f9d9a;--th:#f1f5f5;--th-ink:#0f5d63}
+.wl--ub .wl__top{border-top:4px solid #0f9d9a;border-bottom:1px solid #e3e5e8}
+.wl--ub .wl__logo b{color:#0f9d9a}
+.player.is-narrow .wl__body{grid-template-columns:1fr}.player.is-narrow .wl__rail{border-left:0;padding-left:0}.player.is-narrow .wl__nav{display:none}

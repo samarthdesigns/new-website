@@ -184,7 +184,7 @@
     // every image remembers its source in the deck data (data-o) so the editor can swap it; enc: sources decrypt on wake
     inner = inner.replace(/<img\b([^>]*?)\ssrc="([^"]+)"/g, (m, a, src) =>
       src.startsWith('enc:') ? `<img${a} data-o="${src}" data-enc="${src.slice(4)}"` : `<img${a} data-o="${src}" src="${src}"`);
-    return `<section class="slide t-${s.t === 'center' ? 'end' : s.t}${s.hidden ? ' is-hidden' : ''}" data-i="${i}" aria-roledescription="slide">${inner}${ai}<span class="hid-tag">Hidden · skipped in fullscreen</span></section>`;
+    return `<section class="slide t-${s.t === 'center' ? 'end' : s.t}${s.flip ? ' is-flip' : ''}${s.hidden ? ' is-hidden' : ''}" data-i="${i}" aria-roledescription="slide">${inner}${ai}<span class="hid-tag">Hidden · skipped in fullscreen</span></section>`;
   }
 
   /* ---------- widgets */

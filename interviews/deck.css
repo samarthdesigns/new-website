@@ -5,24 +5,31 @@
   --d-display:var(--serif);--d-display-style:italic;--d-display-weight:400;--d-display-track:-.01em;
   --d-body:var(--sans);--d-num:var(--pixel);--d-label:var(--sans);--d-radius:14px;--d-radius-sm:8px
 }
-/* Agoda-inspired: my own approximation (blue primary, multicolour accents, rounded sans). Not Agoda's design system. */
+/* Agoda-inspired, taken from their flight search and checkout screens: my own approximation, not Agoda's design system. */
 [data-theme="agoda"]{
-  --d-bg:#f5f8fe;--d-ink:#1a2233;--d-text:rgba(26,34,51,.74);--d-mut:rgba(26,34,51,.58);--d-line:#d8e1f0;
-  --d-tile:#e8effc;--d-tile-2:#d9e5fb;--d-card:#fff;--d-accent:#2067da;--d-accent-ink:#fff;--d-hl:#ff567d;
-  --a1:#ff567d;--a2:#ffa726;--a3:#ffd23f;--a4:#2fb67c;--a5:#7b5cf5;
-  --d-display:"Nunito",var(--sans);--d-display-style:normal;--d-display-weight:800;--d-display-track:-.02em;
-  --d-body:"Nunito",var(--sans);--d-num:"Nunito",var(--sans);--d-label:"Nunito",var(--sans);--d-radius:22px;--d-radius-sm:14px
+  --d-bg:#fff;--d-ink:#2a2a2e;--d-text:#4a4d55;--d-mut:#6b7079;--d-line:#d5d9e0;
+  --d-tile:#eef3fc;--d-tile-2:#dfe9fb;--d-card:#fff;--d-accent:#2067da;--d-accent-ink:#fff;--d-hl:#d0282e;
+  --a1:#e8374a;--a2:#f7b500;--a3:#2cb34a;--a4:#8e44ad;--a5:#1fa1d8;
+  --d-display:"Helvetica Neue",Helvetica,Arial,sans-serif;--d-display-style:normal;--d-display-weight:700;--d-display-track:-.01em;
+  --d-body:"Helvetica Neue",Helvetica,Arial,sans-serif;--d-num:"Helvetica Neue",Helvetica,Arial,sans-serif;--d-label:"Helvetica Neue",Helvetica,Arial,sans-serif;--d-radius:12px;--d-radius-sm:8px
 }
-[data-theme="agoda"] .disp,[data-theme="agoda"] .gate__t,[data-theme="agoda"] .row__t{font-weight:800}
-[data-theme="agoda"] .row__n,[data-theme="agoda"] .pick__n,[data-theme="agoda"] .stats b,[data-theme="agoda"] .funnel__row b,[data-theme="agoda"] .steps__v,[data-theme="agoda"] .msg.pay b,[data-theme="agoda"] .res2 b,[data-theme="agoda"] .about__stats b,[data-theme="agoda"] .tl__y,[data-theme="agoda"] .pn,[data-theme="agoda"] .pizza__who b,[data-theme="agoda"] .chrome__c{font-weight:800;letter-spacing:-.02em}
+[data-theme="agoda"] .disp,[data-theme="agoda"] .gate__t,[data-theme="agoda"] .row__t{font-weight:700}
+[data-theme="agoda"] .row__n,[data-theme="agoda"] .pick__n,[data-theme="agoda"] .stats b,[data-theme="agoda"] .closer b,[data-theme="agoda"] .funnel__row b,[data-theme="agoda"] .steps__v,[data-theme="agoda"] .msg.pay b,[data-theme="agoda"] .res2 b,[data-theme="agoda"] .about__stats b,[data-theme="agoda"] .tl__y,[data-theme="agoda"] .pn,[data-theme="agoda"] .pizza__who b,[data-theme="agoda"] .chrome__c{font-weight:700;letter-spacing:-.01em}
+/* big numbers read like their fare prices */
+[data-theme="agoda"] .stats b,[data-theme="agoda"] .closer b,[data-theme="agoda"] .res2 b,[data-theme="agoda"] .about__stats b{color:var(--d-hl)}
 [data-theme="agoda"] .dot{background:conic-gradient(var(--a1) 0 20%,var(--a2) 0 40%,var(--a3) 0 60%,var(--a4) 0 80%,var(--a5) 0)}
-[data-theme="agoda"] .prog button:nth-child(5n+1)::after{background:var(--d-accent)}
-[data-theme="agoda"] .prog button:nth-child(5n+2)::after{background:var(--a1)}
-[data-theme="agoda"] .prog button:nth-child(5n+3)::after{background:var(--a2)}
-[data-theme="agoda"] .prog button:nth-child(5n+4)::after{background:var(--a4)}
-[data-theme="agoda"] .prog button:nth-child(5n)::after{background:var(--a5)}
+[data-theme="agoda"] .prog button::after{background:var(--d-accent)}
 [data-theme="agoda"] .s-kick .k b{color:var(--d-accent)}
-[data-theme="agoda"] .player::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;z-index:3;background:linear-gradient(90deg,var(--d-accent) 0 20%,var(--a1) 0 40%,var(--a2) 0 60%,var(--a4) 0 80%,var(--a5) 0)}
+/* selected control = their date chip: white, blue outline, blue text */
+[data-theme="agoda"] .seg{background:none;gap:6px;padding:0}
+[data-theme="agoda"] .seg button{background:#fff;box-shadow:inset 0 0 0 1px var(--d-line);color:var(--d-ink)}
+[data-theme="agoda"] .seg button[aria-pressed="true"]{background:#fff;box-shadow:inset 0 0 0 2px var(--d-accent);color:var(--d-accent)}
+/* cards = white with a hairline, on pale blue */
+[data-theme="agoda"] .cap,[data-theme="agoda"] .car__track{box-shadow:inset 0 0 0 1px var(--d-line)}
+[data-theme="agoda"] .cap.is-on{box-shadow:none}
+[data-theme="agoda"] .car__track{background:#fff}
+/* notes = their warm checkout banner */
+[data-theme="agoda"] .future{background:#fdeee6;color:#5c2b12}
 
 /* theme switch */
 .tsw{display:inline-flex;align-items:center;gap:10px}
@@ -668,3 +675,28 @@ button{font:inherit;color:inherit}
 .shift .is-on p{color:var(--d-ink)}
 .player.is-narrow .t-stack:has(.shift) .s-title{font-size:56px}
 .player.is-narrow .shift{grid-template-columns:1fr;row-gap:20px}.player.is-narrow .shift div{padding-top:16px}.player.is-narrow .shift p{font-size:20px}
+
+
+/* What I bring: the two lenses are the headline. The new panel wipes out from the tab you pressed, then its items rise in. */
+.caps[data-tabs]{grid-template-rows:auto minmax(0,1fr);gap:24px;height:100%}
+.caps__sw{position:relative;gap:56px;padding:0 0 14px;border:0;border-radius:0;background:none}
+.caps__sw button,.caps__sw button.is-on{padding:0;border-radius:0;background:none;font-family:var(--d-display);font-style:var(--d-display-style);font-weight:var(--d-display-weight);letter-spacing:var(--d-display-track);font-size:88px;line-height:1.05;color:var(--d-mut);opacity:.45;transition:opacity .35s ease,color .35s ease}
+.caps__sw button:hover{opacity:.8}
+.caps__sw button.is-on{color:var(--d-accent);opacity:1}
+.caps__sw::after{content:"";position:absolute;left:0;bottom:0;height:4px;width:var(--w,0);border-radius:2px;background:var(--d-accent);transform:translateX(var(--x,0));transition:transform .55s cubic-bezier(.65,0,.2,1),width .55s cubic-bezier(.65,0,.2,1)}
+.caps[data-tabs] .cap{grid-row:2;grid-column:1;min-height:0}
+.caps[data-tabs] .cap[hidden]{display:grid;visibility:hidden}
+.cap.is-in{z-index:2;animation:capWipe .75s cubic-bezier(.65,0,.2,1) both}
+.cap.is-in li{animation:capItem .5s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(.2s + var(--i,0)*55ms)}
+.cap li:nth-child(2){--i:1}.cap li:nth-child(3){--i:2}.cap li:nth-child(4){--i:3}.cap li:nth-child(5){--i:4}
+@keyframes capWipe{from{clip-path:circle(0 at var(--ox,0) var(--oy,0))}to{clip-path:circle(160% at var(--ox,0) var(--oy,0))}}
+@keyframes capItem{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.cap.is-in,.cap.is-in li{animation:none}.caps__sw::after{transition:none}}
+.player.is-narrow .caps__sw{gap:24px}.player.is-narrow .caps__sw button{font-size:36px}
+.caps[data-tabs] .cap{grid-template-rows:minmax(0,1fr);padding:24px}
+.caps[data-tabs] .cap ul{height:100%;grid-auto-rows:minmax(0,1fr)}
+.caps[data-tabs] .cap li{align-content:center}
+.caps[data-tabs] .cap li:last-child:nth-child(odd){grid-column:1/-1}
+.caps[data-tabs] .cap li b{font-size:26px}
+.caps[data-tabs] .cap li small{font-size:17px}
+.player.is-narrow .caps[data-tabs] .cap{padding:16px}.player.is-narrow .caps[data-tabs] .cap ul{height:auto}.player.is-narrow .caps[data-tabs] .cap li b{font-size:18px}

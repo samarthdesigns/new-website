@@ -326,11 +326,31 @@
   }
   // Tabs inside a slide (What I bring): one panel at a time, switched by the viewer.
   function tabs(el) {
-    const bs = [...el.querySelectorAll('[data-tab]')], ps = [...el.querySelectorAll('[data-panel]')];
+    const bs = [...el.querySelectorAll('[data-tab]')], ps = [...el.querySelectorAll('[data-panel]')], sw = el.querySelector('.caps__sw');
+    const mark = () => {
+      const b = bs.find(x => x.classList.contains('is-on'));
+      if (b && sw) { sw.style.setProperty('--x', `${b.offsetLeft}px`); sw.style.setProperty('--w', `${b.offsetWidth}px`); }
+    };
+    if (sw) { mark(); new ResizeObserver(mark).observe(sw); }
     bs.forEach((b, i) => b.addEventListener('click', e => {
       e.stopPropagation();
+      if (b.classList.contains('is-on')) return;
       bs.forEach((x, j) => { x.classList.toggle('is-on', j === i); x.setAttribute('aria-selected', j === i); });
-      ps.forEach((p, j) => { p.hidden = j !== i; });
+      mark();
+      const next = ps[i], settle = () => {
+        next.classList.remove('is-in');
+        ps.forEach((p, j) => { p.hidden = j !== i; });
+      };
+      ps.forEach(p => { if (p !== next) p.classList.remove('is-in'); });
+      // the wipe grows from the pressed tab, so its origin is measured against the panel it reveals
+      next.hidden = false;
+      const t = b.getBoundingClientRect(), r = next.getBoundingClientRect();
+      next.style.setProperty('--ox', `${(t.left + t.width / 2 - r.left) / r.width * 100}%`);
+      next.style.setProperty('--oy', `${(t.top + t.height / 2 - r.top) / r.height * 100}%`);
+      next.classList.remove('is-in'); void next.offsetWidth; next.classList.add('is-in');
+      if (matchMedia('(prefers-reduced-motion:reduce)').matches) return settle();
+      const wipe = next.getAnimations().find(a => a.animationName === 'capWipe');
+      wipe ? wipe.finished.then(() => { if (bs[i].classList.contains('is-on')) settle(); }, () => {}) : settle();
     }));
   }
   function wake(slide) {

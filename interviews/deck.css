@@ -656,3 +656,15 @@ button{font:inherit;color:inherit}
 .closer span{font-size:18px;color:var(--d-mut);max-width:26ch}
 .player.is-narrow .t-stack:has(.closer) .s-title{font-size:44px}
 .player.is-narrow .closer{grid-template-columns:1fr}.player.is-narrow .closer b{font-size:52px}
+
+/* Problem statement: the claim fills the slide, the story sits on hairlines beneath it. */
+.t-stack:has(.shift) .s-head{display:block;margin-bottom:0}
+.t-stack:has(.shift) .s-title{font-size:176px;line-height:1}
+.t-stack:has(.shift) .vis{display:flex;align-items:flex-end}
+.shift{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:40px;width:100%;border-top:1px solid var(--d-line)}
+.shift div{display:grid;gap:14px;padding-top:28px;align-content:start}
+.shift span{font:600 12px/1.3 var(--d-label);letter-spacing:.08em;text-transform:uppercase;color:var(--d-mut)}
+.shift p{margin:0;font-size:28px;line-height:1.3;color:var(--d-text);max-width:20ch}
+.shift .is-on p{color:var(--d-ink)}
+.player.is-narrow .t-stack:has(.shift) .s-title{font-size:56px}
+.player.is-narrow .shift{grid-template-columns:1fr;row-gap:20px}.player.is-narrow .shift div{padding-top:16px}.player.is-narrow .shift p{font-size:20px}

@@ -643,3 +643,16 @@ button{font:inherit;color:inherit}
 .slide.is-hidden .hid-tag{display:block}
 .player.is-play .hid-tag{display:none}
 .ed__hide{display:flex;align-items:center;gap:10px}.ed__hide .ed__h{margin:0}.ed__hide .pill{flex:none}
+
+/* Case-study closer: one big claim, then the numbers on hairlines. */
+.t-stack:has(.closer) .s-head{display:block;margin-bottom:0}
+.t-stack:has(.closer) .s-title{font-size:116px;line-height:1;margin-bottom:32px}
+.t-stack:has(.closer) .s-head .s-body{font-size:24px;line-height:1.4}
+.t-stack:has(.closer) .s-head .s-body p{max-width:none}
+.t-stack:has(.closer) .vis{display:flex;align-items:flex-end}
+.closer{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:40px;width:100%;border-top:1px solid var(--d-line)}
+.closer div{display:grid;gap:12px;padding:28px 0 0;align-content:start}
+.closer b{font:400 96px/1 var(--d-num);color:var(--d-ink);white-space:nowrap}
+.closer span{font-size:18px;color:var(--d-mut);max-width:26ch}
+.player.is-narrow .t-stack:has(.closer) .s-title{font-size:44px}
+.player.is-narrow .closer{grid-template-columns:1fr}.player.is-narrow .closer b{font-size:52px}

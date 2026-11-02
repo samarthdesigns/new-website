@@ -3,6 +3,8 @@
 (() => {
   const app = document.getElementById('app');
   const KEY = 'sn-interviews';
+  // /interviews/public: view-only. Loads the sanitised deck.json (no hidden slides, no notes); nothing here can edit or publish.
+  const PUB = document.documentElement.dataset.mode === 'public';
   const keys = new Map();
   let pw = null, data = null, player = null, loadedSha = null, editing = false, dirty = false;
 
@@ -92,7 +94,7 @@
   const deckById = id => data.decks.find(d => d.id === id);
   const go = h => { location.hash = h; };
   function top(right = '', deck) {
-    return `<header class="top"><a href="/" rel="nofollow">${data.owner}</a><div style="display:flex;gap:12px;align-items:center">${themeSwitch(deck)}${right}<button class="pill" data-lock><span class="dot"></span>Lock</button></div></header>`;
+    return `<header class="top"><a href="/" rel="nofollow">${data.owner}</a><div style="display:flex;gap:12px;align-items:center">${themeSwitch(deck)}${right}${PUB ? '' : '<button class="pill" data-lock><span class="dot"></span>Lock</button>'}</div></header>`;
   }
   function bindTop(deck) {
     bindTheme(app, deck);
@@ -103,11 +105,11 @@
   function hub() {
     document.title = 'Interviews · ' + data.owner;
     app.innerHTML = `<div class="page">${top()}
-      <section class="head"><h1 class="disp">Interview decks</h1><p>One deck per conversation. Pick a deck, choose the case studies that fit the panel, then present.</p></section>
+      <section class="head"><h1 class="disp">Interview decks</h1><p>${PUB ? 'View only. Pick a company, choose the case studies you want to see, then present.' : 'One deck per conversation. Pick a deck, choose the case studies that fit the panel, then present.'}</p></section>
       <ol class="rows">${data.decks.map((d, i) => `<li class="row" tabindex="0" data-deck="${d.id}">
         <span class="row__n">${pad(i + 1)}</span><span class="row__t">${d.company}</span>
         <span class="k">${fmtDate(d.date)}</span><span class="k">${d.caseStudies.length} case studies</span><span class="row__go">Open →</span></li>`).join('')}</ol>
-      <p class="foot">Private and unlisted. Please don’t share the link without asking.</p></div>`;
+      ${PUB ? '' : '<p class="foot">Private and unlisted. Please don’t share the link without asking.</p>'}</div>`;
     bindTop();
     app.querySelectorAll('[data-deck]').forEach(r => {
       const open = () => go('#/' + r.dataset.deck);
@@ -125,7 +127,7 @@
     const sel = picks[deck.id] ||= [...deck.caseStudies];
     app.innerHTML = `<div class="page">${top('', deck)}
       <section class="head"><div><a class="back" href="#/">← All decks</a><h1 class="disp" style="margin-top:18px">${deck.company}</h1></div>
-        <p>Pick one or more case studies. They sit between the intro and the thank-you. Arrange slides and sections once the deck is open.</p></section>
+        <p>Pick one or more case studies. They sit between the intro and the thank-you.${PUB ? '' : ' Arrange slides and sections once the deck is open.'}</p></section>
       <div class="picks">${deck.caseStudies.map(id => { const c = data.caseStudies[id]; return `
         <button class="pick" data-cs="${id}" aria-pressed="false">
           <span class="pick__img"><img src="${c.card}" alt="" loading="lazy"></span><span class="pick__n"></span>
@@ -393,6 +395,48 @@
     if (!r.ok) throw new Error(`${path}: ${r.status} ${j.message || ''}`);
     return j.content?.sha;
   }
+  /* Public copy: hidden slides and speaker notes are removed from the data itself, and locked images used by what's left are written unencrypted. */
+  function publicJson(d) {
+    const c = JSON.parse(JSON.stringify(d));
+    c.sections.forEach(s => {
+      s.slides = s.slides.filter(o => !o.hidden);
+      s.slides.forEach(o => { delete o.notes; Object.values(o.vibe || {}).forEach(v => { delete v.notes; }); });
+    });
+    c.sections = c.sections.filter(s => s.slides.length);
+    const owned = new Set(c.sections.map(s => s.owner));
+    c.decks.forEach(k => { k.caseStudies = k.caseStudies.filter(id => owned.has(id)); });
+    c.decks = c.decks.filter(k => k.caseStudies.length);
+    const used = new Set(c.decks.flatMap(k => k.caseStudies));
+    Object.keys(c.caseStudies).forEach(id => { if (!used.has(id)) delete c.caseStudies[id]; });
+    c.sections = c.sections.filter(s => s.owner === 'intro' || s.owner === 'close' || used.has(s.owner));
+    return JSON.stringify(c);
+  }
+  const imgExt = u => u[0] === 0x89 ? 'png' : u[0] === 0xff ? 'jpg' : u[0] === 0x47 ? 'gif' : u[0] === 0x3c ? 'svg' : 'webp';
+  async function ghList(path) {
+    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}?ref=main`, { headers: { Authorization: `Bearer ${localStorage.getItem(TOK)}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' }, cache: 'no-store' });
+    if (r.status === 404) return [];
+    if (!r.ok) throw new Error(`${path}: GitHub said ${r.status}`);
+    return r.json();
+  }
+  async function syncPublic() {
+    let json = publicJson(data);
+    const imgs = new Map();
+    for (const p of new Set((json.match(/enc:\/[^"\\]+/g) || []).map(x => x.slice(4)))) {
+      const bytes = new Uint8Array(await fetch(await encImg(p)).then(r => r.arrayBuffer()));
+      const name = `${p.split('/').pop().replace(/\.bin$/, '')}.${imgExt(bytes)}`;
+      imgs.set(name, bytes);
+      json = json.split('enc:' + p).join('/interviews/public/img/' + name);
+    }
+    const have = await ghList('interviews/public/img');
+    for (const [name, bytes] of imgs) if (!have.some(f => f.name === name)) await gh(`interviews/public/img/${name}`, bytes, 'Interviews: add image to the public view');
+    const out = new TextEncoder().encode(json), cur = (await ghList('interviews/public')).find(f => f.name === 'deck.json');
+    if (cur?.sha !== await gitSha(out)) await gh('interviews/public/deck.json', out, 'Interviews: sync the public view');
+    // images no longer used (a slide was hidden or removed) must not stay public
+    for (const f of have) if (!imgs.has(f.name)) {
+      const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${f.path}`, { method: 'DELETE', headers: { Authorization: `Bearer ${localStorage.getItem(TOK)}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' }, body: JSON.stringify({ message: 'Interviews: remove image from the public view', sha: f.sha, branch: 'main' }) });
+      if (!r.ok) throw new Error(`${f.path}: GitHub said ${r.status}`);
+    }
+  }
   const getPath = (o, p) => p.split('.').reduce((a, k) => a?.[k], o);
   const setPath = (o, p, v) => { const ks = p.split('.'), last = ks.pop(); ks.reduce((a, k) => a[k], o)[last] = v; };
   const EYE_OFF = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 2l12 12M6.5 6.6a2 2 0 0 0 2.8 2.8M4 4.6C2.6 5.5 1.6 6.800 1 8c1.300 2.600 3.700 4.500 7 4.500 1.200 0 2.300-.300 3.200-.700M7 3.600c.300 0 .700-.100 1-.100 3.300 0 5.700 1.900 7 4.500-.400.800-.900 1.500-1.500 2.200"/></svg>';
@@ -407,9 +451,9 @@
     app.innerHTML = `<div class="player">
       <header class="topb"><div class="topb__l"><a class="lnkb" href="#/${deck.id}" aria-label="Back to case studies">←</a><b>${deck.company}</b></div>
         <div class="topb__r">${themeSwitch(deck)}<span class="sv" aria-live="polite"></span>
-          <button class="ib ib--t" data-notes aria-pressed="false" aria-label="Speaker notes (N)" title="Speaker notes (N)">N</button>
+          ${PUB ? '<button class="pill" data-share>Share</button><div hidden>' : ''}<button class="ib ib--t" data-notes aria-pressed="false" aria-label="Speaker notes (N)" title="Speaker notes (N)">N</button>
           <button class="pill" data-more aria-expanded="false" aria-label="Publishing settings">⋯</button>
-          <button class="pill" data-save>Publish</button>
+          <button class="pill" data-save>Publish</button>${PUB ? '</div>' : ''}
           <button class="pill pill--on" data-present>▶ Present</button></div>
         <div class="ed" hidden><div class="ed__tok"></div><div class="ed__b"><button class="pill" data-discard>Discard all edits</button></div></div></header>
       <aside class="rail" aria-label="Slides"></aside>
@@ -431,11 +475,12 @@
     const sel = new Set(), undo = [];
     const collapsed = new Set(JSON.parse(localStorage.getItem(COL) || '[]'));
     const inView = s => s.owner === 'intro' || s.owner === 'close' || ids.includes(s.owner);
-    const canEdit = () => !playing && !narrow;
+    const canEdit = () => !PUB && !playing && !narrow;
 
     /* status */
     const say = t => { sv.textContent = t; };
     const syncSave = () => {
+      if (PUB) return;
       const has = !!localStorage.getItem(TOK);
       saveB.disabled = !dirty;
       if (!/Saving|Encrypting|Uploading|Committing|failed|Live in/.test(sv.textContent) || dirty) say(dirty ? 'Unsaved changes' : '');
@@ -521,12 +566,12 @@
     };
     const renderRail = () => {
       rail.innerHTML = `<div class="rail__l">${secs.map((s, si) => `<div class="rs${collapsed.has(s.id) ? ' is-col' : ''}" data-s="${si}">
-        <div class="rs__h" draggable="true"><button class="rs__c" aria-label="Collapse or expand ${s.name}" aria-expanded="${!collapsed.has(s.id)}">⌄</button><span class="rs__n">${s.name}</span><span class="rs__k">${s.slides.length}</span></div>
+        <div class="rs__h"${PUB ? '' : ' draggable="true"'}><button class="rs__c" aria-label="Collapse or expand ${s.name}" aria-expanded="${!collapsed.has(s.id)}">⌄</button><span class="rs__n">${s.name}</span><span class="rs__k">${s.slides.length}</span></div>
         <div class="rs__b">${s.slides.length ? '' : '<p class="rs__e">Empty. Drag slides here.</p>'}</div></div>`).join('')}</div>
-        <button class="rail__add" data-addsec>+ Add section</button>`;
+        ${PUB ? '' : '<button class="rail__add" data-addsec>+ Add section</button>'}`;
       list.forEach((x, i) => {
         const t = document.createElement('div');
-        t.className = 'th'; t.draggable = true; t.dataset.i = i; t.tabIndex = -1;
+        t.className = 'th'; t.draggable = !PUB; t.dataset.i = i; t.tabIndex = -1;
         t.innerHTML = `<span class="th__n"></span><div class="th__f"><div class="th__s"></div><span class="th__h" title="Hidden">${EYE_OFF}</span></div>`;
         t.querySelector('.th__s').append(thumbFor(i));
         rail.querySelector(`.rs[data-s="${x.si}"] .rs__b`).append(t);
@@ -610,6 +655,7 @@
       ctx.querySelector('button:not(:disabled)')?.focus();
     };
     rail.addEventListener('contextmenu', e => {
+      if (PUB) return;
       const t = e.target.closest('.th'), h = e.target.closest('.rs__h');
       if (t) {
         e.preventDefault();
@@ -657,7 +703,7 @@
       show(sel.has(o) ? i : list.findIndex(x => sel.has(x.o)));
       syncRail(); t.focus({ preventScroll: true });
     });
-    rail.addEventListener('dblclick', e => { const n = e.target.closest('.rs__n'); if (n && !n.isContentEditable) renameSec(secs[+n.closest('.rs').dataset.s]); });
+    rail.addEventListener('dblclick', e => { if (PUB) return; const n = e.target.closest('.rs__n'); if (n && !n.isContentEditable) renameSec(secs[+n.closest('.rs').dataset.s]); });
     const clearDrop = () => rail.querySelectorAll('.drop-b,.drop-a,.drop-in').forEach(x => x.classList.remove('drop-b', 'drop-a', 'drop-in'));
     rail.addEventListener('dragstart', e => {
       const t = e.target.closest?.('.th'), h = e.target.closest?.('.rs__h');
@@ -762,6 +808,8 @@
         const bin = await encrypt(new TextEncoder().encode(JSON.stringify(data)));
         say('Committing…');
         loadedSha = await gh('interviews/deck.bin', bin, 'Interviews: edit deck from the browser editor');
+        say('Updating the public view…');
+        await syncPublic();
         say('Published. Live in about a minute.');
       } catch (err) { dirty = true; say('Publish failed: ' + err.message); }
       saveB.disabled = !dirty;
@@ -785,6 +833,7 @@
     };
     const fillNotes = () => { notesEl.querySelector('p').innerHTML = list[at].s.notes || ''; };
     const toggleNotes = () => {
+      if (PUB) return;
       notesEl.hidden = !notesEl.hidden;
       notesBtn.setAttribute('aria-pressed', !notesEl.hidden);
       if (!notesEl.hidden) fillNotes();
@@ -834,6 +883,13 @@
       show(k > -1 ? k : Math.max(0, Math.min(prev, list.length - 1)));
     }
     root.querySelectorAll('[data-nav]').forEach(b => b.addEventListener('click', () => step(+b.dataset.nav)));
+
+    /* share (public view): the link opens this deck, these case studies, this slide and style */
+    root.querySelector('[data-share]')?.addEventListener('click', async e => {
+      const b = e.currentTarget;
+      try { await navigator.clipboard.writeText(location.href); b.textContent = 'Link copied'; setTimeout(() => { b.textContent = 'Share'; }, 1800); }
+      catch { prompt('Copy this link', location.href); }
+    });
 
     /* present */
     const enterPlay = () => {
@@ -904,6 +960,11 @@
   }
   addEventListener('hashchange', route);
 
+  if (PUB) {
+    fetch('/interviews/public/deck.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw 0; return r.json(); }).then(d => { data = d; route(); })
+      .catch(() => { app.innerHTML = '<div class="page"><section class="head"><h1 class="disp">Couldn’t load the decks</h1><p>Please refresh the page.</p></section></div>'; });
+    return;
+  }
   const saved = sessionStorage.getItem(KEY);
   if (saved) unlock(saved).then(route).catch(() => { sessionStorage.removeItem(KEY); gate(); });
   else gate();

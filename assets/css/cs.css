@@ -250,3 +250,9 @@
   .dg-clients{grid-template-columns:repeat(2,minmax(0,1fr))}
   .dg-flow{grid-template-columns:1fr 1fr}
 }
+/* TLDR carousel: text slides */
+#tldr .display{margin-bottom:22px}
+.mcar--tldr{margin:0}
+.mcar__s--t{aspect-ratio:auto;display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;padding:clamp(24px,4vw,44px);background:var(--tile);text-align:left;overflow:visible}
+.mcar__s--t .msub{margin:0 0 11px;font-size:clamp(20px,2.2vw,24px);text-wrap:balance}
+.mcar__s--t p{margin:0;font-size:16px;line-height:1.65;color:rgba(20,20,20,.72);max-width:60ch;text-wrap:pretty}

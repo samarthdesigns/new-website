@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Samarth Nayyar</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png">
+<style>
+  html,body{margin:0;height:100%;background:#f6f6f4;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Manrope,sans-serif}
+  main{min-height:100%;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;box-sizing:border-box}
+  p{margin:0 0 12px;font-size:15px;line-height:1.5}
+  a{color:inherit}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+  <div id="go" hidden><p>Opening Samarth&rsquo;s portfolio&hellip;</p><p><a id="go-link" href="/">Continue</a></p></div>
+  <div id="nf" hidden><p>This page doesn&rsquo;t exist.</p><p><a href="/">Go to samarthnayyar.com</a></p></div>
+  <noscript><p><a href="/">Go to samarthnayyar.com</a></p></noscript>
+</main>
+<script>
+/*
+  Application link router (TEST VERSION).
+  GitHub Pages serves this file for any path that has no page, so every
+  /r/<slug> link lands here. We look the slug up, log one Umami pageview
+  for /r/<slug>, then send the visitor on to the real page.
+  Spec: application-links-spec.md
+*/
+(function () {
+  // Lookup table: slug -> destination on this site. Test entries only.
+  var LINKS = {
+    "test-alpha": "/",
+    "test-beta":  "/case-studies/ai-native-design-system.html"
+  };
+  var UMAMI_URL = "https://cloud.umami.is/api/send";
+  var WEBSITE_ID = "12ea2061-77c4-4a85-aa50-0a532e9b67d4";
+
+  var m = location.pathname.toLowerCase().match(/^\/r\/([a-z0-9][a-z0-9-]{0,80})\/?$/);
+  if (!m) { document.getElementById("nf").hidden = false; return; }
+
+  var slug = m[1];
+  var known = Object.prototype.hasOwnProperty.call(LINKS, slug);
+  var dest = known ? LINKS[slug] : "/";   // unknown slug: never show a recruiter an error
+  document.getElementById("go-link").href = dest;
+  document.getElementById("go").hidden = false;
+
+  var left = false;
+  function go() { if (left) return; left = true; location.replace(dest); }
+  setTimeout(go, 1500);                     // never hold the visitor longer than 1.5 s
+
+  try {
+    fetch(UMAMI_URL, {
+      method: "POST",
+      keepalive: true,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "event",
+        payload: {
+          website: WEBSITE_ID,
+          hostname: location.hostname,
+          url: "/r/" + slug,
+          title: known ? "App link: " + slug : "App link (unknown): " + slug,
+          referrer: document.referrer || "",
+          language: navigator.language || "",
+          screen: screen.width + "x" + screen.height
+        }
+      })
+    }).then(go, go);
+  } catch (e) { go(); }
+})();
+</script>
+</body>
+</html>

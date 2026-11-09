@@ -22,53 +22,28 @@
 </main>
 <script>
 /*
-  Application link router (TEST VERSION).
-  GitHub Pages serves this file for any path that has no page, so every
-  /r/<slug> link lands here. We look the slug up, log one Umami pageview
-  for /r/<slug>, then send the visitor on to the real page.
-  Spec: application-links-spec.md
+  Application link router (TEST VERSION, GitHub Pages fallback).
+  GitHub Pages serves this file for any path with no page, so /r/<slug> lands here.
+  It marks the visitor with the application cookie and forwards them; the
+  destination page (assets/js/app-link.js) records the open in Umami.
+  Production does the same with a real 302 from the Fly.io link service.
 */
 (function () {
-  // Lookup table: slug -> destination on this site. Test entries only.
+  // slug -> [destination, company, role]. Test entries only.
   var LINKS = {
-    "test-alpha": "/",
-    "test-beta":  "/case-studies/ai-native-design-system.html"
+    "test-alpha": ["/", "test-alpha-co", "Test role A"],
+    "test-beta":  ["/case-studies/ai-native-design-system.html", "test-beta-co", "Test role B"]
   };
-  var UMAMI_URL = "https://cloud.umami.is/api/send";
-  var WEBSITE_ID = "12ea2061-77c4-4a85-aa50-0a532e9b67d4";
-
   var m = location.pathname.toLowerCase().match(/^\/r\/([a-z0-9][a-z0-9-]{0,80})\/?$/);
   if (!m) { document.getElementById("nf").hidden = false; return; }
-
   var slug = m[1];
-  var known = Object.prototype.hasOwnProperty.call(LINKS, slug);
-  var dest = known ? LINKS[slug] : "/";   // unknown slug: never show a recruiter an error
-  document.getElementById("go-link").href = dest;
+  var row = Object.prototype.hasOwnProperty.call(LINKS, slug) ? LINKS[slug] : ["/", "unknown", ""];
+  var app = encodeURIComponent(JSON.stringify({ s: slug, c: row[1], r: row[2] }));
+  document.cookie = "sn_app=" + app + "; Path=/; Max-Age=2592000; SameSite=Lax; Secure";
+  document.cookie = "sn_new=1; Path=/; Max-Age=600; SameSite=Lax; Secure";
+  document.getElementById("go-link").href = row[0];
   document.getElementById("go").hidden = false;
-
-  var left = false;
-  function go() { if (left) return; left = true; location.replace(dest); }
-  setTimeout(go, 1500);                     // never hold the visitor longer than 1.5 s
-
-  try {
-    fetch(UMAMI_URL, {
-      method: "POST",
-      keepalive: true,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "event",
-        payload: {
-          website: WEBSITE_ID,
-          hostname: location.hostname,
-          url: "/r/" + slug,
-          title: known ? "App link: " + slug : "App link (unknown): " + slug,
-          referrer: document.referrer || "",
-          language: navigator.language || "",
-          screen: screen.width + "x" + screen.height
-        }
-      })
-    }).then(go, go);
-  } catch (e) { go(); }
+  location.replace(row[0]);
 })();
 </script>
 </body>

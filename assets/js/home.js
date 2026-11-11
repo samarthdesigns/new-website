@@ -10,6 +10,12 @@
   /* past-employers carousel: CSS loop, paused while offscreen */
   const pm = q('.prow__marquee');
   if (pm) new IntersectionObserver(([e]) => pm.classList.toggle('is-off', !e.isIntersecting)).observe(pm);
+  /* hero role swap: Product Designer ⇄ Design Engineer */
+  const rs = q('[data-role-swap]');
+  if (rs) { const ws = qa('.role-swap__w', rs); let i = 0;
+    setInterval(() => { if (document.hidden) return; const cur = ws[i]; i = (i + 1) % ws.length;
+      cur.classList.remove('is-on'); cur.classList.add('is-out'); ws[i].classList.remove('is-out'); ws[i].classList.add('is-on');
+      setTimeout(() => cur.classList.remove('is-out'), 750); }, 3000); }
   if (RM) return;
   SN.fontsReady.then(() => {
     const ex = 'expo.out';

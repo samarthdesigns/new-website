@@ -265,7 +265,7 @@
       const L = P ? Math.max(1, P.x1 - P.x0 - p.w) : 0;
       p.d = P ? (RM ? (L * i) / Math.max(1, n - 1) : (2 * L * i) / n + L * .08) / P.fs : 0; }); };
 
-  let cur = 'de', on = true, raf = 0;
+  let cur = 'de', on = true, raf = 0; document.documentElement.dataset.role = cur;
   const now = () => performance.now() / 1000;
   let last = 0;
   const loop = () => { raf = 0; if (!on || RM) return; const t = now(), dt = last ? Math.min(.05, t - last) : 0; last = t;
@@ -308,7 +308,7 @@
   const swap = () => {
     if (held) return; next(EVERY);
     if (document.hidden) return;
-    const from = sets[cur]; cur = cur === 'pd' ? 'de' : 'pd'; const to = sets[cur];
+    const from = sets[cur]; cur = cur === 'pd' ? 'de' : 'pd'; const to = sets[cur]; document.documentElement.dataset.role = cur;
     hidePets(from);
     if (RM) { from.line.classList.remove('is-on'); to.line.classList.add('is-on'); showPets(to, 0); return; }
     const op = qa('.pc', from.line), ip = qa('.pc', to.line);

@@ -193,20 +193,17 @@ a.craft__stat:hover i{transform:translateX(4px)}
    The rows that match the hero title (Design Engineer / Product Designer) stay full strength, the others step back */
 .tstack{display:flex;flex-direction:column;gap:9px;margin:2px 0 0}
 .trow{display:grid;grid-template-columns:62px 1fr;align-items:start;gap:8px;margin:0;transition:opacity .6s var(--liquid)}
-.trow dt{font-size:12px;font-weight:500;color:var(--mut-2);line-height:26px;transition:color .6s var(--liquid)}
+.trow dt{font-size:12px;font-weight:500;color:var(--mut-2);line-height:27px;transition:color .6s var(--liquid)}
 .trow dd{margin:0;display:flex;flex-wrap:wrap;gap:4px}
-.trow.trow--daily{grid-template-columns:1fr;gap:6px;padding-bottom:12px;margin-bottom:2px;border-bottom:1px solid var(--line)}
-.trow--daily dt{color:var(--ink);line-height:1.2}
-.tchip{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 8px 0 7px;border-radius:899px;background:var(--tile);font-size:12px;font-weight:500;color:var(--ink);white-space:nowrap;cursor:default;outline:none;
-  transition:background-color .4s var(--liquid),transform .45s var(--liquid),box-shadow .4s var(--liquid)}
+.trow.trow--daily{grid-template-columns:62px 1fr;padding-bottom:9px;margin-bottom:0;border-bottom:1px solid var(--line)}
+.trow--daily dt{color:var(--ink)}
+.tchip{display:inline-flex;align-items:center;gap:5px;height:27px;padding:0 8px 0 7px;border-radius:9px;background:var(--tile);font-size:12px;line-height:1;color:rgba(20,20,20,.72);white-space:nowrap;cursor:default;outline:none;
+  transition:background-color .4s var(--liquid),border-radius .4s var(--liquid)}
 .tchip img,.tchip svg{width:14px;height:14px;object-fit:contain;flex:none}
-.tchip--big{height:32px;padding:0 12px 0 9px;font-size:13.5px;background:#fff;box-shadow:0 1px 2px rgba(20,20,20,.08),0 3.6px 11px -6px rgba(20,20,20,.18)}
-.tchip--big img,.tchip--big svg{width:16px;height:16px}
-.tchip:hover,.tchip.is-on{background:var(--tile-2);transform:translateY(-1px)}
-.tchip--big:hover,.tchip--big.is-on{background:#fff;box-shadow:0 1px 2px rgba(20,20,20,.1),0 6px 14px -6px rgba(20,20,20,.25)}
+.tchip:hover,.tchip.is-on{background:var(--tile-2);border-radius:14px}
 .tchip:focus-visible{outline:1.5px solid var(--ink);outline-offset:2px}
 html[data-role=de] .trow[data-for=pd],html[data-role=pd] .trow[data-for=de]{opacity:.5}
 html[data-role=de] .trow[data-for=de] dt,html[data-role=pd] .trow[data-for=pd] dt{color:var(--ink)}
-@media (max-width:600px){.tstack{gap:11px}.trow{grid-template-columns:1fr;gap:5px}.trow dt{line-height:1.2}}
+@media (max-width:600px){.tstack{gap:11px}.trow,.trow.trow--daily{grid-template-columns:1fr;gap:5px}.trow dt{line-height:1.2}}
 @media (prefers-reduced-motion:reduce){.trow,.tchip{transition:none}}
 .tchip[data-tip]{cursor:help}.tchip[data-tip]>span{text-decoration:underline dotted rgba(20,20,20,.35);text-underline-offset:3px}

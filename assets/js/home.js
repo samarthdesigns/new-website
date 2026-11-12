@@ -385,18 +385,38 @@ varying vec2 v;uniform sampler2D T;uniform vec2 R;uniform vec2 C;uniform float t
   }, {rootMargin: '200px'}).observe(box);
 })();
 
-/* hero lede: starts as "I code", backspaces and retypes "I brew" (the real text in the HTML stays "brew" for no-JS, SEO and reduced motion) */
+/* hero lede tags: coffee count follows Samarth's day (Central time), km grows ~30/week; hover, focus or tap shows a joke */
 (function(){
-  const {RM, q} = SN; const el0 = q('.typo'); if (!el0 || RM) return;
-  const from = el0.dataset.typo, to = el0.textContent; el0.textContent = from;
-  SN.fontsReady.then(() => setTimeout(() => {
-    const el = q('.typo'); el.classList.add('is-typing');
-    let txt = from; const steps = [];
-    for (let i = from.length; i > 0; i--) steps.push([from.slice(0, i - 1), 70]);
-    steps.push(['', 260]);
-    for (let i = 1; i <= to.length; i++) steps.push([to.slice(0, i), 95 + Math.random() * 60]);
-    let k = 0; const tick = () => { if (k >= steps.length) { setTimeout(() => el.classList.remove('is-typing'), 900); return; }
-      const [s, ms] = steps[k++]; el.textContent = s; setTimeout(tick, ms); };
-    setTimeout(tick, 450);
-  }, 1500));
+  const {RM, qa} = SN; if (!qa('.ltag').length) return;
+  const JOKES = {
+    coffee: ['latte art: still improving', 'today’s pour: a lopsided heart', 'decaf is a bug report', 'cup 4 needs a design review', 'oat milk, no notes'],
+    run: ['these shoes have more km than my car', 'pace: conversational, mostly', 'rest days are on the roadmap', 'some pairs are just for looks', 'runner’s high > design crit high']
+  };
+  const BASE_KM = 1284, BASE_DAY = Date.UTC(2026, 10, 12), KM_PER_DAY = 30 / 7;
+  const cups = () => { const h = +new Intl.DateTimeFormat('en-US', {hour: 'numeric', hourCycle: 'h23', timeZone: 'America/Chicago'}).format(new Date());
+    return h < 7 ? 0 : h < 10 ? 1 : h < 14 ? 2 : 3; };
+  const km = () => Math.max(BASE_KM, Math.floor(BASE_KM + (Date.now() - BASE_DAY) / 864e5 * KM_PER_DAY));
+  const fmt = n => n.toLocaleString('en-US');
+  const val = {coffee: cups, run: km};
+  const paint = (animate) => qa('.ltag').forEach(t => {
+    const b = t.querySelector('b'), to = val[t.dataset.tag](); if (!b) return;
+    if (!animate || RM) { b.textContent = fmt(to); return; }
+    const o = {v: t.dataset.tag === 'run' ? Math.round(to * .92) : 0};
+    b.textContent = fmt(o.v);
+    gsap.to(o, {v: to, duration: 1.6, delay: .9, ease: 'expo.out', onUpdate: () => { b.textContent = fmt(Math.round(o.v)); }});
+  });
+  paint(true); setInterval(() => paint(false), 60000);
+
+  const tip = document.createElement('div'); tip.className = 'ltip'; tip.setAttribute('role', 'tooltip'); tip.id = 'ltip'; document.body.appendChild(tip);
+  const idx = {coffee: 0, run: 0}; let cur = null;
+  const show = t => { const list = JOKES[t.dataset.tag]; tip.textContent = list[idx[t.dataset.tag]++ % list.length];
+    const r = t.getBoundingClientRect(); tip.style.left = (r.left + r.width / 2) + 'px'; tip.style.top = r.top + 'px';
+    qa('.ltag.is-on').forEach(x => x !== t && x.classList.remove('is-on')); t.classList.add('is-on'); t.setAttribute('aria-describedby', 'ltip');
+    tip.classList.add('is-on'); cur = t; };
+  const hide = () => { tip.classList.remove('is-on'); if (cur) { cur.classList.remove('is-on'); cur.removeAttribute('aria-describedby'); } cur = null; };
+  document.addEventListener('pointerover', e => { const t = e.target.closest && e.target.closest('.ltag'); if (e.pointerType === 'touch') return; if (t && t !== cur) show(t); else if (!t && cur) hide(); });
+  document.addEventListener('click', e => { const t = e.target.closest && e.target.closest('.ltag'); if (t) { t === cur && matchMedia('(hover:none)').matches ? hide() : show(t); } else if (cur) hide(); });
+  document.addEventListener('focusin', e => { const t = e.target.closest && e.target.closest('.ltag'); if (t) show(t); });
+  document.addEventListener('focusout', e => { if (e.target.closest && e.target.closest('.ltag')) hide(); });
+  addEventListener('scroll', () => cur && hide(), {passive: true});
 })();

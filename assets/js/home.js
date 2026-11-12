@@ -1,5 +1,27 @@
 /* LANDING — jithinrp.com: intro timeline, liquid pixel name, hero kinetics, velocity marquee, hero parallax.
    Reveals, liquid heads, hairlines, lean, progress, cursor pill come from base.js. */
+/* motion blur: one tiny SVG gaussian per element, blur follows on-screen velocity (px/s) and eases off at rest */
+(function(){
+  const NS = 'http://www.w3.org/2000/svg'; let defs = null, n = 0;
+  SN.mblur = el => {
+    if (SN.RM) return {feed() {}, set() {}};
+    if (!defs) { const s = document.createElementNS(NS, 'svg'); s.setAttribute('aria-hidden', 'true');
+      s.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden'; defs = document.createElementNS(NS, 'defs'); s.appendChild(defs); document.body.appendChild(s); }
+    const id = 'mb' + (++n), f = document.createElementNS(NS, 'filter'), g = document.createElementNS(NS, 'feGaussianBlur');
+    f.id = id; ['x', 'y'].forEach(k => f.setAttribute(k, '-50%')); f.setAttribute('width', '200%'); f.setAttribute('height', '200%');
+    f.setAttribute('color-interpolation-filters', 'sRGB'); g.setAttribute('stdDeviation', '0 0'); f.appendChild(g); defs.appendChild(f);
+    let bx = 0, by = 0, on = false, px = null, py = null;
+    const set = (x, y) => { bx = x; by = y; const want = x > .08 || y > .08;
+      if (want) g.setAttribute('stdDeviation', x.toFixed(2) + ' ' + y.toFixed(2));
+      if (want !== on) { on = want; el.style.filter = want ? `url(#${id})` : ''; } };
+    /* feed the element's screen position each frame; k = px of blur per 100px/s, capped */
+    const feed = (x, y, dt, k = .9, cap = 2.4) => { if (!dt) { px = x; py = y; return; }
+      const vx = px == null ? 0 : (x - px) / dt, vy = py == null ? 0 : (y - py) / dt; px = x; py = y;
+      const a = 1 - Math.exp(-14 * dt), tx = Math.min(cap, Math.abs(vx) * k / 100), ty = Math.min(cap, Math.abs(vy) * k / 100);
+      set(bx + (tx - bx) * a, by + (ty - by) * a); };
+    return {feed, set};
+  };
+})();
 (function(){
   const {RM, fine, q, qa} = SN;
   /* skills banner: fresh random order on every visit (both copies match so the loop stays seamless) */
@@ -143,6 +165,7 @@
       `<g class="f1">${rects([s.legs[0]], s.c, h - 1)}</g><g class="f2">${rects([s.legs[1]], s.c, h - 1)}</g></svg></div>`;
     const say = document.createElement('span'); say.className = 'pet__say'; el.appendChild(say);
     layer.appendChild(el); const pet = {el, inn: el.firstElementChild, svg: el.querySelector('svg'), say, ar: w / h, flipText: name !== 'illustrator', d: 0, spd: 0, rot: 0, st: 1, fc: 1};
+    pet.mb = SN.mblur(pet.inn);
     el.addEventListener('pointerenter', () => annoy(pet)); el.addEventListener('pointerleave', () => calm(pet));
     return pet;
   };
@@ -213,7 +236,7 @@
       p.svg.style.transform = `scaleX(${(p.flipText ? p.fc : Math.abs(p.fc)).toFixed(3)})`;
       p.el.classList.toggle('is-run', !air && Math.abs(vel) > .3);
       if (p.air && !air && p.spd > .3) gsap.fromTo(p.inn, {scaleX: 1.2, scaleY: .8}, {scaleX: 1, scaleY: 1, duration: .42, ease: 'elastic.out(1,.5)', overwrite: 'auto'});
-      p.air = air;
+      p.air = air; p.mb.feed(x, y + gsap.getProperty(p.inn, 'y'), dt, .7, 1.8);
     });
   };
 
@@ -307,6 +330,7 @@
     el.innerHTML = '<div class="pet__in"><svg></svg></div><span class="pet__say"></span>'; lay.appendChild(el);
     const P = {el, inn: el.firstElementChild, svg: el.querySelector('svg'), say: el.querySelector('.pet__say'),
       x: 40, y: 0, ty: 0, dir: 1, spd: 0, fc: 1, mad: false, hover: false, tm: 0, target: null, live: false, name: ''};
+    P.mb = SN.mblur(P.inn);
     const LINES = ['Featured Work is right below ↓', 'Card 02 is my favorite.', 'Hire my human. I need snacks.', '50% faster. Not a typo.',
       'I’m a feature, not a bug.', 'Pixel-perfect, unlike my walk.', 'Psst, the case studies are good.', 'Resume’s up top, btw.'];
     const sprite = name => { const s = SPR[name], w = s.rows[0].length, h = s.rows.length + 1; P.name = name; P.flipText = name !== 'illustrator';
@@ -340,7 +364,8 @@
       grid.addEventListener('pointerleave', () => P.target = null); }
     const stacked = () => getComputedStyle(grid).gridTemplateColumns.split(' ').length < 2;
     const step = dt => {
-      if (!P.live || RM) return;
+      if (RM) return; P.mb.feed(P.x, P.y + gsap.getProperty(P.inn, 'y'), dt, .8, 2.4);
+      if (!P.live) return;
       let want = 1; const st = stacked();
       let tc = null;
       if (touch || st) { const mid = innerHeight / 2; let bd = 1e9;
@@ -501,32 +526,50 @@ varying vec2 v;uniform sampler2D T;uniform vec2 R;uniform vec2 C;uniform float t
   addEventListener('scroll', () => cur && hide(), {passive: true});
 })();
 
-/* craft cards: content leans toward the cursor with a soft spotlight; on touch screens the card in the middle
-   of the screen lights up and leans a little with scroll. The proof numbers count up the first time each card shows. */
+/* craft cards: content leans toward the cursor with a soft white sheen; on touch screens the card in the middle
+   of the screen lights up and leans a little with scroll. Tilt and sheen run through one eased per-card loop
+   (no tween restarts per pointer event), and the proof numbers count up the first time each card shows, blurred while they spin. */
 (function(){
   const {RM, qa} = SN; const cards = qa('.craft'); if (!cards.length) return;
   cards.forEach(c => { const st = c.querySelector('.craft__stat'), b = c.querySelector('[data-count]'); if (!b) return;
     st.setAttribute('aria-label', [...st.children].map(x => x.textContent).join(' ').replace('→', '').replace(/\s+/g, ' ').trim());
     const to = +b.dataset.count, suf = b.dataset.suffix || ''; if (RM) return;
-    const o = {v: 0}; b.textContent = '0' + suf;
-    ScrollTrigger.create({trigger: c, start: 'top 85%', once: true, onEnter: () => gsap.to(o, {v: to, duration: 1.8, ease: 'expo.out',
-      onUpdate: () => b.textContent = Math.round(o.v) + suf})}); });
+    const o = {v: 0}, mb = SN.mblur(b); let pv = 0, pt = 0; b.textContent = '0' + suf;
+    ScrollTrigger.create({trigger: c, start: 'top 85%', once: true, onEnter: () => gsap.to(o, {v: to, duration: 2, ease: 'expo.out',
+      onUpdate() { const t = performance.now() / 1000, dt = pt ? t - pt : 0; pt = t;
+        /* vertical blur from how fast the digits are changing, relative to the final number */
+        const rate = dt ? Math.abs(o.v - pv) / dt / to : 0; pv = o.v; mb.set(0, Math.min(2.2, rate * 1.1));
+        b.textContent = Math.round(o.v) + suf; },
+      onComplete: () => mb.set(0, 0)})}); });
   if (RM) return;
-  const tilt = (inn, x, y, d) => gsap.to(inn, {rotationX: x, rotationY: y, transformPerspective: 900, duration: d, ease: 'power3.out', overwrite: true,
-    onComplete: x || y ? null : () => gsap.set(inn, {clearProps: 'transform'})});
+  const E = (v, t, k, dt) => v + (t - v) * (1 - Math.exp(-k * dt));
+  const S = cards.map(c => ({c, inn: c.querySelector('.craft__in'), rx: 0, ry: 0, tx: 0, ty: 0, mx: 50, my: 30, gx: 50, gy: 30, on: false}));
+  let raf = 0, last = 0;
+  const loop = () => { raf = 0; const t = performance.now() / 1000, dt = last ? Math.min(.05, t - last) : 1 / 60; last = t; let busy = false;
+    S.forEach(s => { if (!s.inn) return;
+      s.rx = E(s.rx, s.tx, 7, dt); s.ry = E(s.ry, s.ty, 7, dt); s.mx = E(s.mx, s.gx, 9, dt); s.my = E(s.my, s.gy, 9, dt);
+      const moving = Math.abs(s.rx - s.tx) + Math.abs(s.ry - s.ty) > .01 || Math.abs(s.mx - s.gx) + Math.abs(s.my - s.gy) > .05;
+      if (!moving && !s.tx && !s.ty) { s.rx = s.ry = 0; s.inn.style.transform = ''; }
+      else s.inn.style.transform = `perspective(900px) rotateX(${s.rx.toFixed(3)}deg) rotateY(${s.ry.toFixed(3)}deg)`;
+      s.c.style.setProperty('--mx', s.mx.toFixed(2) + '%'); s.c.style.setProperty('--my', s.my.toFixed(2) + '%');
+      busy = busy || moving; });
+    if (busy) raf = requestAnimationFrame(loop); else last = 0; };
+  const kick = () => { if (!raf) raf = requestAnimationFrame(loop); };
   if (matchMedia('(hover:none)').matches) {
     let lit = null;
     const pick = () => { const mid = innerHeight / 2; let best = null, bd = innerHeight * .45;
-      cards.forEach(c => { const r = c.getBoundingClientRect(), d = Math.abs(r.top + r.height / 2 - mid); if (d < bd) { bd = d; best = c; } });
-      if (best !== lit) { lit && (lit.classList.remove('is-lit'), tilt(lit.querySelector('.craft__in'), 0, 0, .6)); lit = best; lit && lit.classList.add('is-lit'); }
-      if (lit) { const r = lit.getBoundingClientRect(), k = Math.max(-1, Math.min(1, (r.top + r.height / 2 - mid) / (innerHeight / 2)));
-        lit.style.setProperty('--my', (50 + k * 40).toFixed(1) + '%'); tilt(lit.querySelector('.craft__in'), k * 4, 0, .5); } };
+      S.forEach(s => { const r = s.c.getBoundingClientRect(), d = Math.abs(r.top + r.height / 2 - mid); if (d < bd) { bd = d; best = s; } });
+      if (best !== lit) { if (lit) { lit.c.classList.remove('is-lit'); lit.tx = lit.ty = 0; } lit = best; lit && lit.c.classList.add('is-lit'); }
+      if (lit) { const r = lit.c.getBoundingClientRect(), k = Math.max(-1, Math.min(1, (r.top + r.height / 2 - mid) / (innerHeight / 2)));
+        lit.gy = 50 + k * 40; lit.gx = 50; lit.tx = k * 3; }
+      kick(); };
     addEventListener('scroll', pick, {passive: true}); return; }
-  cards.forEach(c => {
-    const inn = c.querySelector('.craft__in'); if (!inn) return;
+  S.forEach(s => { const c = s.c; if (!s.inn) return;
     c.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(), u = (e.clientX - r.left) / r.width, v = (e.clientY - r.top) / r.height;
-      tilt(inn, (.5 - v) * 6, (u - .5) * 8, .6); c.style.setProperty('--mx', (u * 100).toFixed(1) + '%'); c.style.setProperty('--my', (v * 100).toFixed(1) + '%'); });
-    c.addEventListener('pointerenter', () => c.classList.add('is-lit'));
-    c.addEventListener('pointerleave', () => { tilt(inn, 0, 0, .8); c.classList.remove('is-lit'); });
+      s.tx = (.5 - v) * 5; s.ty = (u - .5) * 6; s.gx = u * 100; s.gy = v * 100; kick(); });
+    c.addEventListener('pointerenter', e => { const r = c.getBoundingClientRect();
+      /* start the sheen where the pointer came in, so it doesn't sweep across from the last spot */
+      s.mx = s.gx = (e.clientX - r.left) / r.width * 100; s.my = s.gy = (e.clientY - r.top) / r.height * 100; c.classList.add('is-lit'); kick(); });
+    c.addEventListener('pointerleave', () => { s.tx = s.ty = 0; c.classList.remove('is-lit'); kick(); });
   });
 })();

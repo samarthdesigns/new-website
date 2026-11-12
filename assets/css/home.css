@@ -171,8 +171,8 @@
 
 /* craft cards: content tilts toward the cursor (or with scroll on touch), a soft spotlight follows, proof stat per card */
 .crafts__grid{position:relative}
-.craft::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity .5s var(--liquid);
-  background:radial-gradient(240px circle at var(--mx,50%) var(--my,30%),rgba(253,179,0,.11),transparent 70%)}
+.craft::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity .7s var(--liquid);
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,30%),rgba(255,255,255,.95),rgba(255,255,255,.4) 45%,transparent 75%)}
 .craft.is-lit::after{opacity:1}
 .craft__in{display:flex;flex-direction:column;flex:1;transform-origin:50% 50%}
 .craft__stat{display:flex;align-items:baseline;gap:9px;margin-top:auto;padding-top:22px;color:var(--mut);font-size:13px;line-height:1.35;text-decoration:none}

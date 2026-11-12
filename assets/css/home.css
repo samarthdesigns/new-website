@@ -189,21 +189,13 @@ a.craft__stat:hover i{transform:translateX(4px)}
 @media (max-width:900px){.craft__stat{padding-top:18px}.craft__stat b{font-size:23px}}
 @media (prefers-reduced-motion:reduce){.craft__in{transform:none!important}}
 
-/* tools card: grouped by how I work (Daily → Prototype → Build, Design, Motion), named chips so the tools read as keywords.
-   The rows that match the hero title (Design Engineer / Product Designer) stay full strength, the others step back */
-.tstack{display:flex;flex-direction:column;gap:9px;margin:2px 0 0}
-.trow{display:grid;grid-template-columns:62px 1fr;align-items:start;gap:8px;margin:0;transition:opacity .6s var(--liquid)}
-.trow dt{font-size:12px;font-weight:500;color:var(--mut-2);line-height:27px;transition:color .6s var(--liquid)}
-.trow dd{margin:0;display:flex;flex-wrap:wrap;gap:4px}
-.trow.trow--daily{grid-template-columns:62px 1fr;padding-bottom:9px;margin-bottom:0;border-bottom:1px solid var(--line)}
-.trow--daily dt{color:var(--ink)}
-.tchip{display:inline-flex;align-items:center;gap:5px;height:27px;padding:0 8px 0 7px;border-radius:9px;background:var(--tile);font-size:12px;line-height:1;color:rgba(20,20,20,.72);white-space:nowrap;cursor:default;outline:none;
-  transition:background-color .4s var(--liquid),border-radius .4s var(--liquid)}
-.tchip img,.tchip svg{width:14px;height:14px;object-fit:contain;flex:none}
-.tchip:hover,.tchip.is-on{background:var(--tile-2);border-radius:14px}
-.tchip:focus-visible{outline:1.5px solid var(--ink);outline-offset:2px}
-html[data-role=de] .trow[data-for=pd],html[data-role=pd] .trow[data-for=de]{opacity:.5}
-html[data-role=de] .trow[data-for=de] dt,html[data-role=pd] .trow[data-for=pd] dt{color:var(--ink)}
-@media (max-width:600px){.tstack{gap:11px}.trow,.trow.trow--daily{grid-template-columns:1fr;gap:5px}.trow dt{line-height:1.2}}
-@media (prefers-reduced-motion:reduce){.trow,.tchip{transition:none}}
+/* tools card: plain rows, label + icon/name, no fills */
+.tstack{display:flex;flex-direction:column;gap:10px;margin:4px 0 0}
+.trow{display:grid;grid-template-columns:66px 1fr;align-items:baseline;gap:8px;margin:0}
+.trow dt{font-size:12.5px;color:var(--mut-2);line-height:20px}
+.trow dd{margin:0;display:flex;flex-wrap:wrap;gap:4px 12px}
+.tchip{display:inline-flex;align-items:center;gap:6px;height:20px;font-size:13px;line-height:1;color:var(--ink);white-space:nowrap;cursor:default;outline:none}
+.tchip img,.tchip svg{width:13px;height:13px;object-fit:contain;flex:none}
+.tchip:focus-visible{outline:1.5px solid var(--ink);outline-offset:3px;border-radius:4px}
 .tchip[data-tip]{cursor:help}.tchip[data-tip]>span{text-decoration:underline dotted rgba(20,20,20,.35);text-underline-offset:3px}
+@media (max-width:600px){.trow{grid-template-columns:1fr;gap:4px}}

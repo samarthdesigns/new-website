@@ -255,6 +255,7 @@
     reset(set);
     set.t0 = now() + delay + .75;
     if (RM) { set.pets.forEach(p => p.inn.style.visibility = 'visible'); place(set, 0); return; }
+    if (!set.path) { set.pets.forEach(p => gsap.set(p.inn, {autoAlpha: 1})); return; }
     place(set, 0); const fs = set.path.fs;
     set.pets.forEach((p, i) => {
       const d = delay + i * .12;
@@ -264,7 +265,7 @@
         .to(p.inn, {scaleX: 1, scaleY: 1, duration: .45, ease: 'elastic.out(1,.45)'});
     });
   };
-  const hidePets = set => { if (RM) { set.pets.forEach(p => p.inn.style.visibility = 'hidden'); return; }
+  const hidePets = set => { if (RM || !set.path) { set.pets.forEach(p => p.inn.style.visibility = 'hidden'); return; }
     const fs = set.path.fs;
     set.pets.forEach((p, i) => {
       p.el.classList.remove('is-run');

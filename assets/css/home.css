@@ -189,13 +189,12 @@ a.craft__stat:hover i{transform:translateX(4px)}
 @media (max-width:900px){.craft__stat{padding-top:18px}.craft__stat b{font-size:23px}}
 @media (prefers-reduced-motion:reduce){.craft__in{transform:none!important}}
 
-/* tools card: plain rows, label + icon/name, no fills */
-.tstack{display:flex;flex-direction:column;gap:10px;margin:4px 0 0}
-.trow{display:grid;grid-template-columns:66px 1fr;align-items:baseline;gap:8px;margin:0}
-.trow dt{font-size:12.5px;color:var(--mut-2);line-height:20px}
-.trow dd{margin:0;display:flex;flex-wrap:wrap;gap:4px 12px}
-.tchip{display:inline-flex;align-items:center;gap:6px;height:20px;font-size:13px;line-height:1;color:var(--ink);white-space:nowrap;cursor:default;outline:none}
-.tchip img,.tchip svg{width:13px;height:13px;object-fit:contain;flex:none}
-.tchip:focus-visible{outline:1.5px solid var(--ink);outline-offset:3px;border-radius:4px}
-.tchip[data-tip]{cursor:help}.tchip[data-tip]>span{text-decoration:underline dotted rgba(20,20,20,.35);text-underline-offset:3px}
-@media (max-width:600px){.trow{grid-template-columns:1fr;gap:4px}}
+/* two-card craft: more room, bigger title + stat, short line length */
+.crafts__grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.crafts__grid--2 .craft{padding:36px 36px 40px;min-height:340px}
+.crafts__grid--2 .craft__no{top:36px;right:36px}
+.crafts__grid--2 .craft__t{font-size:24px;margin-bottom:14px}
+.crafts__grid--2 .craft__b{font-size:15px;max-width:44ch}
+.crafts__grid--2 .craft__stat{padding-top:32px;font-size:14px}
+.crafts__grid--2 .craft__stat b{font-size:40px}
+@media (max-width:900px){.crafts__grid--2{grid-template-columns:1fr}.crafts__grid--2 .craft+.craft{border-left:0;border-top:1px solid var(--line)}.crafts__grid--2 .craft{padding:25px 22px 29px;min-height:0}.crafts__grid--2 .craft__no{top:25px;right:22px}.crafts__grid--2 .craft__stat b{font-size:32px}}

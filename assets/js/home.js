@@ -122,6 +122,9 @@
   });
 })();
 
+/* once a pet's bubble has faded out, empty it so the invisible box can't stick out past the screen edge as the pet walks on */
+SN.hush = p => setTimeout(() => { if (!p.mad) { p.say.textContent = ''; p.say.style.marginLeft = ''; } }, 350);
+
 /* hero title swap: "Product Designer" ⇄ "Design Engineer" in the pixel font.
    Each title brings its own pixel pets that walk the x-height line, hopping tall letters and the word gap.
    Product Designer: Figma, Sketch, Illustrator, Framer. Design Engineer: Claude, GPT, Grok. */
@@ -257,7 +260,7 @@
   };
   const annoy = p => { if (!p.inn.style.visibility || p.inn.style.visibility === 'hidden') return; p.hover = true; shout(p); };
   const calm = p => { p.hover = false; if (!p.mad) return; clearTimeout(p.tm);
-    p.tm = setTimeout(() => { if (p.hover) return; p.el.classList.remove('is-mad'); p.mad = false; },
+    p.tm = setTimeout(() => { if (p.hover) return; p.el.classList.remove('is-mad'); p.mad = false; SN.hush(p); },
       Math.max(700, 1700 - (now() - p.madT) * 1000)); };
   const reset = set => { const P = set.path, n = set.pets.length;
     set.pets.forEach((p, i) => { clearTimeout(p.tm); p.mad = p.hover = false; p.el.classList.remove('is-mad');
@@ -353,7 +356,7 @@
       el.classList.add('is-mad'); clearTimeout(P.tm);
       if (matchMedia('(hover:none)').matches) P.tm = setTimeout(unpoke, 1900); };
     const unpoke = () => { P.hover = false; clearTimeout(P.tm);
-      P.tm = setTimeout(() => { if (P.hover) return; el.classList.remove('is-mad'); P.mad = false; }, Math.max(600, 1600 - (now() - P.madT) * 1000)); };
+      P.tm = setTimeout(() => { if (P.hover) return; el.classList.remove('is-mad'); P.mad = false; SN.hush(P); }, Math.max(600, 1600 - (now() - P.madT) * 1000)); };
     el.addEventListener('pointerenter', e => e.pointerType !== 'touch' && poke());
     el.addEventListener('pointerleave', e => e.pointerType !== 'touch' && unpoke());
     el.addEventListener('click', () => { P.mad ? unpoke() : poke(); });

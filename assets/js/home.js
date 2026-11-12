@@ -295,8 +295,88 @@
       .add(() => from.line.classList.remove('is-on'))
       .to(ip, {yPercent: 0, duration: 1.2, ease: 'expo.out', stagger: .04}, .35)
       .to(ip, {'--elsh': 1, duration: 1.4, ease: 'power2.out', stagger: .04}, .5);
-    relayout(); showPets(to, 1.1); kick();
+    relayout(); showPets(to, 1.1); kick(); crafty && setTimeout(crafty.morph, 900);
   };
+
+  /* a pet from the current title drops onto the craft cards and patrols their top edge.
+     It walks over to the card you hover (on phones: the card in the middle of the screen); poke it and it pitches the work. */
+  const crafty = (() => {
+    const grid = q('.crafts__grid'); if (!grid) return null;
+    const lay = document.createElement('div'); lay.className = 'craft-pets'; grid.appendChild(lay);
+    const el = document.createElement('div'); el.className = 'pet';
+    el.innerHTML = '<div class="pet__in"><svg></svg></div><span class="pet__say"></span>'; lay.appendChild(el);
+    const P = {el, inn: el.firstElementChild, svg: el.querySelector('svg'), say: el.querySelector('.pet__say'),
+      x: 40, y: 0, ty: 0, dir: 1, spd: 0, fc: 1, mad: false, hover: false, tm: 0, target: null, live: false, name: ''};
+    const LINES = ['Featured Work is right below ↓', 'Card 02 is my favorite.', 'Hire my human. I need snacks.', '50% faster. Not a typo.',
+      'I’m a feature, not a bug.', 'Pixel-perfect, unlike my walk.', 'Psst, the case studies are good.', 'Resume’s up top, btw.'];
+    const sprite = name => { const s = SPR[name], w = s.rows[0].length, h = s.rows.length + 1; P.name = name; P.flipText = name !== 'illustrator';
+      P.svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      P.svg.innerHTML = `<g class="bd">${rects(s.rows, s.c, 0)}</g><g class="f1">${rects([s.legs[0]], s.c, h - 1)}</g><g class="f2">${rects([s.legs[1]], s.c, h - 1)}</g>`;
+      P.h = innerWidth < 900 ? 20 : 24; P.w = P.h * w / h; el.style.width = P.w + 'px'; el.style.height = P.h + 'px'; };
+    const pick = () => (cur === 'de' ? SETS.de : SETS.pd)[0];
+    sprite(pick());
+    const hi = () => grid.clientWidth - P.w / 2 - 6, lo = () => P.w / 2 + 6;
+    const draw = () => {
+      const fl = Math.min(.15, Math.abs(P.ty - P.y) / 400);
+      el.style.transform = `translate3d(${(P.x - P.w / 2).toFixed(2)}px,${(P.y - P.h + 1).toFixed(2)}px,0) scale(${(1 - fl).toFixed(3)},${(1 + fl).toFixed(3)})`;
+      P.svg.style.transform = `scaleX(${(P.flipText ? P.fc : Math.abs(P.fc)).toFixed(3)})`; };
+    let lg = '';
+    const poke = () => { if (!P.live) return; P.hover = true; if (P.mad) return; let g;
+      do g = LINES[Math.floor(Math.random() * LINES.length)]; while (g === lg); lg = g;
+      P.mad = true; P.madT = now(); P.say.textContent = g;
+      const r = el.getBoundingClientRect(), half = P.say.offsetWidth / 2, cx = r.left + r.width / 2, vw = document.documentElement.clientWidth;
+      P.say.style.marginLeft = (Math.min(0, vw - 8 - (cx + half)) + Math.max(0, 8 - (cx - half))).toFixed(0) + 'px';
+      el.classList.add('is-mad'); clearTimeout(P.tm);
+      if (matchMedia('(hover:none)').matches) P.tm = setTimeout(unpoke, 1900); };
+    const unpoke = () => { P.hover = false; clearTimeout(P.tm);
+      P.tm = setTimeout(() => { if (P.hover) return; el.classList.remove('is-mad'); P.mad = false; }, Math.max(600, 1600 - (now() - P.madT) * 1000)); };
+    el.addEventListener('pointerenter', e => e.pointerType !== 'touch' && poke());
+    el.addEventListener('pointerleave', e => e.pointerType !== 'touch' && unpoke());
+    el.addEventListener('click', () => { P.mad ? unpoke() : poke(); });
+    /* where to walk: the hovered card, or on touch screens the card nearest the middle of the screen */
+    const cards = qa('.craft', grid), touch = matchMedia('(hover:none)').matches;
+    const centerOf = c => { const g = grid.getBoundingClientRect(), r = c.getBoundingClientRect(); return r.left - g.left + r.width / 2; };
+    if (!touch) { cards.forEach(c => c.addEventListener('pointerenter', () => P.target = centerOf(c) + (c === cards[0] ? 10 : -10)));
+      grid.addEventListener('pointerleave', () => P.target = null); }
+    const stacked = () => getComputedStyle(grid).gridTemplateColumns.split(' ').length < 2;
+    const step = dt => {
+      if (!P.live || RM) return;
+      let want = 1; const st = stacked();
+      let tc = null;
+      if (touch || st) { const mid = innerHeight / 2; let bd = 1e9;
+        cards.forEach(c => { const r = c.getBoundingClientRect(), d = Math.abs(r.top + r.height / 2 - mid); if (d < bd) { bd = d; tc = c; } }); }
+      /* stacked cards (phones): hop down onto the top edge of the card in view and patrol it */
+      P.ty = st && tc ? tc.offsetTop : 0;
+      if (touch && !st) P.target = tc ? centerOf(tc) : null; else if (st) P.target = null;
+      if (P.target != null) { const dx = P.target - P.x; if (Math.abs(dx) > 3) P.dir = Math.sign(dx); want = Math.min(1, Math.abs(dx) / 40); if (Math.abs(dx) < 2) want = 0; }
+      else { if (P.x > hi() - 2) P.dir = -1; if (P.x < lo() + 2) P.dir = 1;
+        want = .35 + .65 * Math.min(1, Math.min(P.x - lo(), hi() - P.x) / 50); }
+      const dy = P.ty - P.y; P.y = Math.abs(dy) < .5 ? P.ty : ease(P.y, P.ty, 5, dt);
+      const fly = Math.abs(dy) > 2; if (fly) want = .3;
+      P.spd = ease(P.spd, P.mad ? 0 : want, P.mad ? 10 : 4, dt);
+      P.x = Math.max(lo(), Math.min(hi(), P.x + P.dir * P.spd * (innerWidth < 900 ? 70 : 110) * dt));
+      P.fc = ease(P.fc, P.dir, 12, dt);
+      el.classList.toggle('is-run', P.spd > .15 && Math.abs(P.ty - P.y) < 2); draw(); };
+    let on2 = false, raf2 = 0, last2 = 0;
+    const loop2 = () => { raf2 = 0; if (!on2) return; const t = now(), dt = last2 ? Math.min(.05, t - last2) : 0; last2 = t; step(dt); raf2 = requestAnimationFrame(loop2); };
+    const drop = () => { if (P.live) return; sprite(pick()); P.x = lo() + (grid.clientWidth - P.w) * .12; draw();
+      if (RM) { P.inn.style.visibility = 'visible'; P.live = true; return; }
+      gsap.timeline({onComplete: () => P.live = true})
+        .fromTo(P.inn, {y: -220, autoAlpha: 0, scaleX: .8, scaleY: 1.2}, {y: 0, autoAlpha: 1, duration: .7, ease: 'power2.in'})
+        .to(P.inn, {scaleX: 1.3, scaleY: .7, duration: .09, ease: 'power1.out'})
+        .to(P.inn, {scaleX: 1, scaleY: 1, duration: .5, ease: 'elastic.out(1,.4)'});
+      setTimeout(() => { if (!P.hover) { poke(); P.tm = setTimeout(unpoke, 1800); } }, 1300); };
+    new IntersectionObserver(([e]) => { on2 = e.isIntersecting; if (on2) { if (e.intersectionRatio > .25 || e.boundingClientRect.top < innerHeight * .7) drop();
+      if (!raf2 && !RM) { last2 = 0; raf2 = requestAnimationFrame(loop2); } } }, {threshold: [0, .25, .5]}).observe(grid);
+    addEventListener('resize', () => { const h0 = P.h; sprite(P.name); if (P.h !== h0) draw(); P.x = Math.max(lo(), Math.min(hi(), P.x)); draw(); });
+    /* when the title swaps, the pet morphs into a pet of the new title with a little hop */
+    const morph = () => { if (!P.live) return; const name = pick(); if (name === P.name) return;
+      if (RM) { sprite(name); return; }
+      gsap.timeline().to(P.inn, {y: -14, scaleX: .85, scaleY: 1.15, duration: .22, ease: 'power2.out'})
+        .add(() => sprite(name)).to(P.inn, {y: 0, scaleX: 1, scaleY: 1, duration: .3, ease: 'power2.in'})
+        .to(P.inn, {scaleX: 1.2, scaleY: .8, duration: .07}).to(P.inn, {scaleX: 1, scaleY: 1, duration: .4, ease: 'elastic.out(1,.45)'}); };
+    return {morph};
+  })();
 
   SN.fontsReady.then(() => requestAnimationFrame(() => {
     relayout(); showPets(sets.de, RM ? 0 : 2.2); kick();
@@ -387,7 +467,7 @@ varying vec2 v;uniform sampler2D T;uniform vec2 R;uniform vec2 C;uniform float t
 
 /* hero lede tags: coffee count follows Samarth's day (Central time), km grows ~30/week; hover, focus or tap shows a joke */
 (function(){
-  const {RM, qa} = SN; if (!qa('.ltag').length) return;
+  const {RM, qa} = SN; const TIP = '.ltag,[data-tip]'; if (!qa(TIP).length) return;
   const JOKES = {
     coffee: ['latte art: still improving', 'today’s pour: a lopsided heart', 'decaf is a bug report', 'cup 4 needs a design review', 'oat milk, no notes'],
     run: ['these shoes have more km than my car', 'pace: conversational, mostly', 'rest days are on the roadmap', 'some pairs are just for looks', 'runner’s high > design crit high']
@@ -409,14 +489,44 @@ varying vec2 v;uniform sampler2D T;uniform vec2 R;uniform vec2 C;uniform float t
 
   const tip = document.createElement('div'); tip.className = 'ltip'; tip.setAttribute('role', 'tooltip'); tip.id = 'ltip'; document.body.appendChild(tip);
   const idx = {coffee: 0, run: 0}; let cur = null;
-  const show = t => { const list = JOKES[t.dataset.tag]; tip.textContent = list[idx[t.dataset.tag]++ % list.length];
+  const show = t => { const list = t.dataset.tip ? [t.dataset.tip] : JOKES[t.dataset.tag]; if (!idx[t.dataset.tag]) idx[t.dataset.tag] = 0; tip.textContent = list[idx[t.dataset.tag]++ % list.length];
     const r = t.getBoundingClientRect(); tip.style.left = (r.left + r.width / 2) + 'px'; tip.style.top = r.top + 'px';
-    qa('.ltag.is-on').forEach(x => x !== t && x.classList.remove('is-on')); t.classList.add('is-on'); t.setAttribute('aria-describedby', 'ltip');
+    qa('.is-on[data-tag],.is-on[data-tip]').forEach(x => x !== t && x.classList.remove('is-on')); t.classList.add('is-on'); t.setAttribute('aria-describedby', 'ltip');
     tip.classList.add('is-on'); cur = t; };
   const hide = () => { tip.classList.remove('is-on'); if (cur) { cur.classList.remove('is-on'); cur.removeAttribute('aria-describedby'); } cur = null; };
-  document.addEventListener('pointerover', e => { const t = e.target.closest && e.target.closest('.ltag'); if (e.pointerType === 'touch') return; if (t && t !== cur) show(t); else if (!t && cur) hide(); });
-  document.addEventListener('click', e => { const t = e.target.closest && e.target.closest('.ltag'); if (t) { t === cur && matchMedia('(hover:none)').matches ? hide() : show(t); } else if (cur) hide(); });
-  document.addEventListener('focusin', e => { const t = e.target.closest && e.target.closest('.ltag'); if (t) show(t); });
-  document.addEventListener('focusout', e => { if (e.target.closest && e.target.closest('.ltag')) hide(); });
+  document.addEventListener('pointerover', e => { const t = e.target.closest && e.target.closest(TIP); if (e.pointerType === 'touch') return; if (t && t !== cur) show(t); else if (!t && cur) hide(); });
+  document.addEventListener('click', e => { const t = e.target.closest && e.target.closest(TIP); if (t) { t === cur && matchMedia('(hover:none)').matches ? hide() : show(t); } else if (cur) hide(); });
+  document.addEventListener('focusin', e => { const t = e.target.closest && e.target.closest(TIP); if (t) show(t); });
+  document.addEventListener('focusout', e => { if (e.target.closest && e.target.closest(TIP)) hide(); });
   addEventListener('scroll', () => cur && hide(), {passive: true});
+})();
+
+/* craft cards: content leans toward the cursor with a soft spotlight; on touch screens the card in the middle
+   of the screen lights up and leans a little with scroll. The proof numbers count up the first time each card shows. */
+(function(){
+  const {RM, qa} = SN; const cards = qa('.craft'); if (!cards.length) return;
+  cards.forEach(c => { const st = c.querySelector('.craft__stat'), b = c.querySelector('[data-count]'); if (!b) return;
+    st.setAttribute('aria-label', [...st.children].map(x => x.textContent).join(' ').replace('→', '').replace(/\s+/g, ' ').trim());
+    const to = +b.dataset.count, suf = b.dataset.suffix || ''; if (RM) return;
+    const o = {v: 0}; b.textContent = '0' + suf;
+    ScrollTrigger.create({trigger: c, start: 'top 85%', once: true, onEnter: () => gsap.to(o, {v: to, duration: 1.8, ease: 'expo.out',
+      onUpdate: () => b.textContent = Math.round(o.v) + suf})}); });
+  if (RM) return;
+  const tilt = (inn, x, y, d) => gsap.to(inn, {rotationX: x, rotationY: y, transformPerspective: 900, duration: d, ease: 'power3.out', overwrite: true,
+    onComplete: x || y ? null : () => gsap.set(inn, {clearProps: 'transform'})});
+  if (matchMedia('(hover:none)').matches) {
+    let lit = null;
+    const pick = () => { const mid = innerHeight / 2; let best = null, bd = innerHeight * .45;
+      cards.forEach(c => { const r = c.getBoundingClientRect(), d = Math.abs(r.top + r.height / 2 - mid); if (d < bd) { bd = d; best = c; } });
+      if (best !== lit) { lit && (lit.classList.remove('is-lit'), tilt(lit.querySelector('.craft__in'), 0, 0, .6)); lit = best; lit && lit.classList.add('is-lit'); }
+      if (lit) { const r = lit.getBoundingClientRect(), k = Math.max(-1, Math.min(1, (r.top + r.height / 2 - mid) / (innerHeight / 2)));
+        lit.style.setProperty('--my', (50 + k * 40).toFixed(1) + '%'); tilt(lit.querySelector('.craft__in'), k * 4, 0, .5); } };
+    addEventListener('scroll', pick, {passive: true}); return; }
+  cards.forEach(c => {
+    const inn = c.querySelector('.craft__in'); if (!inn) return;
+    c.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(), u = (e.clientX - r.left) / r.width, v = (e.clientY - r.top) / r.height;
+      tilt(inn, (.5 - v) * 6, (u - .5) * 8, .6); c.style.setProperty('--mx', (u * 100).toFixed(1) + '%'); c.style.setProperty('--my', (v * 100).toFixed(1) + '%'); });
+    c.addEventListener('pointerenter', () => c.classList.add('is-lit'));
+    c.addEventListener('pointerleave', () => { tilt(inn, 0, 0, .8); c.classList.remove('is-lit'); });
+  });
 })();

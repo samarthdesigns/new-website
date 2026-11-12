@@ -168,3 +168,23 @@
 .ltip.is-on{opacity:1;transform:translate(-50%,calc(-100% - 10px)) scale(1)}
 .ltip::after{content:"";position:absolute;left:50%;bottom:-4px;width:8px;height:8px;margin-left:-4px;background:inherit;transform:rotate(45deg);border-radius:1px}
 @media (prefers-reduced-motion:reduce){.ltag,.ltag__i,.ltip{transition:none}}
+
+/* craft cards: content tilts toward the cursor (or with scroll on touch), a soft spotlight follows, proof stat per card */
+.crafts__grid{position:relative}
+.craft::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity .5s var(--liquid);
+  background:radial-gradient(240px circle at var(--mx,50%) var(--my,30%),rgba(253,179,0,.11),transparent 70%)}
+.craft.is-lit::after{opacity:1}
+.craft__in{display:flex;flex-direction:column;flex:1;transform-origin:50% 50%}
+.craft__stat{display:flex;align-items:baseline;gap:9px;margin-top:auto;padding-top:22px;color:var(--mut);font-size:13px;line-height:1.35;text-decoration:none}
+.craft__stat b{font:400 26px/1 var(--pixel);letter-spacing:-.01em;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+a.craft__stat span{border-bottom:1px solid transparent;transition:border-color .3s var(--liquid),color .3s var(--liquid)}
+a.craft__stat i{font-style:normal;display:inline-block;transition:transform .4s var(--liquid)}
+a.craft__stat:hover span,a.craft__stat:focus-visible span{color:var(--ink);border-color:var(--ink)}
+a.craft__stat:hover i{transform:translateX(4px)}
+.craft__b s{text-decoration-thickness:1.5px;color:var(--mut-2)}
+.craft .tool[data-tip]{cursor:default;outline:none}
+.craft .tool[data-tip]:focus-visible{outline:1.5px solid var(--ink);outline-offset:3px;border-radius:4px}
+/* the pet that drops onto the cards */
+.craft-pets{position:absolute;left:0;right:0;top:0;height:0;z-index:3;pointer-events:none}
+@media (max-width:900px){.craft__stat{padding-top:18px}.craft__stat b{font-size:23px}}
+@media (prefers-reduced-motion:reduce){.craft__in{transform:none!important}}

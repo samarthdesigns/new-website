@@ -217,7 +217,7 @@ const COVERS = {
     const a = stat('left:60px;top:650px;--c:#002e6e');
     a.sub.textContent = 'drop-off after pay-first onboarding';
     pop(a.el, 3.8);
-    hooks.push(t => { const k = E.liquid(clamp((t - 4.0) / 1.3)); a.b.textContent = '34% → ' + Math.round(34 - 22 * k) + '%'; });
+    hooks.push(t => { const k = E.liquid(clamp((t - 4.0) / 1.3)); a.b.textContent = t < 4.0 ? '34%' : '34% → ' + Math.round(34 - 22 * k) + '%'; });
     pop(mk(null, 'pill', '100M+ monthly users', 'left:800px;top:110px;background:#002e6e;color:#fff'), 4.4, { x: 60 });
   },
 
@@ -227,9 +227,9 @@ const COVERS = {
     drift(blob(1050, 820, 260, 'rgba(230,0,126,.12)'), -60, 1, 1.15);
     const f = mk(null, '', '<i style="left:28px;top:34px;width:180px;height:18px;border-radius:9px;background:#e6e6e6"></i><i style="left:28px;top:66px;width:280px;height:44px;border-radius:22px;background:#f1f1f1"></i><b style="left:28px;top:132px;font:700 15px ui-monospace,Menlo,monospace;color:#9a9a9a;letter-spacing:.06em">PINNED</b><b style="left:28px;top:322px;font:700 15px ui-monospace,Menlo,monospace;color:#9a9a9a;letter-spacing:.06em">ALL FEATURES</b>', 'left:120px;top:100px;width:400px;height:720px;border-radius:44px;background:#fff;box-shadow:inset 0 0 0 3px #141414;overflow:hidden');
     tr(f, [[0, { y: 80, o: 0, s: .95 }], [.8, { y: 0, o: 1, s: 1 }], ...out(7.05)]);
-    const glyph = ['border-radius:50%', 'border-radius:8px', 'border-radius:50% 50% 8px 8px', 'border-radius:8px 50%', 'border-radius:50% 8px', 'border-radius:4px;transform:rotate(45deg) scale(.8)'];
-    const tile = (x, y, g, c = '#ececec', ic = '#e40000') => mk(f, '', `<i style="left:34px;top:34px;width:36px;height:36px;background:${ic};${glyph[g % glyph.length]}"></i>`, `left:${x}px;top:${y}px;width:104px;height:104px;border-radius:24px;background:${c}`);
-    [148, 268].forEach((x, i) => pop(tile(x, 166, i + 3, '#f4f4f4', '#d0d0d0'), .9 + i * .1, { s: .7 }));
+    // real icons from the case study's custom icon set
+    const tile = (x, y, g, c = '#ececec') => mk(f, '', g < 0 ? '' : `<img src="src/air-ic-${g % 9}.webp" style="left:26px;top:26px;width:52px;height:52px;object-fit:contain">`, `left:${x}px;top:${y}px;width:104px;height:104px;border-radius:24px;background:${c}`);
+    [148, 268].forEach((x, i) => pop(tile(x, 166, -1, '#f4f4f4'), .9 + i * .1, { s: .7 }));
     const slot = mk(f, '', '', 'left:28px;top:166px;width:104px;height:104px;border-radius:24px;box-shadow:inset 0 0 0 2px #d9d9d9');
     pop(slot, .9, { s: .7 });
     let g = 0;
@@ -238,7 +238,7 @@ const COVERS = {
       pop(tile(28 + c * 120, 356 + r * 120, g++), 1.1 + (r * 3 + c) * .07, { s: .6, y: 20 });
     }
     // the user's favourite category lifts out of the grid and pins to the first slot
-    const m = tile(148, 476, 1);
+    const m = tile(148, 476, 8);
     tr(m, [[1.4, { s: .6, o: 0 }], [2.0, { s: 1, o: 1 }, 'back'], [2.6, { s: 1.08 }], [3.4, { x: -120, y: -310, s: 1 }, 'io'], ...out(7.05).map(k => [k[0], { ...k[1], x: -120, y: -310 }, k[2]])]);
     const purple = mk(m, '', '', 'inset:0;border-radius:24px;background:#c9a6f0');
     tr(purple, [[3.3, { o: 0 }], [3.6, { o: 1 }, 'io']]);
@@ -277,9 +277,9 @@ const COVERS = {
     slideIn(P.imgs[1], 3.1, P.sw);
     pointer([[2.4, { x: 1000, y: 920, o: 0 }], [2.6, { o: 1 }], [2.95, P.at(.85, .32), 'io'], [3.2, {}], [3.75, P.at(.49, .40), 'io'], [4.0, {}], [4.6, { x: 1100, y: 940, o: 0 }, 'in']], [3.0, 3.8], '#0088FF');
     const a = stat('left:70px;top:620px;--c:#0088FF;box-shadow:inset 0 0 0 2px #e3eaf6');
-    a.sub.textContent = 'learners served';
+    a.sub.textContent = 'students on the product suite';
     pop(a.el, 4.2);
-    count(a.b, 4.25, 5.6, 500000, v => v > 499000 ? '500,000+' : (Math.round(v / 1000) * 1000).toLocaleString('en-US'));
+    count(a.b, 4.25, 5.6, 12000, v => (Math.round(v / 100) * 100).toLocaleString('en-US'));
     pop(mk(null, 'pill', '4 products shipped', 'left:500px;top:760px;background:#051839;color:#fff'), 4.7, { x: -40 });
   },
 
@@ -298,9 +298,8 @@ const COVERS = {
     pop(mk(null, 'title', 'Hope House', 'left:120px;top:590px;font-size:64px;color:#141414'), 2.7, { y: 30 });
     pop(mk(null, 'pill', 'Anonymous by design', 'left:120px;top:700px;background:#f06b8b;color:#fff'), 3.0, { y: 30 });
     pop(mk(null, 'pill', 'Built for teens', 'left:120px;top:770px;background:#f9c840;color:#141414'), 3.15, { y: 30 });
-    const stack = (srcs, l, t, w) => { const el = mk(null, 'stk', '', `left:${l}px;top:${t}px;width:${w}px;height:${Math.round(w * 2.12)}px`); return { el, imgs: srcs.map(s => { const i = document.createElement('img'); i.src = s; el.appendChild(i); return i; }) }; };
-    const A = stack(['src/hope-1.webp', 'src/hope-2.webp'], 560, 120, 260), B = stack(['src/hope-3.webp', 'src/hope-4.webp'], 860, 200, 260);
-    pop(A.el, .9, { y: 120 }, 7.05); pop(B.el, 1.1, { y: 120 }, 7.1);
+    const A = phone(['src/hope-1.webp', 'src/hope-2.webp'], 560, 110, 2.123, '', 270), B = phone(['src/hope-3.webp', 'src/hope-4.webp'], 870, 190, 2.123, '', 270);
+    pop(A.p, .9, { y: 120 }, 7.05); pop(B.p, 1.1, { y: 120 }, 7.1);
     fade(A.imgs[1], 2.55); fade(B.imgs[1], 3.95);
     pointer([[1.9, { x: 700, y: 920, o: 0 }], [2.1, { o: 1 }], [2.4, { x: 630, y: 318 }, 'io'], [2.6, {}], [3.6, { x: 930, y: 300 }, 'io'], [4.0, {}], [4.6, { x: 1000, y: 940, o: 0 }, 'in']], [2.45, 3.85], '#f06b8b');
   },
@@ -312,12 +311,12 @@ const COVERS = {
     pop(mk(null, 'title', 'Election<br>App', 'left:70px;top:80px;font-size:120px;color:#fff;white-space:normal;width:500px'), .1, { y: 40 });
     pop(mk(null, '', 'For Tamil Nadu Police', 'left:74px;top:322px;font:600 24px Manrope;color:rgba(255,255,255,.85)'), .4, { y: 20 });
     const slide = (src, l, t, r, at) => {
-      const el = mk(null, '', `<img src="${src}" style="width:100%">`, `left:${l}px;top:${t}px;width:330px;height:330px;border-radius:26px;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 2px #f6d2de`);
+      const el = mk(null, '', `<img src="${src}" style="width:100%">`, `left:${l}px;top:${t}px;width:330px;height:330px;border-radius:26px;overflow:hidden;background:#fff;box-shadow:0 18px 40px rgba(120,10,50,.18),inset 0 0 0 2px #f6d2de`);
       el.firstChild.style.position = 'static';
       tr(el, [[at, { y: 260, r: 0, o: 0, s: .9 }], [at + .7, { y: 0, r, o: 1, s: 1 }, 'back'], ...out(7.0).map(k => [k[0], { ...k[1], r }, k[2]])]);
       return el;
     };
-    slide('src/pp-133m.webp', 520, 340, -6, .9); slide('src/pp-B7WB.webp', 690, 300, 2, 1.25); slide('src/pp-XXA9.webp', 850, 370, 7, 1.6);
+    slide('src/pp-133m.webp', 470, 250, -4, .9); slide('src/pp-B7WB.webp', 830, 220, 3, 1.25); slide('src/pp-XXA9.webp', 650, 540, 4, 1.6);
     const a = stat('left:70px;top:560px;--c:#ff3e78;box-shadow:inset 0 0 0 2px #f6d2de');
     a.sub.textContent = 'people served in Tamil Nadu';
     pop(a.el, 2.3);
@@ -443,9 +442,9 @@ const COVERS = {
     const [master, ...rest] = card.querySelectorAll('.tg');
     hooks.push(t => { master.classList.toggle('on', t >= 1.75); rest.forEach((r, i) => r.classList.toggle('on', t >= 1.95 + i * .14)); });
     pointer([[1.0, { x: 520, y: 920, o: 0 }], [1.25, { o: 1 }], [1.65, { x: 518, y: 196 }, 'io'], [1.9, {}], [2.5, { x: 620, y: 940, o: 0 }, 'in']], [1.75], '#2155ff');
-    const st = mk(null, 'stk', '<img src="src/ga-2.webp"><img src="src/ga-3.webp">', 'left:660px;top:70px;width:290px;height:601px');
-    pop(st, .5, { y: 120 }, 7.05);
-    fade(st.children[1], 3.0);
+    const st = phone(['src/gaf-2.webp', 'src/gaf-3.webp'], 680, 60, 2.097, '', 290);
+    pop(st.p, .5, { y: 120 }, 7.05);
+    slideIn(st.imgs[1], 3.0, st.sw);
     const a = stat('left:650px;top:700px;--c:#2155ff;box-shadow:inset 0 0 0 2px #e6e9f5');
     a.sub.textContent = 'downloads';
     pop(a.el, 3.6);

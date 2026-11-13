@@ -1,0 +1,35 @@
+/* resume page: flat, hairline bands, site tokens only */
+.rs-hero{padding-block:72px 45px}
+.rs-hero__in{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap}
+.rs-name{font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(44px,7vw,84px);line-height:1;letter-spacing:-.01em;color:var(--ink)}
+.rs-role0{margin-top:10px;font-size:18px;font-weight:600;color:var(--ink)}
+.rs-contact{margin-top:14px;display:flex;flex-wrap:wrap;gap:4px 10px;font-size:14px;color:var(--mut)}
+.rs-contact a{color:var(--ink);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px;transition:text-decoration-color .3s}
+.rs-contact a:hover{text-decoration-color:var(--ink)}
+.rs-dot{color:var(--mut-2)}
+.rs-sec{padding-block:var(--band-sm)}
+.rs-grid{display:grid;grid-template-columns:200px 1fr;gap:24px 45px}
+.rs-h{font-family:var(--pixel);font-weight:400;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);padding-top:4px}
+.rs-body{max-width:780px}
+.rs-summary{font-size:19px;line-height:1.6;color:var(--ink)}
+.rs-role+.rs-role{margin-top:36px;padding-top:36px;border-top:1px solid var(--line)}
+.rs-role__h{display:flex;justify-content:space-between;align-items:baseline;gap:6px 24px;flex-wrap:wrap}
+.rs-role__t{font-size:17px;font-weight:700;line-height:1.35;color:var(--ink);margin:0}
+.rs-role__org{font-weight:500}
+.rs-role__d{font-size:13px;color:var(--mut);white-space:nowrap}
+.rs-role__m{margin-top:2px;font-size:13px;color:var(--mut)}
+.rs-list{margin:12px 0 0;padding-left:18px;color:var(--text);font-size:15px;line-height:1.6}
+.rs-list li+li{margin-top:7px}
+.rs-list li::marker{color:var(--mut-2)}
+.rs-edu{margin:0;padding-left:18px;font-size:15px;line-height:1.6;color:var(--text)}
+.rs-edu li+li{margin-top:8px}
+.rs-skill+.rs-skill{margin-top:20px}
+.rs-skill__h{font-size:15px;font-weight:700;color:var(--ink);margin:0 0 4px}
+.rs-skill p{font-size:15px;line-height:1.6;color:var(--text)}
+@media (max-width:760px){
+  .rs-hero{padding-block:40px 32px}
+  .rs-grid{grid-template-columns:1fr;gap:14px}
+  .rs-summary{font-size:17px}
+  .rs-role__d{white-space:normal}
+}
+@media print{.navbar,.navbar-spacer,.progress,.cursor-pill,.contact,.footer,.rs-hero__cta{display:none!important}.js [data-reveal]{opacity:1!important}}

@@ -15,7 +15,7 @@
         const key = await crypto.subtle.deriveKey({name: 'PBKDF2', salt: b0.slice(0, 16), iterations: 250000, hash: 'SHA-256'}, base, {name: 'AES-GCM', length: 256}, false, ['decrypt']);
         const out = await Promise.all(bufs.map(b => { b = new Uint8Array(b); return crypto.subtle.decrypt({name: 'AES-GCM', iv: b.slice(16, 28)}, key, b.slice(28)); }));
         imgs.forEach((i, k) => { i.src = URL.createObjectURL(new Blob([out[k]], {type: 'image/webp'})); });
-        c.classList.remove('is-locked'); ov.classList.add('is-gone'); setTimeout(() => ov.remove(), 600);
+        c.classList.remove('is-locked'); document.dispatchEvent(new CustomEvent('sn:unlock')); ov.classList.add('is-gone'); setTimeout(() => ov.remove(), 600);
       } catch (_) {
         err.textContent = 'Wrong password'; f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); inp.select();
       }

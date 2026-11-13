@@ -13,14 +13,15 @@
 
   /* ---------- heads, drawn by hand, facing right. N marks where the neck meets ---------- */
   const HEADS = {
-    me: ['......hhh...', '...HHHHHhhh.', '.HHHHHHHHHHh', 'HHHHHHHHHHH.', 'HHHHHHHSSSS.', 'HHHHHSSSSSS.', 'HHHEsSGLeLG.', 'HHHEsSSSSSSS', '.HHsSSSSSSS.', '.HHsSSSSSm..', '..HsSSSSSS..', '...sSSSSS...', '....sSSS....'],
-    man: ['............', '...HHHHHH...', '..HHHHHHHH..', '.HHHHHHHHHH.', '.HHHHHHSSSS.', '.HHHsSSSSSS.', '.HHEsSSSSeS.', '.HHEsSSSSSSS', '..HsSSSSSSSS', '...sSSSSSm..', '....sSSSSS..', '.....sSSS...'],
-    woman: ['...HHHHHH...', '.HHHHHHHHHH.', 'HHHHHHHHHHH.', 'HHHHHHHHSSS.', 'HHHHHHSSSSS.', 'HHHHsSSSSSS.', 'HHHHsSSSSeS.', 'HHHHsSSSSSSS', 'HHHHsSSSSSSS', 'HHHHHsSSSSm.', 'HHHH.sSSSSS.', '.HH...sSSS..'],
-    old: ['............', '............', '...HHHHH....', '..HHHSSSSS..', '.HHHSSSSSSS.', '.HHsSSSSSSS.', '.HHEsSSSSeS.', '.HHEsSSSSSSS', '..HsSSSSSSSS', '...sSSSMMMM.', '....sSSSSS..', '.....sSSS...'],
-    cop: ['...CCCCCC...', '..CCCCCCCC..', '..CCCCCCCCcc', '.HHHsSSSSS..', '.HHHsSSSSSS.', '.HHEsSSSSeS.', '.HHEsSSSSSSS', '..HsSSSSSSSS', '...sSSSMMMM.', '....sSSSSS..', '.....sSSS...', '............'],
-    hood: ['...TTTTTT...', '.TTTTTTTTTT.', 'TTTTTTTTTTT.', 'TTTTTTsSSSS.', 'TTTTTsSSSSS.', 'TTTTTsSSSeS.', 'TTTTTsSSSSSS', 'TTTTTsSSSSSS', '.TTTTsSSSSm.', '..TTTsSSSSS.', '...TTTsSSS..', '............'],
-    bun: ['..HHH.......', '.HHHHHHHH...', 'HHHHHHHHHH..', 'HHHHHHHHSSS.', 'HHHHHHSSSSS.', '.HHHsSSSSSS.', '.HHEsSSSSeS.', '.HHEsSSSSSSS', '..HsSSSSSSSS', '...sSSSSSm..', '....sSSSSS..', '.....sSSS...']};
-  const NECK = [5, 11], NECKS = {me: [5, 12]};
+    me: ['.....hhh..', '..HHHHHhh.', '.HHHHHHHHh', 'HHHHHHHHH.', 'HHHHHHSSS.', 'HHHEsSGLeG', 'HHHEsSSSSS', '.HHsSSSSS.', '..HsSSSm..', '...sSSSS..', '....sSS...'],
+    man: ['..........', '..HHHHHH..', '.HHHHHHHH.', '.HHHHSSSS.', '.HEsSSSeS.', '.HEsSSSSSS', '..HsSSSSS.', '..HsSSSm..', '...sSSSS..', '....sSS...'],
+    woman: ['..HHHHH...', '.HHHHHHHH.', 'HHHHHHHSS.', 'HHHHHSSSS.', 'HHHHsSSeS.', 'HHHHsSSSSS', 'HHHHsSSSS.', 'HHHHsSSm..', 'HHH.sSSS..', '.H...sS...'],
+    old: ['..........', '...HHHH...', '..HHSSSS..', '.HHSSSSSS.', '.HEsSSSeS.', '.HEsSSSSSS', '..HsSSSSS.', '..HsSMMMM.', '...sSSSS..', '....sSS...'],
+    cop: ['..CCCCC...', '.CCCCCCC..', '.CCCCCCCcc', '.HHsSSSS..', '.HEsSSSeS.', '.HEsSSSSSS', '..HsSSSSS.', '..HsSMMMM.', '...sSSSS..', '....sSS...'],
+    hood: ['..TTTTT...', '.TTTTTTTT.', 'TTTTTTTTT.', 'TTTTTsSSS.', 'TTTTsSSeS.', 'TTTTsSSSSS', 'TTTTsSSSS.', '.TTTsSSm..', '..TTsSSS..', '...TTsS...'],
+    bun: ['.HH.......', 'HHHHHHH...', 'HHHHHHHHH.', 'HHHHHHSSS.', '.HEsSSSeS.', '.HEsSSSSSS', '..HsSSSSS.', '..HsSSSm..', '...sSSSS..', '....sSS...']};
+  /* the neck point inside each head: [column, row just under the jaw] */
+  const NECK = [5, 10], NECKS = {me: [5, 11]};
   const LOOKS = {
     me: {head: 'me', hair: '#1a1411', hairHi: '#3b2c23', skin: '#b47a52', skinD: '#97613f', top: '#e4dccb', topD: '#cbbfa8', pant: '#5a3b2d', pantD: '#452c21', shoe: '#fbfbf9', sole: '#bdbdb7', sleeve: .55},
     suit: {head: 'man', hair: '#2a2420', skin: '#e0b48f', skinD: '#c49271', top: '#3d4250', topD: '#2d313c', shirt: '#f2f2f2', pant: '#2d3240', pantD: '#22262f', shoe: '#2a2220', sole: '#141414', sleeve: 1},
@@ -62,17 +63,17 @@
     cart: P({t: 8, ua: 62, fa: 86, ub: 58, fb: 84}),
     water: P({ua: 62, fa: 94, item: 'can', t: 4}),
     snap: P({ua: 72, fa: 64}),
-    type: P({sit: 14, t: 6, tf: 90, sf: 2, tb: 86, sb: -3, ffa: 92, fba: 92, ua: 18, fa: 86, ub: 14, fb: 84}),
-    sitPhone: P({sit: 14, t: 4, tf: 90, sf: 2, tb: 86, sb: -3, ua: 8, fa: 132, ub: 6, fb: 124, item: 'phone', head: 'down'}),
-    sit: P({sit: 14, t: 0, tf: 90, sf: 2, tb: 86, sb: -3, ua: 20, fa: 70, ub: 16, fb: 66}),
-    sitTalk: P({sit: 14, t: 2, tf: 90, sf: 2, tb: 86, sb: -3, ua: 42, fa: 82, ub: 16, fb: 66}),
-    relax: P({sit: 14, t: -10, tf: 84, sf: 14, tb: 80, sb: 8, ua: 160, fa: 250, ub: 166, fb: 248}),
+    type: P({sit: 17, t: 6, tf: 90, sf: 30, tb: 86, sb: 24, ffa: 92, fba: 92, ua: 18, fa: 86, ub: 14, fb: 84}),
+    sitPhone: P({sit: 17, t: 4, tf: 90, sf: 30, tb: 86, sb: 24, ua: 8, fa: 132, ub: 6, fb: 124, item: 'phone', head: 'down'}),
+    sit: P({sit: 17, t: 0, tf: 90, sf: 30, tb: 86, sb: 24, ua: 20, fa: 70, ub: 16, fb: 66}),
+    sitTalk: P({sit: 17, t: 2, tf: 90, sf: 30, tb: 86, sb: 24, ua: 42, fa: 82, ub: 16, fb: 66}),
+    relax: P({sit: 17, t: -10, tf: 84, sf: 30, tb: 80, sb: 8, ua: 160, fa: 250, ub: 166, fb: 248}),
     crouch: P({t: 24, tf: 80, sf: -22, tb: 30, sb: -76, fba: 150, ua: 44, fa: 64, ub: 22, fb: 40}),
     crouchPhone: P({t: 18, tf: 80, sf: -22, tb: 30, sb: -76, fba: 150, ua: 30, fa: 122, ub: 22, fb: 112, item: 'phone', head: 'down'}),
     kick: P({tf: 62, sf: 44, ffa: 118, tb: -2, sb: -4, ua: 36, fa: 56, ub: -30, fb: -18, t: -3, head: 'down'}),
     knee: P({tf: 96, sf: 8, ffa: 96, tb: -1, sb: -3, ua: 30, fa: 50, ub: -26, fb: -12, t: 0, head: 'down'}),
     guitar: P({ub: 58, fb: 104, ua: 22, fa: 62, item: 'guitar'}),
-    sleepy: P({sit: 12, t: 14, tf: 88, sf: 4, tb: 84, sb: -2, ua: 30, fa: 70, ub: 14, fb: 60, head: 'down'})};
+    sleepy: P({sit: 17, t: 14, tf: 88, sf: 30, tb: 84, sb: 24, ua: 30, fa: 70, ub: 14, fb: 60, head: 'down'})};
 
   /* a walk cycle with planted feet: 8 hand-set keys (contact, down, pass, up ...), phase from distance travelled */
   const STRIDE = 38, WALK = [[24, 8, 104], [15, 6, 92], [4, 1, 90], [-9, -7, 80], [-20, -30, 58], [-9, -56, 46], [14, -36, 78], [27, 2, 100]];
@@ -125,8 +126,8 @@
     const sit = pose.sit, hip = [HX + .5, HY + .5], up = [Math.sin(rad(pose.t)), -Math.cos(rad(pose.t))];
     const leg = (th, sh, fa) => { const k = add(hip, dir(th), 13 * K), a = add(k, dir(sh), 13 * K); return {k, a, toe: add(a, dir(fa), 4.6), heel: add(a, dir(fa), -1.4)}; };
     const LF = leg(pose.tf, pose.sf, pose.ffa), LB = leg(pose.tb, pose.sb, pose.fba);
-    const sh = add(hip, up, 15 * K), neck = add(hip, up, 17.5 * K);
-    const arm = (u, f) => { const s0 = add(sh, up, -1), e = add(s0, dir(u), 10 * K), w = add(e, dir(f), 9 * K); return {s0, e, w, h: add(w, dir(f), 1.4)}; };
+    const sh = add(hip, up, 17.5 * K), neck = add(hip, up, 24 * K);
+    const arm = (u, f) => { const s0 = add(sh, up, -1), e = add(s0, dir(u), 11 * K), w = add(e, dir(f), 10 * K); return {s0, e, w, h: add(w, dir(f), 1.4)}; };
     const AF = arm(pose.ua, pose.fa), AB = arm(pose.ub, pose.fb);
     const item = (m, name, hand, fa) => { if (!name || name === 'guitar') return;
       if (name === 'pen' || name === 'marker') { const d = dir(fa); for (let i = 1; i <= 3; i++) { const p = add(hand, d, i + .6); m.set(Math.floor(p[1]) * FW + Math.floor(p[0]), name === 'pen' ? '#2a2a2e' : '#c8372d'); } return; }
@@ -145,19 +146,19 @@
     /* back to front: far arm, far leg, near leg, body, neck, head, guitar, near arm */
     limbArm(AB, true, pose.item2 === 'tablet' || pose.item2 === 'pad' ? null : pose.item2, pose.fb);
     limbLeg(LB, true); limbLeg(LF, false);
-    const tm = new Map(); seg(tm, add(hip, up, -1.5), sh, 3.5, 4.1, (s, u) => {
+    const tm = new Map(); seg(tm, add(hip, up, -1.5), sh, 3.5, 3.9, (s, u) => {
       if (L.shirt && s > .55 && u > .35) return L.shirt; if (s < .1 && !L.skirt) return L.topD; return u < -.62 ? L.topD : L.top; });
     paint(tm);
     if (pose.item2 === 'tablet' || pose.item2 === 'pad') { const mi = new Map(); item(mi, pose.item2, AB.h, pose.fb); paint(mi, true); }
-    paint(seg(new Map(), add(sh, up, -.5), neck, 1.35, 1.25, L.skinD));
+    paint(seg(new Map(), add(sh, up, -.5), add(neck, up, .5), 1.4, 1.3, L.skin));
     const hr = HEADS[L.head], hm = new Map();
     const HP = {H: L.hair, h: L.hairHi || L.hair, S: L.skin, s: L.skinD, E: L.skinD, G: '#26201c', L: '#a9c3cf', e: '#1c1b1f', m: '#7b3b2c', M: L.hair, C: L.cap, c: L.capD, T: L.top};
     const tilt = pose.head === 'down' ? [1, 1] : pose.head === 'up' ? [-1, -1] : [0, 0], NK = NECKS[L.head] || NECK;
     const hx = Math.round(neck[0] - NK[0] + tilt[0] * .5), hy = Math.round(neck[1] - NK[1] + tilt[1]);
     hr.forEach((r, y) => [...r].forEach((ch, x) => { if (ch !== '.') hm.set((hy + y) * FW + hx + x, HP[ch]); })); paint(hm);
     let gtr = null;
-    if (pose.item === 'guitar') { const g = new Map(), n = [.87, -.49], c1 = add(add(hip, up, 3), [4, 0], 1), c2 = add(c1, n, 4.6), wood = '#d58c47', woodD = '#a8662f';
-      seg(g, c1, c1, 4.4, 4.4, wood); seg(g, c2, c2, 3.4, 3.4, wood); paint(g, true);
+    if (pose.item === 'guitar') { const g = new Map(), n = [.87, -.49], c1 = add(add(hip, up, 4.5), [4, 0], 1), c2 = add(c1, n, 5.2), wood = '#d58c47', woodD = '#a8662f';
+      seg(g, c1, c1, 5, 5, wood); seg(g, c2, c2, 3.8, 3.8, wood); paint(g, true);
       const nk = new Map(); seg(nk, add(c2, n, 2), add(c2, n, 15), .9, .8, '#5a3a22'); seg(nk, add(c2, n, 15), add(c2, n, 17.5), 1.2, 1.2, '#3c2616'); paint(nk, true);
       const sh2 = new Map(); seg(sh2, add(c1, n, 1.6), add(c1, n, 1.6), 1.2, 1.2, '#2b1a10'); sh2.forEach((c, i) => px[i] = c);
       const br = add(c1, n, -2.2); px[Math.floor(br[1]) * FW + Math.floor(br[0])] = woodD; px[Math.floor(br[1]) * FW + Math.floor(br[0]) + 1] = woodD; gtr = {c1, n}; }
@@ -252,13 +253,13 @@
         else ctx.drawImage(im, Math.round(x) - cam, Math.round(y)); ctx.globalAlpha = 1; },
       sprite: (rows, pal) => sprite(rows, pal),
       shadow(x, w) { R(x - w / 2, G + 1, w, 1, 'rgba(28,27,31,.12)'); },
-      person(x, pose, look = 'me', face = 1) { const f = figure(pose, look), y = f.sit ? Math.round(G - f.sit - HY) : G - f.low - 1;
+      person(x, pose, look = 'me', face = 1) { const f = figure(pose, look), y = f.sit ? Math.min(Math.round(G - f.sit - HY), G - f.low - 1) : G - f.low - 1;
         const ox = face > 0 ? Math.round(x) - HX : Math.round(x) - (FW - 1 - HX); if (!f.sit) g.shadow(x, 14); g.img(f.cv, ox, y, face < 0);
         const map = p => [face > 0 ? ox + p[0] : ox + FW - p[0], y + p[1]]; return {hand: map(f.hand), hand2: map(f.hand2), head: map(f.head), foot: map(f.foot), knee: map(f.knee)}; },
       /* furniture and props */
       desk(x, w = 34, h = 14) { R(x, G - h, w, 2, '#8a6a4a'); R(x, G - h + 2, w, 1, dark('#8a6a4a')); R(x + 1, G - h + 3, 2, h - 3, '#6e5238'); R(x + w - 3, G - h + 3, 2, h - 3, '#6e5238'); },
-      chair(x, face = 1) { const bx = face > 0 ? x - 6 : x + 5; R(x - 5, G - 14, 11, 2, '#3a3a3e'); R(x - 1, G - 12, 2, 9, '#3a3a3e'); R(x - 5, G - 3, 11, 1, '#3a3a3e'); R(x - 5, G - 2, 1, 2, '#3a3a3e'); R(x + 5, G - 2, 1, 2, '#3a3a3e'); R(bx, G - 30, 2, 17, '#3a3a3e'); },
-      stool(x) { R(x - 5, G - 14, 11, 2, '#8a6a4a'); R(x - 4, G - 12, 1, 12, '#6e5238'); R(x + 4, G - 12, 1, 12, '#6e5238'); R(x - 4, G - 6, 9, 1, '#6e5238'); },
+      chair(x, face = 1) { const bx = face > 0 ? x - 6 : x + 5; R(x - 5, G - 17, 11, 2, '#3a3a3e'); R(x - 1, G - 15, 2, 12, '#3a3a3e'); R(x - 5, G - 3, 11, 1, '#3a3a3e'); R(x - 5, G - 2, 1, 2, '#3a3a3e'); R(x + 5, G - 2, 1, 2, '#3a3a3e'); R(bx, G - 35, 2, 19, '#3a3a3e'); },
+      stool(x) { R(x - 5, G - 17, 11, 2, '#8a6a4a'); R(x - 4, G - 15, 1, 15, '#6e5238'); R(x + 4, G - 15, 1, 15, '#6e5238'); R(x - 4, G - 7, 9, 1, '#6e5238'); },
       monitor(x, y, w, h, fill = PAPER) { g.rbox(x, y, w, h, fill, '#2a2a2e'); R(x + w / 2 - 1, y + h, 2, 2, '#2a2a2e'); R(x + w / 2 - 4, y + h + 2, 8, 1, '#2a2a2e'); },
       laptop(x, y, face = 1) { R(x, y, 10, 1, '#2a2a2e'); if (face > 0) g.line(x + 10, y, x + 13, y - 7, '#2a2a2e'); else g.line(x, y, x - 3, y - 7, '#2a2a2e'); },
       board(x, y, w, h, fill = PAPER) { g.box(x, y, w, h, fill, '#3a3a3e'); R(x + 3, y + h, 1, G - y - h, '#3a3a3e'); R(x + w - 4, y + h, 1, G - y - h, '#3a3a3e'); },
@@ -266,6 +267,7 @@
       phone(x, y, w = 24, h = 40, fill = PAPER) { g.rbox(x, y, w, h, '#2a2a2e', '#2a2a2e'); R(x + 2, y + 3, w - 4, h - 6, fill); R(x + w / 2 - 2, y + 1, 4, 1, '#55555b'); },
       sticky(x, y, c = '#fdd76b') { R(x, y, 6, 6, c); R(x + 1, y + 2, 4, 1, 'rgba(0,0,0,.16)'); R(x + 1, y + 4, 3, 1, 'rgba(0,0,0,.16)'); },
       lines(x, y, w, n, c = GREY, gap = 3) { for (let i = 0; i < n; i++) R(x, y + i * gap, i % 3 === 2 ? w * .6 : w, 1, c); },
+      bars(x, y, w, n, c = GREY) { g.lines(x, y, w, n, c); },
       pop: (t, a, d = .25) => cl((t - a) / d),
       night(k) { if (k > 0) { ctx.fillStyle = `rgba(22,26,48,${.5 * k})`; ctx.fillRect(0, 0, W, H); } },
       flash(k) { if (k > 0) { ctx.fillStyle = `rgba(255,255,255,${k})`; ctx.fillRect(0, 0, W, H); } },

@@ -354,3 +354,9 @@
 .adraw.is-in .adraw__g{clip-path:inset(-2% -2% -2% -2%)}
 .adraw__g img{position:absolute;max-width:none;height:auto;display:block}
 .cmp__stage.fit-cover img{object-fit:cover;object-position:top}
+/* idea cards size their type to the stage, not the viewport */
+.cmp__stage{container-type:inline-size}
+.cmp__idea{gap:clamp(8px,2.6cqw,14px);padding:8cqw 8cqw}
+.cmp__idea p{font-size:clamp(15px,4.2cqw,26px)}
+.cmp__idea ul{font-size:clamp(11.5px,2.9cqw,15px);gap:clamp(4px,1.4cqw,8px)}
+@media (max-width:760px){.cmp__stage.m-square{aspect-ratio:1/1}.cmp__stage.m-square .cmp__b img{object-fit:cover;object-position:center bottom}}

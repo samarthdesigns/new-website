@@ -1,4 +1,4 @@
-/* STRIP SCENES v3: one 30-second 8-bit story per case study.
+/* STRIP SCENES v3: one 30-second 12-bit story per case study.
    Every story has the same five beats: the problem, what I did, the insight, the decision, the result.
    The result always lands on one big number. Facts come straight from the case study pages.
    Each beat: c = caption, d = seconds, draw(g, t, X) = props, me(t) = my pose, say(t) = bubbles, fx = things in front of me.
@@ -11,7 +11,14 @@
   const NPC = (t, a, b, text, x, y = -56) => at(t, a, b) && {who: 'npc', text, x, y};
   const RED = '#d0402f', GREEN = '#2e9e5b', YEL = '#fdd76b', BLUE = '#3b6fd8';
   const KS = ['The problem', 'What I did', 'The insight', 'The decision', 'The result'];
-  const story = (id, accent, finale, beats) => S.scene(id, {accent, finale, beats: beats.map((b, i) => ({k: KS[i], d: 4.2, ...b}))});
+  /* the pets that follow me are the tools each project was built with */
+  const STACK = {
+    'ai-native-design-system': ['claude', 'gpt', 'figma', 'html', 'js'], 'paytm-chat': ['figma', 'usertesting', 'clevertap', 'protopie'],
+    makemytrip: ['sketch', 'protopie', 'illustrator'], 'insider-vibes': ['figma', 'html', 'js', 'clevertap', 'lottie'], airtel: ['sketch', 'xd', 'protopie'],
+    'poll-police': ['figma', 'html', 'js', 'reactnative'], winuall: ['sketch', 'figma', 'protopie'], 'hope-house': ['figma', 'illustrator'],
+    snapshot: ['figma', 'usertesting', 'protopie'], planteria: ['figma', 'usertesting', 'aftereffects', 'lottie'], storewell: ['figma', 'usertesting', 'aftereffects', 'lottie'],
+    moneylingo: ['figma', 'usertesting'], 'group-alarm': ['figma', 'sketch', 'reactnative'], 'divergent-minds-convergent-design': ['figma', 'usertesting', 'notebook']};
+  const story = (id, accent, finale, beats) => S.scene(id, {accent, finale, pets: STACK[id], beats: beats.map((b, i) => ({k: KS[i], d: 4.2, ...b}))});
 
   /* drawing helpers on top of the engine kit */
   const tag = (g, x, y, s, fill = YEL, c = g.INK) => { const w = g.textW(String(s).toUpperCase()) + 6; g.box(x, y, w, 9, fill); g.text(s, x + 3, y + 2, c); return w; };
@@ -394,5 +401,31 @@
       me: t => settle(t, PO.water)},
     {c: 'Tested with 8+ users. They loved the feel, but the home needed work.',
       draw(g, t, X) { plant(g, X + 100, Math.min(1, .4 + T(t, .4, 1.4) * .6), false); big(g, X + 60, g.G - 104, '8+ USERS', g.pop(t, .6, .4), '#3f7d3a', 'LOVED THE FEEL'); },
+      me: win}]);
+
+  /* ===================== Divergent Minds, Convergent Design ===================== */
+  const DM = '#5b5bd6';
+  story('divergent-minds-convergent-design', DM, 'coffee', [
+    {c: 'The faster-horses line is used to skip listening to users. Does it hold up?',
+      draw(g, t, X) { g.person(X + 92, t > .4 && t < 2.6 ? talk(t) : PO.stand, 'exec', -1); g.board(X + 18, g.G - 64, 52, 30);
+        g.text('FASTER', X + 44, g.G - 58, g.INK, 'center'); g.text('HORSES', X + 44, g.G - 50, g.INK, 'center'); if (g.pop(t, 2.4)) g.text('?', X + 64, g.G - 46, RED, 'left', 2); },
+      me: t => settle(t, PO.think),
+      say: t => say(t, NPC(t, .4, 2.4, 'Users don’t know what they want.', 92))},
+    {c: 'So I ran a study: 8 people from 4 backgrounds, looking at the same two screens.',
+      draw(g, t, X) { g.board(X + 26, g.G - 104, 58, 24); [0, 1].forEach(i => { g.screen(X + 30 + i * 26, g.G - 101, 24, 17, '#eef0ff'); g.lines(X + 33 + i * 26, g.G - 97, 16, 3, '#bdbde8'); });
+        [['dev', 'DEV'], ['woman', 'ART'], ['teen', 'USER'], ['shop', 'PM']].forEach(([l, n], i) => { if (!g.pop(t, .3 + i * .35)) return; const x = X + 16 + i * 26; g.person(x, PO.stand, l, i < 2 ? 1 : -1); ctag(g, x, g.G - 75, n, i === 1 ? '#e6e3ff' : YEL); }); },
+      me: t => settle(t, PO.pad), at: -18},
+    {c: 'An artistic background mattered more than years in the industry.',
+      draw(g, t, X) { const k = T(t, .4, 1.2); g.R(X + 34, g.G - 1 - Math.round(44 * k), 14, Math.round(44 * k), DM); g.R(X + 60, g.G - 1 - Math.round(20 * k), 14, Math.round(20 * k), '#bdbde8');
+        if (k >= 1) { ctag(g, X + 41, g.G - 58, 'ART', '#e6e3ff'); ctag(g, X + 67, g.G - 34, 'YEARS', g.PAPER); } },
+      me: t => settle(t, PO.point)},
+    {k: 'The surprise', c: 'Everyday users weren’t blind to design. They cared what a product gave them.',
+      draw(g, t, X) { const p = g.person(X + 76, PO.phone, 'teen', -1); if (g.pop(t, 1.2)) { const a = (t * .8) % 1; g.heart(p.head[0] - 2, p.head[1] - 8 - a * 6, 1 - a); }
+        if (g.pop(t, .6)) { g.box(X + 24, g.G - 62, 30, 9, g.PAPER); g.text('LOOKS', X + 39, g.G - 60, g.MID, 'center'); }
+        if (g.pop(t, 1.8)) { g.box(X + 24, g.G - 50, 30, 9, YEL); g.text('GIVES', X + 39, g.G - 48, g.INK, 'center'); } },
+      me: t => settle(t, PO.present),
+      say: t => say(t, NPC(t, 2.2, 4, 'Does it help me?', 76))},
+    {c: 'And the industry makes designers more critical, and more conformist.',
+      draw(g, t, X) { big(g, X + 64, g.G - 104, 'MORE CRITICAL', g.pop(t, .4, .4), DM, 'AND MORE CONFORMIST'); },
       me: win}]);
 })();

@@ -1,4 +1,4 @@
-/* STRIP: each case study told as a short 16-bit story, full screen. Pixel Samarth walks through it chapter by chapter
+/* STRIP: each case study told as a short 12-bit story, full screen. Pixel Samarth walks through it chapter by chapter
    (brief, problem, research, decision, build, result) and acts each one out. Everything is drawn on a half-pixel grid (Q sub-pixels per world pixel), sprites are smoothed
    with Scale2x, then scaled up by a whole number of device pixels, so nothing blurs. The whole thing is a pure function of time,
    so seeking and stepping are free. */
@@ -16,6 +16,8 @@
   const x2 = rows => { const h = rows.length, w = Math.max(...rows.map(r => r.length)), at2 = (x, y) => y < 0 || y >= h || x < 0 || x >= w ? '.' : (rows[y][x] || '.'), o = [];
     for (let y = 0; y < h; y++) { let a = '', b = ''; for (let x = 0; x < w; x++) { const P = at2(x, y), A = at2(x, y - 1), B = at2(x + 1, y), C = at2(x - 1, y), D = at2(x, y + 1); let e0 = P, e1 = P, e2 = P, e3 = P;
       if (A !== D && C !== B) { if (C === A) e0 = A; if (A === B) e1 = B; if (D === C) e2 = C; if (B === D) e3 = D; } a += e0 + e1; b += e2 + e3; } o.push(a, b); } return o; };
+  /* 12-bit: only faces get rounded; props, pets and lettering keep their square pixels (each pixel just doubled) */
+  const dbl = rows => rows.flatMap(r => { const d = [...r].map(c => c + c).join(''); return [d, d]; });
 
   /* ---------- heads, drawn by hand, facing right. N marks where the neck meets ---------- */
   const HEADS = {
@@ -141,7 +143,7 @@
     const item = (m, name, hand, fa) => { if (!name || name === 'guitar') return;
       if (name === 'pen' || name === 'marker') { const d = dir(fa); for (let i = 1; i <= 3.6; i += .5) { const p = add(hand, d, i + .6); m.set(Math.floor(p[1] * Q) * FWQ + Math.floor(p[0] * Q), name === 'pen' ? '#2a2a2e' : '#c8372d'); } return; }
       const it = ITEMS[name], ox = Math.round((hand[0] - it.g[0] - .5) * Q), oy = Math.round((hand[1] - it.g[1] - .5) * Q);
-      (it.r2 || (it.r2 = x2(it.rows))).forEach((r, y) => [...r].forEach((ch, x) => { if (ch !== '.') m.set((oy + y) * FWQ + ox + x, it.pal[ch]); })); };
+      (it.r2 || (it.r2 = dbl(it.rows))).forEach((r, y) => [...r].forEach((ch, x) => { if (ch !== '.') m.set((oy + y) * FWQ + ox + x, it.pal[ch]); })); };
     const limbArm = (A, far, it, fa) => { const m = new Map(), top = far ? L.topD : L.top, skin = far ? L.skinD : L.skin, sl = L.sleeve;
       seg(m, A.s0, A.e, 1.5, 1.2, s => s < sl * 1.6 ? top : skin); seg(m, A.e, A.w, 1.15, 1, s => sl >= 1 ? (s > .82 ? skin : top) : skin);
       if (sl >= 1) seg(m, A.e, A.w, 1.15, 1.05, s => s > .82 ? skin : top);
@@ -183,14 +185,34 @@
   }
 
   /* ---------- small sprites: the pets (smaller than me now), the ball, notes, hearts ---------- */
-  const sprite = (rows, pal) => { rows = x2(rows); const c = document.createElement('canvas'); c.width = Math.max(...rows.map(r => r.length)); c.height = rows.length; const x = c.getContext('2d');
-    rows.forEach((r, y) => [...r].forEach((ch, i) => { if (ch !== '.' && pal[ch]) { x.fillStyle = pal[ch]; x.fillRect(i, y, 1, 1); } })); return c; };
-  const SPR = {
-    figma: {c: {R: '#F24E1E', O: '#FF7262', P: '#A259FF', B: '#1ABCFE', G: '#0ACF83', K: '#1c1b1f'}, rows: ['.RROO.', 'RRROOO', '.RROO.', '.PPBB.', 'PPPBKB', '.PPBB.', '.GG...', 'GGG...', '.G....'], legs: ['.K..K.', 'K....K']},
-    claude: {c: {C: '#D97757', K: '#1c1b1f'}, rows: ['.CCCCCC.', '.CKCCKC.', 'CCCCCCCC', '.CCCCCC.'], legs: ['.C.C.CC.', 'C.C..C.C']},
-    framer: {c: {K: '#1c1b1f', W: '#ffffff'}, rows: ['KKKKKK', '.KKKKK', '..KKKK', 'KKKKK.', 'KWKWK.', 'KKKKKK', 'KKK...', 'KK....'], legs: ['K..K..', '.K..K.']},
-    gpt: {c: {T: '#10A37F', W: '#ffffff', K: '#0b3d30'}, rows: ['...TT...', '.TTTTTT.', 'TWWWWWWT', 'TWKWWKWT', 'TWWWWWWT', '.TTTTTT.'], legs: ['..T..T..', '.T....T.']}};
-  const PETS = ['figma', 'claude', 'framer', 'gpt'].map(n => { const s = SPR[n]; return {n, f: s.legs.map(l => sprite([...s.rows, l], s.c)), w: s.rows[0].length, h: s.rows.length + 1}; });
+  const sprite = (rows, pal, z = Q) => { const c = document.createElement('canvas'); c.width = Math.max(...rows.map(r => r.length)) * z; c.height = rows.length * z; const x = c.getContext('2d');
+    rows.forEach((r, y) => [...r].forEach((ch, i) => { if (ch !== '.' && pal[ch]) { x.fillStyle = pal[ch]; x.fillRect(i * z, y * z, z, z); } })); return c; };
+  /* the pets are the tools each project was built with. Each is its logo, simplified to a few pixels, on two little legs */
+  const MINI = {i: '#/./#/#/#', d: '..#/..#/###/#.#/###', e: '.../###/###/#../###'};
+  const badge = (txt, w = 9, h = 9, round = 1) => { const g = Array.from({length: h}, () => Array(w).fill('B'));
+    if (round) [[0, 0], [w - 1, 0], [0, h - 1], [w - 1, h - 1]].forEach(([x, y]) => g[y][x] = '.');
+    const gl = [...txt].map(ch => (MINI[ch] || FONT[ch]).split('/')), tw = gl.reduce((a, r) => a + r[0].length + 1, -1); let x0 = Math.floor((w - tw) / 2) + (w - tw) % 2, y0 = h - 7;
+    gl.forEach(r => { r.forEach((row, y) => [...row].forEach((c, x) => { if (c === '#') g[y0 + y][x0 + x] = 'F'; })); x0 += r[0].length + 1; }); return g.map(r => r.join('')); };
+  let PD = null; const PETDEF = () => PD || (PD = {
+    claude: {n: 'Claude', c: {C: '#D97757', K: '#1c1b1f'}, rows: ['.CCCCCC.', '.CKCCKC.', 'CCCCCCCC', '.CCCCCC.'], legs: ['.C.C.CC.', 'C.C..C.C']},
+    gpt: {n: 'GPT', c: {T: '#10A37F', W: '#ffffff', K: '#0b3d30'}, rows: ['...TT...', '.TTTTTT.', 'TWWWWWWT', 'TWKWWKWT', 'TWWWWWWT', '.TTTTTT.'], legs: ['..T..T..', '.T....T.']},
+    figma: {n: 'Figma', c: {R: '#F24E1E', O: '#FF7262', P: '#A259FF', B: '#1ABCFE', G: '#0ACF83', K: '#1c1b1f'}, rows: ['.RROO.', 'RRROOO', '.RROO.', '.PPBB.', 'PPPBKB', '.PPBB.', '.GG...', 'GGG...', '.G....'], legs: ['.K..K.', 'K....K']},
+    html: {n: 'HTML', c: {O: '#E44D26', o: '#F16529', W: '#ffffff'}, rows: ['OOOOoooo', 'OWWWWWWo', 'OWOOoooo', 'OWWWWWWo', 'OOOOooWo', 'OWWWWWWo', '.OOOooo.', '..OOoo..']},
+    js: {n: 'JS', c: {B: '#F7DF1E', F: '#1c1b1f'}, rows: badge('JS', 9, 9, 0)},
+    usertesting: {n: 'UserTesting', c: {B: '#0B4B8F', F: '#ffffff'}, rows: badge('UT')},
+    clevertap: {n: 'CleverTap', c: {B: '#E8462B', F: '#ffffff'}, rows: badge('CT')},
+    protopie: {n: 'ProtoPie', c: {P: '#FF4F7B', p: '#d93a62', W: '#ffffff'}, rows: ['..PPPP...', '.PPPPPP..', 'PPPPPP...', 'PPPPP....', 'PPPPPP...', 'PPPPPPP..', '.pPPPPPp.', '..pppp...']},
+    sketch: {n: 'Sketch', c: {Y: '#FDB300', O: '#EA6C00', o: '#FDAD00', L: '#FEEEB7'}, rows: ['..YLLLY..', '.YLLYLLY.', 'OoooOoooO', '.OoooooO.', '..OoooO..', '...OoO...', '....O....']},
+    illustrator: {n: 'Illustrator', c: {B: '#330000', F: '#FF9A00'}, rows: badge('Ai')},
+    xd: {n: 'XD', c: {B: '#470137', F: '#FF61F6'}, rows: badge('Xd')},
+    aftereffects: {n: 'After Effects', c: {B: '#00005B', F: '#9999FF'}, rows: badge('Ae')},
+    lottie: {n: 'Lottie', c: {B: '#00DDB3', F: '#ffffff'}, rows: ['.BBBBBBB.', 'BBBBBBFFB', 'BBBBBFBBB', 'BBBBFBBBB', 'BBBFFFBBB', 'BBBFBBBBB', 'BBFBBBBBB', 'BFFBBBBBB', '.BBBBBBB.']},
+    reactnative: {n: 'React Native', c: {C: '#61DAFB', K: '#1c1b1f'}, rows: ['..C...C..', '..CC.CC..', 'CCCCCCCCC', 'C..CKC..C', 'CCCCCCCCC', '..CC.CC..', '..C...C..']},
+    notebook: {n: 'Notebook', c: {N: '#2f3a4a', n: '#232c38', W: '#f4efe2', L: '#c9c1ad', P: '#e0a33a', K: '#1c1b1f'}, rows: ['.......PK', 'NNNNNNPK.', 'NWWWWPLN.', 'NWLLPLLN.', 'NWWWWWWN.', 'NWLLLLLN.', 'NWWWWWWN.', 'NnnnnnnN.']}});
+  const PETC = {};
+  const petsFor = list => (list || ['figma', 'claude', 'gpt']).map(n => PETC[n] || (PETC[n] = (() => { const s = PETDEF()[n], w = Math.max(...s.rows.map(r => r.length));
+    const dk = Object.keys(s.c).find(k => k !== 'W' && k !== 'F' && k !== 'L') , leg = s.legs || [[.25, .7], [.18, .78]].map(p => [...Array(w)].map((_, x) => p.some(f => x === Math.round(f * (w - 1))) ? dk : '.').join(''));
+    const pal = s.c; return {n, name: s.n, f: leg.map(l => sprite([...s.rows, l], {...pal, K: pal.K || dark(pal[dk], .6)}, 2 * Q)), w: w * 2, h: (s.rows.length + 1) * 2}; })()));
   const BALLS = [['..kkk..', '.kWWWk.', 'kWWKWWk', 'kWKKKWk', 'kWWKWgk', '.kWWgk.', '..kkk..'], ['..kkk..', '.kKWWk.', 'kKKWWWk', 'kWWWWWk', 'kWWWKKk', '.kgWKk.', '..kkk..']]
     .map(r => sprite(r, {k: '#3a3a3e', K: '#1c1b1f', W: '#ffffff', g: '#cfcfcf'}));
   const NOTES = [sprite(['..K', '..K', '..K', 'KKK', 'KK.'], {K: INK}), sprite(['.KKK', '.K.K', '.K.K', 'KK.K', 'KKKK'], {K: INK})];
@@ -206,7 +228,7 @@
     '.': './././././#', ',': './././#/#', ':': './#/./#/.', '%': '#.#/..#/.#./#../#.#', '+': '.../.#./###/.#./...', '-': '.../.../###/.../...', '$': '.##/##./.#./.##/##.',
     '!': '#/#/#/./#', '?': '##./..#/.#./.../.#.', '/': '..#/..#/.#./#../#..', '>': '#../.#./..#/.#./#..', '<': '..#/.#./#../.#./..#', "'": '#/#/./././', '=': '.../###/.../###/...', '#': '#.#/###/#.#/###/#.#',
     '→': '..../..#./####/..#./....', '✓': '...#/..#./#.#./.#../....', '×': '.../#.#/.#./#.#/...'};
-  const glyph = ch => FONT[ch] ? FONT[ch].split('/') : null, G2 = {}, glyph2 = ch => G2[ch] || (G2[ch] = x2(glyph(ch) || glyph('?')));
+  const glyph = ch => FONT[ch] ? FONT[ch].split('/') : null, G2 = {}, glyph2 = ch => G2[ch] || (G2[ch] = dbl(glyph(ch) || glyph('?')));
   const textW = s => [...String(s).toUpperCase()].reduce((w, ch) => w + (ch === ' ' ? 3 : (glyph(ch) || ['###'])[0].length) + 1, 0) - 1;
 
   /* ---------- player ---------- */
@@ -226,6 +248,7 @@
     const capEl = root.querySelector('.strip__cap'), kEl = root.querySelector('.strip__k'), segs = root.querySelector('.strip__segs'), nEl = root.querySelector('.strip__n'), playB = root.querySelector('[data-play]');
     const intro = root.querySelector('.strip__intro'), end = root.querySelector('.strip__end');
     root.style.setProperty('--accent', sc.accent || INK);
+    const PETS = petsFor(sc.pets);
     const buf = document.createElement('canvas'), ctx = buf.getContext('2d');
     let W = 260, H = 140, S = 4, P = 2, dpr = 1, G = 120, cam = 0;
 
@@ -318,7 +341,7 @@
       /* props of every chapter near the camera; t is chapter-local (negative before it starts) */
       beats.forEach((b, i) => { if (b.X + 170 < cam || b.X - 110 > cam + W) return; const bt = t - b.t0; b.draw && b.draw(g, s.i > i && s.k !== 'idle' ? Math.max(bt, b.d) : bt, b.X); });
       /* the pets trail behind, using where I was a moment ago */
-      PETS.forEach((p, i) => { const lag = .5 + i * .34, px = heroX(t - lag) - 13 - i * 11, moving = Math.abs(heroX(t - lag) - heroX(t - lag - .05)) > .3;
+      let off = 13; PETS.forEach((p, i) => { const lag = .5 + i * .34, px = heroX(t - lag) - off - p.w; off += p.w + 4 + (i % 2) * 2; const moving = Math.abs(heroX(t - lag) - heroX(t - lag - .05)) > .3;
         let x = px, y = G - p.h + 1, fr = (moving ? Math.floor(Math.abs(t * 9 + i)) : Math.floor(Math.abs(t * 1.2 + i * .3))) % 2;
         if (moving) y -= Math.floor(Math.abs(Math.sin(t * 9 + i)) * 1.6);
         if (s.k === 'fin' && fin.pet) [x, y] = fin.pet(t - finT0, p, i, x, y, hx, g);
@@ -332,7 +355,7 @@
           : mode === 'sip' ? (wk > .4 && wk < .64 ? {ua: 12, fa: 160, item: 'latte', t: 0, head: 'up'} : {ua: 8, fa: 96, item: 'latte'})
           : mode === 'guitar' && mid ? {ub: 58, fb: 104, ua: 22, fa: ph ? 70 : 54, item: 'guitar', t: 1} : null); }
       else if (s.k === 'act') { const b = beats[s.i], r = b.me ? b.me(bt, g) : POSE.stand; pose = r.pose || r; face = r.face || 1; said = b.say ? b.say(bt) || [] : []; }
-      else { const r = fin.me(t - finT0); pose = r.pose || r; face = r.face || 1; said = fin.say ? fin.say(t - finT0) || [] : []; }
+      else { const r = fin.me(t - finT0); pose = r.pose || r; face = r.face || 1; said = fin.say ? fin.say(t - finT0, PETS) || [] : []; }
       const sitX = s.k === 'act' && beats[s.i].seatX != null ? beats[s.i].X + beats[s.i].seatX : null;
       const me = g.person(sitX != null && pose.sit ? sitX : hx, pose, 'me', face);
       if (mode === 'guitar' && wk > .14 && wk < .86) for (let k = 0; k < 4; k++) { const a = (t * .8 + k / 4) % 1; g.note(me.head[0] + 6 + k * 3 + Math.sin(a * 6 + k) * 2, me.head[1] - 2 - a * 16, cl((1 - a) * 1.6), k); }
@@ -342,10 +365,14 @@
       out.drawImage(buf, 0, 0, W * Q, H * Q, 0, 0, W * S, H * S);
       bubble(said.map(o => o && (o.who === 'me' ? {...o, x: me.head[0] + 1, y: me.head[1] - 2} : {...o, x: beats[s.i].X + o.x, y: G + o.y})));
       const bi = Math.min(beats.length - 1, s.i);
-      if (bi !== curBeat) { curBeat = bi; capEl.textContent = beats[bi].c; kEl.textContent = beats[bi].k || ''; nEl.innerHTML = '<b>' + String(bi + 1).padStart(2, '0') + '</b> / ' + String(beats.length).padStart(2, '0'); capEl.classList.remove('is-in'); void capEl.offsetWidth; capEl.classList.add('is-in');
+      if (bi !== curBeat) { curBeat = bi; 
+        capEl.innerHTML = beats[bi].c.split(/\s+/).map((w, j) => `<span class="strip__w" style="--i:${j}">${w.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</span>`).join(' '); kEl.textContent = beats[bi].k || ''; nEl.innerHTML = '<b>' + String(bi + 1).padStart(2, '0') + '</b> / ' + String(beats.length).padStart(2, '0'); capEl.style.removeProperty('--capf'); const lw = capEl.lastElementChild; for (let f = parseFloat(getComputedStyle(capEl).fontSize), n = 0; lw && lw.offsetTop + lw.offsetHeight > capEl.clientHeight + 2 && n < 14; n++) capEl.style.setProperty('--capf', (f -= 2) + 'px');
+        [capEl, kEl.parentNode].forEach(e => { e.classList.remove('is-in'); void e.offsetWidth; e.classList.add('is-in'); });
         [...segs.children].forEach((d, j) => { d.classList.toggle('is-done', j < bi); d.classList.toggle('is-on', j === bi); }); }
       const b = beats[bi], k = s.k === 'idle' ? 0 : cl((t - b.w0) / (b.t0 + b.d - b.w0));
       segs.children[bi].style.setProperty('--k', s.i > bi ? 1 : k);
+      /* the narration leaves just before I walk on to the next chapter */
+      root.classList.toggle('is-capout', s.k === 'act' && bi < beats.length - 1 && t > b.t0 + b.d - .55);
       intro.classList.toggle('is-on', t < 2.6); root.classList.toggle('is-intro', t < 2.6);
     }
     const seek = t => { clock = cl(t, 0, TOTAL); curBeat = -1; ended = false; end.hidden = true; root.classList.remove('is-ended'); [...segs.children].forEach(d => d.style.setProperty('--k', 0)); render(); };
@@ -377,7 +404,7 @@
     pet: {d: 6, me: t => t < .3 || t > 5.4 ? {pose: POSE.stand, face: t < .3 ? 1 : -1} : {pose: wig(t, POSE.crouch, 'fa', 8, 2), face: -1},
       pet: (t, p, i, x, y, hx) => i === 0 && t > .2 ? [lerp(x, hx - 22, cl(t / .6)), y - (t > 5.2 && t < 5.6 ? Math.floor(Math.sin((t - 5.2) * 8) * 4) : 0)] : [x, y],
       fx(t, g, me, hx) { for (let k = 0; k * .7 < t - .8 && k < 7; k++) { const a = t - .8 - k * .7; if (a > 1.5) continue; g.heart(hx - 20 + Math.sin(a * 5 + k) * 2, g.G - 18 - a * 12, cl(1.5 - a)); } },
-      say: t => [at(t, 1, 4.4) && {who: 'me', text: 'Who’s a good little Figma?'}]},
+      say: (t, pets) => [at(t, 1, 4.4) && {who: 'me', text: `Who’s a good little ${pets[0].name}?`}]},
     coffee: {d: 5.4, me: t => t < .4 ? POSE.cup : t < 1.8 ? POSE.sip : t < 2.4 ? POSE.cup : t < 3.6 ? POSE.sip : POSE.cup,
       fx(t, g, me) { if ((t > .5 && t < 1.8) || (t > 2.5 && t < 3.6)) { const a = (t * 3) % 1; g.px(me.hand[0] + 4, me.hand[1] - 9 - a * 3, 'rgba(140,200,220,.8)'); } },
       say: t => [at(t, 1.8, 5) && {who: 'me', text: 'Iced latte. Always.'}]}};
@@ -390,7 +417,7 @@
     const img = box.querySelector('img'), id = box.dataset.strip || (img && (img.getAttribute('src') || '').split('/').pop().replace(/\.\w+$/, ''));
     if (!id || !SCENES[id]) return;
     const title = (document.querySelector('.chero__t') || {}).textContent || document.title, lede = (document.querySelector('.chero__lede') || {}).textContent || '';
-    const ov = document.createElement('div'); ov.className = 'story'; ov.hidden = true; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', `${title}, as a 16-bit story`); ov.tabIndex = -1;
+    const ov = document.createElement('div'); ov.className = 'story'; ov.hidden = true; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', `${title}, as a 12-bit story`); ov.tabIndex = -1;
     ov.innerHTML = `<div class="story__top"><p class="story__ttl"><span class="story__kick">The story</span><span>${title}</span></p><button type="button" class="story__x" aria-label="Close the story"><span></span><span></span></button></div><div class="strip"></div>`;
     document.body.appendChild(ov);
     let opener = null, pl = null;

@@ -1,0 +1,8 @@
+<!doctype html><html><body style="margin:0;background:#f6f6f4"><canvas id=c></canvas>
+<script>document.write("<script src=assets/js/strip.js?"+Date.now()+"><\/script>")</script>
+<script>
+const S=window.SNStrip,c=document.getElementById('c'),x=c.getContext('2d'),Z=5;
+const r=[[S.POSE.stand,'me'],[S.walkPose(0),'me'],[S.walkPose(19),'me'],[S.POSE.sip,'me'],[S.POSE.guitar,'me'],[S.POSE.type,'me'],[S.POSE.stand,'suit'],[S.POSE.stand,'woman'],[S.POSE.stand,'exec'],[S.POSE.stand,'cop'],[S.POSE.stand,'teen']];
+c.width=r.length*44*Z;c.height=80*Z;x.imageSmoothingEnabled=false;x.fillStyle='#ccc';x.fillRect(0,76*Z,c.width,1);
+r.forEach(([p,l],i)=>{const f=S.figure(p,l);const y=f.sit?(76-f.sit-60):(75-f.low);x.drawImage(f.cv,i*44*Z-22*Z,y*Z,88*Z,100*Z);});
+</script></body></html>

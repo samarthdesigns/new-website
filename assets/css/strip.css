@@ -1,4 +1,4 @@
-/* STRIP: the case study as a full-screen 16-bit story */
+/* STRIP: the case study as a full-screen 12-bit story */
 .story{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;background:#f6f6f4;color:var(--ink,#141414);opacity:0;transition:opacity .26s ease;outline:none}
 .story.is-open{opacity:1}
 .story[hidden]{display:none}
@@ -51,9 +51,15 @@
 .strip__foot{flex:none;padding:12px clamp(16px,3vw,36px) calc(20px + env(safe-area-inset-bottom));display:grid;gap:14px;max-width:1100px;width:100%;margin:0 auto;box-sizing:border-box}
 .strip__chap{margin:0}
 .strip__k{color:var(--forest)}
-.strip__cap{margin:0;font:500 clamp(22px,2.9vw,38px)/1.22 var(--sans);letter-spacing:-.02em;color:var(--ink);min-height:calc(2 * 1.22em);max-width:34ch;text-wrap:balance}
-.strip__cap.is-in{animation:capIn .6s var(--liquid) both}
-@keyframes capIn{from{opacity:0;translate:0 8px}}
+/* the narration box never changes height, so the scene never jumps; long lines shrink to fit two lines */
+.strip__cap{margin:0;font:500 var(--capf,clamp(28px,min(3.7vw,6.4vh),52px))/1.14 var(--sans);letter-spacing:-.025em;color:var(--ink);height:calc(2 * 1.14 * clamp(28px,min(3.7vw,6.4vh),52px));max-width:min(100%,calc(18.5 * clamp(28px,min(3.7vw,6.4vh),52px)));text-wrap:balance;overflow:visible;position:relative}
+/* narration animates in word by word, and lifts away before the next chapter */
+.strip__w{display:inline-block;white-space:pre}
+.strip__cap.is-in .strip__w{animation:wIn .7s var(--liquid) both;animation-delay:calc(var(--i) * 45ms)}
+@keyframes wIn{from{opacity:0;translate:0 .45em;filter:blur(6px)}}
+.strip__cap,.strip__chap{transition:opacity .45s ease,translate .55s var(--liquid),filter .45s ease}
+.is-capout .strip__cap,.is-capout .strip__chap{opacity:0;translate:0 -.3em;filter:blur(4px)}
+.strip__chap.is-in{animation:wIn .6s var(--liquid) both}
 .strip__segs{display:flex;gap:6px}
 .strip__segs button{appearance:none;flex:1;height:18px;padding:0;border:0;background:none;cursor:pointer;position:relative}
 .strip__segs button::before,.strip__segs button::after{content:"";position:absolute;left:0;right:0;top:8px;height:2px;background:var(--line,#d1d1d1)}
@@ -74,9 +80,9 @@
 @media (max-width:640px){
   .story__top{padding-top:14px}
   .strip__say{font-size:12px;max-width:min(220px,80%);padding:7px 10px}
-  .strip__cap{font-size:21px;min-height:calc(3 * 1.22em)}
+  .strip__cap{--capf:24px;height:calc(3 * 1.14 * 24px)}
   .strip__btn{width:43px;height:43px}
   .strip__segs{gap:4px}
   .strip__end{flex:1}.strip__cta{flex:1;padding:0 12px;font-size:13px}
 }
-@media (prefers-reduced-motion:reduce){.story,.strip__intro,.strip__say{transition:none}.strip__cap.is-in{animation:none}}
+@media (prefers-reduced-motion:reduce){.story,.strip__intro,.strip__say{transition:none}.strip__cap.is-in .strip__w,.strip__chap.is-in{animation:none}.strip__cap,.strip__chap{transition:none}}

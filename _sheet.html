@@ -1,0 +1,11 @@
+<!doctype html><html><body style="margin:0;background:#f6f6f4"><canvas id=c></canvas>
+<script src="assets/js/strip.js"></script>
+<script>
+const S=window.SNStrip,c=document.getElementById('c'),x=c.getContext('2d'),Z=5;
+const rows=[[...Array(8)].map((_,i)=>[S.walkPose(i*38/8),'me']),
+ ['stand','cup','sip','phone','point','present','think','cheer'].map(n=>[S.POSE[n],'me']),
+ ['guitar','kick','knee','crouch','type','write','tablet','shrug'].map(n=>[S.POSE[n],'me']),
+ ['suit','exec','woman','dev','saree','shop','cop','teen'].map(n=>[S.POSE.stand,n])];
+c.width=8*70*Z;c.height=rows.length*90*Z;x.imageSmoothingEnabled=false;
+rows.forEach((r,j)=>r.forEach(([p,l],i)=>{const f=S.figure(p,l);x.drawImage(f.cv,i*70*Z-10*Z,j*90*Z-(f.low-86)*Z-10*Z,88*Z,100*Z);}));
+</script></body></html>

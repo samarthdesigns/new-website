@@ -181,33 +181,41 @@ SN.hush = p => setTimeout(() => { if (!p.mad) { p.say.textContent = ''; p.say.st
     cv.font = `400 ${fs}px "Geist Pixel"`;
     const m = cv.measureText('x'), xH = m.actualBoundingBoxAscent, fA = m.fontBoundingBoxAscent, fD = m.fontBoundingBoxDescent;
     const rr = layer.getBoundingClientRect(), kids = [...set.line.children];
-    const ph = Math.max(14, fs * .22);
-    let ground = 0; const obs = []; let start = null, end = 0;
-    kids.forEach((k, i) => {
+    const ph = Math.max(14, fs * (innerWidth <= 600 ? .28 : .22));
+    /* one walk row per visual line of the title (two on phones, where each word gets its own line) */
+    const rows = []; let row = null;
+    kids.forEach(k => {
       const r = k.getBoundingClientRect(), x = r.left - rr.left;
-      if (k.classList.contains('sp')) { obs.push({a: x - fs * .05, b: x + r.width + fs * .05, h: 0}); return; }
+      if (k.classList.contains('sp')) { if (r.width > 1 && row) row.obs.push({a: x - fs * .05, b: x + r.width + fs * .05, h: 0}); return; }
+      if (!row || Math.abs(r.top - row.top) > fs * .5) { row = {top: r.top, obs: [], x0: null, x1: 0, ground: 0, first: true}; rows.push(row); }
       const ch = k.textContent, mm = cv.measureText(ch);
       const il = x + (r.width - mm.width) / 2 - mm.actualBoundingBoxLeft, ir = x + (r.width - mm.width) / 2 + mm.actualBoundingBoxRight;
-      ground = r.top - rr.top + (fs - (fA + fD)) / 2 + fA - xH;
-      if (i === 0) { start = ir + fs * .12; return; }
-      end = ir;
+      row.ground = r.top - rr.top + (r.height - fs * .04 - (fA + fD)) / 2 + fA - xH;
+      if (row.first) { row.first = false; row.x0 = ir + fs * .12; return; }
+      row.x1 = ir;
       const tall = mm.actualBoundingBoxAscent - xH;
-      if (tall > fs * .03) obs.push({a: il, b: ir, h: tall});
+      if (tall > fs * .03) row.obs.push({a: il, b: ir, h: tall});
     });
-    /* merge obstacles with no room to land between them */
-    const arcs = [];
-    obs.sort((p, q) => p.a - q.a).forEach(o => {
-      const a = o.a - fs * .1, b = o.b + fs * .1, last = arcs[arcs.length - 1];
-      if (last && a - last.b < ph * .9) { last.b = b; last.parts.push(o); } else arcs.push({a, b, parts: [o]});
+    rows.forEach(R => {
+      /* merge obstacles with no room to land between them */
+      const arcs = [];
+      R.obs.sort((p, q) => p.a - q.a).forEach(o => {
+        const a = o.a - fs * .1, b = o.b + fs * .1, last = arcs[arcs.length - 1];
+        if (last && a - last.b < ph * .9) { last.b = b; last.parts.push(o); } else arcs.push({a, b, parts: [o]});
+      });
+      /* on a stacked title, keep hops low enough not to reach into the line above */
+      const cap = rows.length > 1 ? fs * .55 : fs * .75;
+      arcs.forEach(c => { let H = fs * .22;
+        c.parts.forEach(o => [o.a, o.b].forEach(x => { const u = Math.min(.5, Math.max(.06, (x - c.a) / (c.b - c.a)));
+          H = Math.max(H, (o.h + fs * .05) / (4 * u * (1 - u))); }));
+        c.H = Math.min(H, cap); });
+      R.arcs = arcs; delete R.obs; delete R.first;
     });
-    arcs.forEach(c => { let H = fs * .22;
-      c.parts.forEach(o => [o.a, o.b].forEach(x => { const u = Math.min(.5, Math.max(.06, (x - c.a) / (c.b - c.a)));
-        H = Math.max(H, (o.h + fs * .05) / (4 * u * (1 - u))); }));
-      c.H = Math.min(H, fs * .75); });
-    return {fs, ph, ground, x0: start, x1: end, arcs};
+    return {fs, ph, rows, stacked: rows.length > 1};
   };
-  const yAt = (P, x) => { for (const c of P.arcs) if (x > c.a && x < c.b) { const u = (x - c.a) / (c.b - c.a); return P.ground - c.H * 4 * u * (1 - u); } return P.ground; };
-
+  const yAt = (R, x) => { for (const c of R.arcs) if (x > c.a && x < c.b) { const u = (x - c.a) / (c.b - c.a); return R.ground - c.H * 4 * u * (1 - u); } return R.ground; };
+  /* which row a pet walks: spread pets evenly, extra ones on the longer (last) line */
+  const rowOf = (P, i, n) => P.rows[P.rows.length < 2 ? 0 : Math.min(P.rows.length - 1, Math.floor((i + n % 2) * P.rows.length / n))];
   const size = set => { const P = set.path; set.pets.forEach(p => { p.h = P.ph; p.w = P.ph * p.ar;
     p.el.style.width = p.w + 'px'; p.el.style.height = p.h + 'px'; }); };
   /* frame-rate independent easing toward a target */
@@ -224,14 +232,14 @@ SN.hush = p => setTimeout(() => { if (!p.mad) { p.say.textContent = ''; p.say.st
      so starting, stopping, hanging in the air when poked and turning around all ramp instead of snapping */
   const place = (set, dt) => {
     const P = set.path; if (!P) return; const live = !RM && now() >= set.t0;
-    set.pets.forEach(p => {
+    set.pets.forEach((p, i) => { const R = rowOf(P, i, set.pets.length);
       p.spd = RM ? 0 : ease(p.spd, live && !p.mad ? 1 : 0, p.mad ? 9 : 4, dt);
       p.d += dt * SPEED * p.spd;
-      const lo = P.x0 + p.w / 2, hi = P.x1 - p.w / 2, e = Math.min(P.fs * .5, (hi - lo) * .2), L = Math.max(1, hi - lo + e);
-      const [u, v] = walk(p.d * P.fs, L, e), x = lo - e / 2 + u, y = yAt(P, x);
-      const air = y < P.ground - .5, vel = v * p.spd, dir = v >= 0 ? 1 : -1;
+      const lo = R.x0 + p.w / 2, hi = R.x1 - p.w / 2, e = Math.min(P.fs * .5, (hi - lo) * .2), L = Math.max(1, hi - lo + e);
+      const [u, v] = walk(p.d * P.fs, L, e), x = lo - e / 2 + u, y = yAt(R, x);
+      const air = y < R.ground - .5, vel = v * p.spd, dir = v >= 0 ? 1 : -1;
       const vy = dt > 0 && p.py != null ? (y - p.py) / dt : 0; p.py = y;
-      const slope = (yAt(P, x + 1) - yAt(P, x - 1)) / 2 * dir;
+      const slope = (yAt(R, x + 1) - yAt(R, x - 1)) / 2 * dir;
       p.rot = ease(p.rot, air ? Math.max(-20, Math.min(20, Math.atan(slope) * 57.3 * .5 * p.spd)) : 0, 14, dt);
       p.st = ease(p.st, air ? 1 + Math.min(.12, Math.abs(vy) / (P.fs * 7)) : 1, 16, dt);
       p.fc = RM ? dir : ease(p.fc, dir, 14, dt);
@@ -263,10 +271,10 @@ SN.hush = p => setTimeout(() => { if (!p.mad) { p.say.textContent = ''; p.say.st
     p.tm = setTimeout(() => { if (p.hover) return; p.el.classList.remove('is-mad'); p.mad = false; SN.hush(p); },
       Math.max(700, 1700 - (now() - p.madT) * 1000)); };
   const reset = set => { const P = set.path, n = set.pets.length;
-    set.pets.forEach((p, i) => { clearTimeout(p.tm); p.mad = p.hover = false; p.el.classList.remove('is-mad');
+    set.pets.forEach((p, i) => { const R = P && rowOf(P, i, n), on = P ? set.pets.filter((_, j) => rowOf(P, j, n) === R) : [], k = on.indexOf(p), m = on.length || 1; clearTimeout(p.tm); p.mad = p.hover = false; p.el.classList.remove('is-mad');
       p.spd = 0; p.rot = 0; p.st = 1; p.fc = 1; p.py = null; p.air = false;
-      const L = P ? Math.max(1, P.x1 - P.x0 - p.w) : 0;
-      p.d = P ? (RM ? (L * i) / Math.max(1, n - 1) : (2 * L * i) / n + L * .08) / P.fs : 0; }); };
+      const L = P ? Math.max(1, R.x1 - R.x0 - p.w) : 0;
+      p.d = P ? (RM ? (L * k) / Math.max(1, m - 1) : (2 * L * k) / m + L * .08 + i * L * .17) / P.fs : 0; }); };
 
   let cur = 'de', on = true, raf = 0; document.documentElement.dataset.role = cur;
   const now = () => performance.now() / 1000;
@@ -286,20 +294,20 @@ SN.hush = p => setTimeout(() => { if (!p.mad) { p.say.textContent = ''; p.say.st
     set.pets.forEach((p, i) => {
       const d = delay + i * .12;
       gsap.timeline({delay: d})
-        .fromTo(p.inn, {y: -fs * 1.6, autoAlpha: 0, scaleX: .85, scaleY: 1.15}, {y: 0, autoAlpha: 1, duration: .55, ease: 'power2.in'})
+        .fromTo(p.inn, {y: -fs * (set.path.stacked ? .7 : 1.6), autoAlpha: 0, scaleX: .85, scaleY: 1.15}, {y: 0, autoAlpha: 1, duration: .55, ease: 'power2.in'})
         .to(p.inn, {scaleX: 1.25, scaleY: .75, duration: .08, ease: 'power1.out'})
         .to(p.inn, {scaleX: 1, scaleY: 1, duration: .45, ease: 'elastic.out(1,.45)'});
     });
   };
   const hidePets = set => { if (RM || !set.path) { set.pets.forEach(p => p.inn.style.visibility = 'hidden'); return; }
-    const fs = set.path.fs;
+    const fs = set.path.fs, k = set.path.stacked ? .45 : 1;
     set.pets.forEach((p, i) => {
       p.el.classList.remove('is-run');
       gsap.timeline({delay: i * .07})
         .to(p.inn, {scaleX: 1.2, scaleY: .8, duration: .1, ease: 'power1.out'})
         .to(p.inn, {y: -fs * .28, scaleX: .9, scaleY: 1.12, duration: .26, ease: 'power2.out'})
-        .to(p.inn, {y: fs * 1.3, scaleX: 1, scaleY: 1, duration: .5, ease: 'power2.in'})
-        .to(p.inn, {autoAlpha: 0, duration: .2, ease: 'none'}, '-=.2');
+        .to(p.inn, {y: fs * 1.3 * k, scaleX: 1, scaleY: 1, duration: .5, ease: 'power2.in'})
+        .to(p.inn, {autoAlpha: 0, duration: k < 1 ? .3 : .2, ease: 'none'}, k < 1 ? '-=.35' : '-=.2');
     });
   };
 

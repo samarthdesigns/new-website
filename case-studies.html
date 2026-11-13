@@ -28,7 +28,7 @@
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="preload" href="assets/fonts/GeistPixel-VF.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/base.css?v=40">
+<link rel="stylesheet" href="assets/css/base.css?v=41">
 <link rel="stylesheet" href="assets/css/work.css?v=39">
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js" defer></script>
@@ -54,7 +54,7 @@
 <section class="wgroup" id="g1">
   <div class="section-head band"><div class="container wgroup__head"><span class="kicker">(08)</span><h2 class="display" data-liquid>Real World Projects</h2></div></div>
   <div class="wgrid container wgrid--3"><div class="wcol wcol--0" data-col="0"><article class="wcard" data-href="case-studies/ai-native-design-system.html" data-cursor-pill="Open" data-reveal>
-  <a class="wcard__frame" href="case-studies/ai-native-design-system.html"><span class="wcard__img"><img src="framerusercontent.com/images/ipg6enpqoeunJSBDdwjeBsglLk__Q__width__E__1600__A__height__E__960.svg" alt="AI Native Design System" loading="lazy"></span></a>
+  <a class="wcard__frame" href="case-studies/ai-native-design-system.html"><span class="wcard__img"><video class="wcard__vid" autoplay muted loop playsinline preload="metadata" poster="assets/covers/ai-native-design-system.webp" aria-label="AI Native Design System"><source src="assets/covers/ai-native-design-system.webm" type="video/webm"><source src="assets/covers/ai-native-design-system.mp4" type="video/mp4"></video></span></a>
   <div class="wcard__cap">
     <span class="wcard__no">(01)</span>
     <h3 class="wcard__t"><a href="case-studies/ai-native-design-system.html">AI Native Design System</a></h3>
@@ -63,7 +63,7 @@
     <a class="wcard__open" href="case-studies/ai-native-design-system.html">Open <span aria-hidden="true">&#8599;</span></a>
   </div>
 </article><article class="wcard" data-href="case-studies/insider-vibes.html" data-cursor-pill="Open" data-reveal>
-  <a class="wcard__frame" href="case-studies/insider-vibes.html"><span class="wcard__img"><img src="framerusercontent.com/images/QuxZeDIu9ZBi4q7sJx9HIWsJgME__Q__width__E__1920__A__height__E__1080.min.webp" alt="Paytm Insider" loading="lazy"></span></a>
+  <a class="wcard__frame" href="case-studies/insider-vibes.html"><span class="wcard__img"><video class="wcard__vid" autoplay muted loop playsinline preload="metadata" poster="assets/covers/insider-vibes.webp" aria-label="Paytm Insider"><source src="assets/covers/insider-vibes.webm" type="video/webm"><source src="assets/covers/insider-vibes.mp4" type="video/mp4"></video></span></a>
   <div class="wcard__cap">
     <span class="wcard__no">(04)</span>
     <h3 class="wcard__t"><a href="case-studies/insider-vibes.html">Paytm Insider</a></h3>
@@ -108,7 +108,7 @@
     <a class="wcard__open" href="case-studies/hope-house.html">Open <span aria-hidden="true">&#8599;</span></a>
   </div>
 </article></div><div class="wcol wcol--2" data-col="2"><article class="wcard" data-href="case-studies/makemytrip.html" data-cursor-pill="Open" data-reveal>
-  <a class="wcard__frame" href="case-studies/makemytrip.html"><span class="wcard__img"><img src="framerusercontent.com/images/7cjfSGTbQshPfoWMVQWy7JZZc__Q__width__E__1823__A__height__E__1164.png" alt="MakeMyTrip" loading="lazy"></span></a>
+  <a class="wcard__frame" href="case-studies/makemytrip.html"><span class="wcard__img"><video class="wcard__vid" autoplay muted loop playsinline preload="metadata" poster="assets/covers/makemytrip.webp" aria-label="MakeMyTrip"><source src="assets/covers/makemytrip.webm" type="video/webm"><source src="assets/covers/makemytrip.mp4" type="video/mp4"></video></span></a>
   <div class="wcard__cap">
     <span class="wcard__no">(03)</span>
     <h3 class="wcard__t"><a href="case-studies/makemytrip.html">MakeMyTrip</a></h3>
@@ -199,5 +199,6 @@
   <p class="footer__note">&copy; 2026 Samarth Nayyar. Powered by Caffeine and the love for design.</p>
   <div class="footer__meta"><span>San Francisco &middot; <span data-local-time></span></span><a class="footer__top" href="#top">Back to top <span aria-hidden="true">&uarr;</span></a></div>
 </footer>
+<script>(()=>{const v=[...document.querySelectorAll('.wcard__vid')];if(!v.length)return;if(matchMedia('(prefers-reduced-motion: reduce)').matches){v.forEach(x=>{x.removeAttribute('autoplay');x.pause()});return}const io=new IntersectionObserver(es=>es.forEach(e=>{const x=e.target;e.isIntersecting?x.play().catch(()=>{}):x.pause()}),{threshold:.2});v.forEach(x=>io.observe(x))})();</script>
 </body>
 </html>

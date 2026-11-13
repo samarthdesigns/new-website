@@ -275,3 +275,22 @@
   const unsub = M.sub(paint);
   addEventListener('pagehide', unsub);
 })();
+
+/* COVER REELS — cards show a poster; the video loads only when needed. Desktop: plays on hover.
+   Touch: plays while mostly on screen. Reduced motion: poster only. */
+(function(){
+  const vids = [...document.querySelectorAll('video[data-cover]')];
+  if (!vids.length || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const load = v => { if (v.dataset.on) return; v.dataset.on = 1; const id = v.dataset.cover, base = v.dataset.base || 'assets/covers/';
+    v.innerHTML = `<source src="${base}${id}.webm" type="video/webm"><source src="${base}${id}.mp4" type="video/mp4">`; v.load(); };
+  const play = v => { load(v); v.play().catch(() => {}); };
+  const stop = v => { v.pause(); if (v.readyState) v.currentTime = 0; };
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    vids.forEach(v => { const card = v.closest('.wcard, .work') || v.parentNode;
+      card.addEventListener('mouseenter', () => play(v)); card.addEventListener('mouseleave', () => stop(v));
+      card.addEventListener('focusin', () => play(v)); card.addEventListener('focusout', () => stop(v)); });
+  } else {
+    const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? play(e.target) : e.target.pause()), {threshold: .6});
+    vids.forEach(v => io.observe(v));
+  }
+})();

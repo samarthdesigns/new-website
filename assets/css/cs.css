@@ -256,3 +256,61 @@
 .mcar__s--t{aspect-ratio:auto;display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;padding:clamp(24px,4vw,44px);background:var(--tile);text-align:left;overflow:visible}
 .mcar__s--t .msub{margin:0 0 11px;font-size:clamp(20px,2.2vw,24px);text-wrap:balance}
 .mcar__s--t p{margin:0;font-size:16px;line-height:1.65;color:rgba(20,20,20,.72);max-width:60ch;text-wrap:pretty}
+
+/* ARTIFACTS — flow played inside a flat phone (cursor taps, screens slide in, step list follows) */
+.mflow{margin:36px 0;padding:45px 36px;background:var(--tile);display:grid;grid-template-columns:auto minmax(0,1fr);gap:54px;align-items:center}
+.mflow__ph{position:relative;width:260px;padding:7px;border-radius:36px;background:#141414}
+.mflow__scr{position:relative;overflow:hidden;border-radius:29px;background:#fff}
+.mflow__scr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.mflow__scr img:first-child{position:relative;height:auto}
+.mflow__hit{position:absolute;inset:7px;pointer-events:none}
+.mflow__cur{position:absolute;left:50%;top:60%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:rgba(20,20,20,.28);border:2px solid #fff;opacity:0}
+.mflow__steps{list-style:none;margin:0;padding:0;counter-reset:st;display:flex;flex-direction:column}
+.mflow__steps li{counter-increment:st;border-top:1px solid var(--line)}
+.mflow__steps li:last-child{border-bottom:1px solid var(--line)}
+.mflow__steps button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:36px 1fr;gap:12px;width:100%;padding:13px 0;font-size:15px;line-height:1.4;color:rgba(20,20,20,.45);transition:color .4s var(--liquid)}
+.mflow__steps button::before{content:counter(st,decimal-leading-zero);font:400 11px/1.9 var(--pixel);color:inherit}
+.mflow__steps li.on button{color:var(--ink)}
+.mflow__steps li.on button::before{color:var(--forest)}
+.mflow__steps button:focus-visible{outline:2px solid var(--forest);outline-offset:3px}
+.mflow figcaption{grid-column:1/-1;font-size:13px;color:var(--muted);margin-top:-27px}
+@media (max-width:760px){.mflow{grid-template-columns:1fr;justify-items:center;padding:36px 18px;gap:31px}.mflow__steps{width:100%}.mflow__ph{width:236px}}
+
+/* count-up keeps its final width so layout never jumps */
+.cnt{display:inline-block;text-align:left;font-variant-numeric:tabular-nums}
+
+/* ARTIFACTS — spec board: numbered dots on a flat phone, leader lines draw out to the notes */
+.mspec{position:relative;margin:36px 0;padding:45px 27px;background:var(--tile);display:grid;grid-template-columns:minmax(0,1fr) 250px minmax(0,1fr);gap:45px;align-items:start}
+.mspec__ph{width:250px}
+.mspec__col{position:relative;align-self:stretch}
+.mspec__n{position:absolute;left:0;right:0;font-size:14px;line-height:1.4;color:var(--ink);display:grid;grid-template-columns:20px 1fr;gap:8px}
+.mspec__l .mspec__n{text-align:right;grid-template-columns:1fr 20px}
+.mspec__l .mspec__n b{order:2}
+.mspec__n b,.mspec__dot{font:400 9px/18px var(--pixel);width:18px;height:18px;border-radius:50%;background:var(--forest);color:#fff;text-align:center}
+.mspec__dot{position:absolute;margin:-10px 0 0 -10px;border:1px solid #fff;box-sizing:content-box;line-height:18px}
+.mspec__svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.mspec__svg path{fill:none;stroke:var(--forest);stroke-width:1}
+.mspec figcaption,.mds figcaption{grid-column:1/-1;font-size:13px;color:var(--muted)}
+@media (max-width:860px){.mspec{grid-template-columns:1fr;justify-items:center;padding:36px 18px;gap:24px}.mspec__col{display:none}.mspec__list{width:100%}.mspec__svg{display:none}
+  .mspec__n{position:static;text-align:left!important;grid-template-columns:24px 1fr!important;padding:9px 0;border-top:1px solid var(--line)}.mspec__l .mspec__n b{order:0}}
+.mspec__list{display:none}
+@media (max-width:860px){.mspec__list{display:block}}
+
+/* ARTIFACTS — design system assembling: tokens → components → screen */
+.mds{margin:36px 0;padding:45px 36px;background:var(--tile);display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1fr) minmax(0,1.7fr);gap:36px;align-items:start}
+.mds__h{font:400 11px/1 var(--pixel);letter-spacing:.06em;color:var(--muted);margin:0 0 18px;text-transform:uppercase}
+.mds__sw{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 10px}
+.mds__s{display:flex;align-items:center;gap:8px;font:400 10px/1.2 var(--pixel);color:var(--text)}
+.mds__s i{flex:none;width:26px;height:26px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 1px rgba(20,20,20,.12)}
+.mds__ty{margin-top:22px;display:flex;flex-direction:column;gap:8px}
+.mds__ty span{font-size:13px;color:var(--text)}.mds__ty b{font-size:22px;font-weight:700;color:var(--ink);margin-right:8px}
+.mds__cmp{display:flex;flex-direction:column;gap:14px}
+.mds__c{display:flex;align-items:stretch;background:#fff;border-radius:8px;overflow:hidden;font-family:'Nunito Sans',var(--sans);box-shadow:inset 0 0 0 1px rgba(20,20,20,.06)}
+.mds__c div{flex:1;padding:11px 13px;font-size:13px;color:#141414;display:flex;flex-direction:column;justify-content:center;gap:3px}
+.mds__c small{font-size:9px;color:#0088ff}
+.mds__c em{flex:none;width:58px;display:grid;place-items:center;font-style:normal;font-weight:700;font-size:18px;color:#fff;background:var(--c)}
+.mds__btn{align-self:flex-start;padding:9px 18px;border-radius:999px;background:#0088ff;color:#fff;font-size:13px;font-weight:600}
+.mds__scr{position:relative;border-radius:8px;overflow:hidden;background:#fafafa}
+.mds__scr img{display:block;width:100%;height:auto}
+.mds__hl{position:absolute;border:2px solid #0088ff;border-radius:6px;opacity:0}
+@media (max-width:860px){.mds{grid-template-columns:1fr;padding:36px 18px}}

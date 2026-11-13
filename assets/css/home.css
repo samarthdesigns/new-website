@@ -69,6 +69,8 @@
 .work__media{display:block;position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--tile)}
 .work__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--liquid)}
 .work:hover .work__media img{transform:scale(1.04)}
+.work__media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--liquid)}
+.work:hover .work__media video{transform:scale(1.04)}
 .work .chips{justify-content:flex-end}
 
 /* about (jithinrp.com "About Me"): text left, photo shown as a screen (dot grid, scanlines, glitch) as tall as the text */

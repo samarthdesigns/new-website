@@ -202,7 +202,7 @@
 
   /* ---------- player ---------- */
   const SCENES = {};
-  const SPEED = 40, GAP = 156, BAND = 128, MINW = 236;
+  const SPEED = 72, GAP = 156, BAND = 128, MINW = 236;
   const words = s => String(s).split(/\s+/).length;
   function Player(root, id, meta) {
     const sc = SCENES[id];
@@ -219,7 +219,7 @@
     let W = 260, H = 140, S = 4, dpr = 1, G = 120, cam = 0;
 
     /* timeline: walk in, act, walk on, act ... then a little finale. Each chapter stays long enough to read its caption. */
-    const beats = sc.beats, segsT = []; let T = 1.6, x = -GAP * .62;
+    const beats = sc.beats, segsT = []; let T = 1.2, x = -GAP * .62;
     segsT.push({k: 'idle', i: 0, t0: 0, t1: T, x0: x, x1: x});
     beats.forEach((b, i) => { b.X = i * GAP; const to = b.X + (b.at || 0), wd = Math.abs(to - x) / SPEED;
       b.d = Math.max(b.d || 4, words(b.c) / 3.4 + 1 - wd * .55);

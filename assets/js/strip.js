@@ -208,9 +208,11 @@
     const sc = SCENES[id];
     root.innerHTML = `<div class="strip__stage"><canvas class="strip__cv" role="img" aria-label="Pixel animation telling this case study"></canvas><div class="strip__says" aria-hidden="true"></div>
         <div class="strip__intro" aria-hidden="true"><span class="strip__intro-k">The story of</span><strong>${meta.title}</strong><span>${meta.lede}</span></div>
-        <div class="strip__end" hidden><button type="button" class="strip__pill" data-again>Watch again</button><button type="button" class="strip__pill strip__pill--solid" data-read>Read the case study</button></div></div>
-      <div class="strip__foot"><p class="strip__chap"><span class="strip__n"></span><span class="strip__k"></span></p><p class="strip__cap" aria-live="polite"></p>
-        <div class="strip__bar"><button type="button" class="strip__btn" data-prev aria-label="Previous">&larr;</button><button type="button" class="strip__btn strip__btn--play" data-play aria-label="Pause">Pause</button><button type="button" class="strip__btn" data-next aria-label="Next">&rarr;</button><div class="strip__segs"></div></div></div>`;
+        </div>
+
+      <div class="strip__foot"><p class="strip__chap kicker"><span class="strip__k"></span></p><p class="strip__cap" aria-live="polite"></p>
+        <div class="strip__segs"></div>
+        <div class="strip__bar"><span class="strip__n kicker"></span><div class="strip__end" hidden><button type="button" class="cta strip__cta" data-again><span>Watch again</span></button><button type="button" class="cta strip__cta strip__cta--solid" data-read><span>Read the case study</span></button></div><button type="button" class="strip__btn" data-prev aria-label="Previous chapter"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span></button><button type="button" class="strip__btn strip__btn--play" data-play aria-label="Pause"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="i-pause" d="M9 6v12M15 6v12"/><path class="i-play" d="M8 5.5l11 6.5-11 6.5z"/></svg></span></button><button type="button" class="strip__btn" data-next aria-label="Next chapter"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></button></div></div>`;
     const stage = root.querySelector('.strip__stage'), cv = root.querySelector('canvas'), out = cv.getContext('2d'), says = root.querySelector('.strip__says');
     const capEl = root.querySelector('.strip__cap'), kEl = root.querySelector('.strip__k'), segs = root.querySelector('.strip__segs'), nEl = root.querySelector('.strip__n'), playB = root.querySelector('[data-play]');
     const intro = root.querySelector('.strip__intro'), end = root.querySelector('.strip__end');
@@ -225,7 +227,7 @@
       b.d = Math.max(b.d || 4, words(b.c) / 3.4 + 1 - wd * .55);
       segsT.push({k: 'walk', i, t0: T, t1: T + wd, x0: x, x1: to}); b.w0 = T; T += wd; x = to;
       segsT.push({k: 'act', i, t0: T, t1: T + b.d, x0: x, x1: x}); b.t0 = T; T += b.d; });
-    const fin = FINALES[sc.finale || 'keepy'], FX = (beats.length - 1) * GAP + GAP * .8;
+    const fin = FINALES[sc.finale || 'coffee'], FX = (beats.length - 1) * GAP + GAP * .8;
     segsT.push({k: 'walk', i: beats.length, t0: T, t1: T + (FX - x) / SPEED, x0: x, x1: FX}); T += (FX - x) / SPEED;
     segsT.push({k: 'fin', i: beats.length, t0: T, t1: T + fin.d, x0: FX, x1: FX}); const finT0 = T; T += fin.d; const TOTAL = T + .4;
     const segAt = t => segsT.find(s => t < s.t1) || segsT[segsT.length - 1];
@@ -304,14 +306,14 @@
       beats.forEach((b, i) => { if (b.X + 170 < cam || b.X - 110 > cam + W) return; const bt = t - b.t0; b.draw && b.draw(g, s.i > i && s.k !== 'idle' ? Math.max(bt, b.d) : bt, b.X); });
       /* the pets trail behind, using where I was a moment ago */
       PETS.forEach((p, i) => { const lag = .5 + i * .34, px = heroX(t - lag) - 13 - i * 11, moving = Math.abs(heroX(t - lag) - heroX(t - lag - .05)) > .3;
-        let x = px, y = G - p.h + 1, fr = moving ? Math.floor((t * 9 + i) % 2) : Math.floor((t * 1.2 + i * .3) % 2);
+        let x = px, y = G - p.h + 1, fr = (moving ? Math.floor(Math.abs(t * 9 + i)) : Math.floor(Math.abs(t * 1.2 + i * .3))) % 2;
         if (moving) y -= Math.floor(Math.abs(Math.sin(t * 9 + i)) * 1.6);
         if (s.k === 'fin' && fin.pet) [x, y] = fin.pet(t - finT0, p, i, x, y, hx, g);
         g.shadow(x + p.w / 2, p.w - 1); g.img(p.f[fr], x, Math.round(y)); });
       /* me */
       let pose, face = 1, bt = t - (s.t0 || 0), mode = null, wk = 0;
       if (s.k === 'idle') pose = POSE.cup;
-      else if (s.k === 'walk') { wk = cl((t - s.t0) / (s.t1 - s.t0)); mode = s.i === 0 || s.i >= beats.length ? 'cup' : ['ball', 'guitar', 'sip'][(s.i - 1) % 3];
+      else if (s.k === 'walk') { wk = cl((t - s.t0) / (s.t1 - s.t0)); mode = s.i === 0 || s.i >= beats.length ? 'cup' : ['guitar', 'sip'][(s.i - 1) % 2];
         const dist = Math.max(0, hx - segsT[0].x0), mid = wk > .14 && wk < .86, ph = Math.floor(t * 5) % 2;
         pose = walkPose(dist, mode === 'cup' ? {ua: 8, fa: 96, item: 'latte'}
           : mode === 'sip' ? (wk > .4 && wk < .64 ? {ua: 12, fa: 160, item: 'latte', t: 0, head: 'up'} : {ua: 8, fa: 96, item: 'latte'})
@@ -320,7 +322,6 @@
       else { const r = fin.me(t - finT0); pose = r.pose || r; face = r.face || 1; said = fin.say ? fin.say(t - finT0) || [] : []; }
       const sitX = s.k === 'act' && beats[s.i].seatX != null ? beats[s.i].X + beats[s.i].seatX : null;
       const me = g.person(sitX != null && pose.sit ? sitX : hx, pose, 'me', face);
-      if (mode === 'ball') dribble(wk, hx, t, s);
       if (mode === 'guitar' && wk > .14 && wk < .86) for (let k = 0; k < 4; k++) { const a = (t * .8 + k / 4) % 1; g.note(me.head[0] + 6 + k * 3 + Math.sin(a * 6 + k) * 2, me.head[1] - 2 - a * 16, cl((1 - a) * 1.6), k); }
       if (mode === 'sip' && wk > .44 && wk < .62) { const a = (t * 3) % 1; g.px(me.hand[0] + 4, me.hand[1] - 9 - a * 3, 'rgba(140,200,220,.8)'); }
       if (s.k === 'fin' && fin.fx) fin.fx(t - finT0, g, me, hx);
@@ -328,24 +329,16 @@
       out.drawImage(buf, 0, 0, W * S, H * S);
       bubble(said.map(o => o && (o.who === 'me' ? {...o, x: me.head[0] + 1, y: me.head[1] - 2} : {...o, x: beats[s.i].X + o.x, y: G + o.y})));
       const bi = Math.min(beats.length - 1, s.i);
-      if (bi !== curBeat) { curBeat = bi; capEl.textContent = beats[bi].c; kEl.textContent = beats[bi].k || ''; nEl.textContent = String(bi + 1).padStart(2, '0') + ' / ' + String(beats.length).padStart(2, '0');
+      if (bi !== curBeat) { curBeat = bi; capEl.textContent = beats[bi].c; kEl.textContent = beats[bi].k || ''; nEl.innerHTML = '<b>' + String(bi + 1).padStart(2, '0') + '</b> / ' + String(beats.length).padStart(2, '0'); capEl.classList.remove('is-in'); void capEl.offsetWidth; capEl.classList.add('is-in');
         [...segs.children].forEach((d, j) => { d.classList.toggle('is-done', j < bi); d.classList.toggle('is-on', j === bi); }); }
       const b = beats[bi], k = s.k === 'idle' ? 0 : cl((t - b.w0) / (b.t0 + b.d - b.w0));
       segs.children[bi].style.setProperty('--k', s.i > bi ? 1 : k);
       intro.classList.toggle('is-on', t < 2.6);
     }
-    /* walking with the ball: it drops in, I dribble it along, then flick it up and away */
-    function dribble(wk, hx, t, s) {
-      const len = s.t1 - s.t0, tt = t - s.t0, G0 = G - 4;
-      if (wk < .16) { const k = wk / .16; g.ball(hx + 14, G0 - 70 * (1 - k) ** 2 * (k < .7 ? 1 : 1) , tt * 6); return; }
-      if (wk > .86) { const k = (wk - .86) / .14; g.ball(hx + 12 + k * 40, G0 - Math.sin(k * Math.PI * .9) * 52 - k * 30, tt * 8); return; }
-      const dist = hx - segsT[0].x0, p = (dist / STRIDE) % 1, push = Math.max(0, Math.sin(p * Math.PI * 2));
-      g.ball(hx + 11 + push * 3, G0 - (push > .9 ? 1 : 0), dist / 4);
-    }
-    const seek = t => { clock = cl(t, 0, TOTAL); curBeat = -1; ended = false; end.hidden = true; [...segs.children].forEach(d => d.style.setProperty('--k', 0)); render(); };
+    const seek = t => { clock = cl(t, 0, TOTAL); curBeat = -1; ended = false; end.hidden = true; root.classList.remove('is-ended'); [...segs.children].forEach(d => d.style.setProperty('--k', 0)); render(); };
     const step = d => { const s = segAt(clock), i = Math.min(beats.length - 1, s.i) + (s.k === 'walk' && d > 0 && s.i < beats.length ? 0 : d);
       if (i < 0) return seek(0); if (i >= beats.length) return seek(finT0); seek(beats[i].t0 + (playing ? 0 : Math.min(beats[i].d * .7, 3.2))); };
-    const setPlay = v => { if (v && ended) seek(0); playing = v; playB.textContent = v ? 'Pause' : 'Play'; playB.setAttribute('aria-label', v ? 'Pause' : 'Play'); };
+    const setPlay = v => { if (v && ended) seek(0); playing = v; playB.classList.toggle('is-paused', !v); playB.setAttribute('aria-label', v ? 'Pause' : 'Play'); };
     playB.addEventListener('click', () => setPlay(!playing));
     root.querySelector('[data-prev]').addEventListener('click', () => step(-1));
     root.querySelector('[data-next]').addEventListener('click', () => step(1));
@@ -354,8 +347,8 @@
     cv.addEventListener('click', () => setPlay(!playing));
     new ResizeObserver(() => { resize(); render(); }).observe(stage);
     let last = 0, raf = 0;
-    const loop = now => { const dt = Math.min(.05, (now - last) / 1000); last = now;
-      if (playing) { clock += dt; if (clock >= TOTAL) { clock = TOTAL; setPlay(false); ended = true; end.hidden = false; } } render(); raf = requestAnimationFrame(loop); };
+    const loop = now => { const dt = cl((now - last) / 1000, 0, .05); last = now;
+      if (playing) { clock += dt; if (clock >= TOTAL) { clock = TOTAL; setPlay(false); ended = true; end.hidden = false; root.classList.add('is-ended'); } } render(); raf = requestAnimationFrame(loop); };
     resize();
     return {
       start(rm) { cancelAnimationFrame(raf); seek(rm ? beats[0].t0 + Math.min(beats[0].d * .7, 3) : 0); setPlay(!rm); last = performance.now(); raf = requestAnimationFrame(loop); },
@@ -363,16 +356,7 @@
   }
 
   /* ---------- finales: what I do once the story's told ---------- */
-  const juggle = (t, n0) => { const T0 = .7, P0 = .62; if (t < T0) return {k: -1}; const i = Math.floor((t - T0) / P0), ph = ((t - T0) / P0) % 1; return {i, ph, k: i % 2}; };
   const FINALES = {
-    keepy: {d: 7, me(t) { if (t > 5.9) return POSE.cheer; const j = juggle(t); if (j.k < 0 || t > 5.66) return POSE.stand;
-        return j.ph < .2 ? (j.k ? POSE.knee : POSE.kick) : POSE.stand; },
-      fx(t, g, me, hx) { const top = (k) => k ? g.G - 30 : g.G - 12; let x = hx + 9, y;
-        if (t < .7) y = g.G - 90 + (t / .7) ** 2 * (90 - 12);
-        else if (t < 5.66) { const j = juggle(t), h = 16 + (j.i % 3) * 5, base = j.k ? g.G - 30 : g.G - 12; y = base - 4 * h * j.ph * (1 - j.ph); x = hx + (j.k ? 8 : 10); }
-        else { const k = (t - 5.66) / .5; y = g.G - 12 - k * 30; x = hx + 9 - k * 2; if (k > 1) { y = me.hand[1] - 4; x = me.hand[0]; } }
-        g.ball(x, y, t * 6); },
-      say: t => [at(t, 5.9, 7) && {who: 'me', text: 'Still got it.'}]},
     guitar: {d: 6.6, me: t => t < .4 || t > 6 ? POSE.stand : wig(t, POSE.guitar, 'fa', 8, 3),
       fx(t, g, me) { for (let k = 0; k * .45 < t - .5 && k < 13; k++) { const a = t - .5 - k * .45; if (a > 1.8) continue; g.note(me.head[0] + 5 + (k % 3) * 5 + Math.sin(a * 4) * 2, me.head[1] - 2 - a * 14, cl(1.8 - a), k); } },
       pet: (t, p, i, x, y) => [x, y - (t > .5 && t < 6 ? Math.floor(Math.abs(Math.sin(t * 7 + i)) * 2) : 0)],

@@ -72,7 +72,7 @@
       say: t => say(t, ME(t, 2.2, 3.6, 'Approved.'))},
     {c: '$500M+ in deals won. 50+ designers. Turnaround cut 50%.',
       draw(g, t, X) { [10, 16, 24, 34].forEach((v, i) => { const h = Math.round(v * T(t, .2 + i * .15, .5)); g.R(X + 24 + i * 7, g.G - h, 5, h, i === 3 ? BLUE : '#9fb6e8'); });
-        big(g, X + 76, g.G - 104, '$500M+', g.pop(t, 1, .4), BLUE, '50+ DESIGNERS / 50% FASTER'); },
+        big(g, X + 76, g.G - 104, '500M+', g.pop(t, 1, .4), BLUE, 'DOLLARS IN DEALS WON'); },
       me: win, say: t => say(t, ME(t, 2.8, 4.2, 'Okay. That worked.'))}]);
 
   /* ===================== Paytm Insider: Insider Vibes ===================== */
@@ -108,7 +108,7 @@
   const booth = (g, x, s, c) => { g.R(x, g.G - 40, 30, 40, c); g.R(x + 2, g.G - 30, 26, 28, g.PAPER); g.R(x - 2, g.G - 44, 34, 6, c); g.text(s, x + 15, g.G - 43, g.PAPER, 'center'); };
   const pizza = (g, cx, cy, k) => { disc(g, cx, cy, 10, '#e8a35a'); disc(g, cx, cy, 8, '#f2c45a'); [[-3, -3], [3, 1], [-2, 4], [4, -4]].forEach(([a, b]) => g.R(cx + a, cy + b, 2, 2, RED));
     if (k > 0) { g.line(cx, cy, cx, cy - 10, g.INK); g.line(cx, cy, cx + 9, cy + 5, g.INK); g.line(cx, cy, cx - 9, cy + 5, g.INK); } };
-  story('paytm-chat', '#00b9f1', 'keepy', [
+  story('paytm-chat', '#00b9f1', 'pet', [
     {c: 'Google Pay added chat to payments. Paytm users started leaving.',
       draw(g, t, X) { booth(g, X + 22, 'PAYTM', '#00b9f1'); booth(g, X + 80, 'RIVAL', '#2e9e5b');
         ['kid', 'girl', 'pal'].forEach((l, i) => { const k = T(t, .4 + i * .6, 1.4); g.person(g.lerp(X + 40, X + 92, g.ease(k)) - i * 4, k > 0 && k < 1 ? S.walkPose((t + i) * 40) : PO.stand, l, 1); }); },
@@ -129,7 +129,7 @@
       me: t => settle(t, PO.point),
       say: t => say(t, ME(t, 1, 2.4, 'Pay first.'))},
     {c: 'Drop-off fell from 34% to 12%. Competitors copied it within 6 months.',
-      draw(g, t, X) { big(g, X + 64, g.G - 104, '34%→12%', g.pop(t, .4, .4), '#00b9f1', 'DROP-OFF');
+      draw(g, t, X) { big(g, X + 64, g.G - 104, '12%', g.pop(t, .4, .4), '#00b9f1', 'DROP-OFF, DOWN FROM 34%');
         if (g.pop(t, 2.2)) { booth(g, X + 90, 'RIVAL', '#2e9e5b'); g.rbox(X + 95, g.G - 22, 18, 7, '#00b9f1', g.INK); g.text('PAY', X + 104, g.G - 20, g.PAPER, 'center'); } },
       me: win, say: t => say(t, ME(t, 2.6, 4.2, 'Copied in six months.'))}]);
 
@@ -138,7 +138,7 @@
     for (let r = 0; r < L[0]; r++) for (let c = 0; c < 3; c++) { if (c === 1 && mode !== 1) continue; g.R(x + c * L[2], y + r * (L[3] + 1), L[2] - 1, L[3], r * 3 + c === hi ? GREEN : '#cfd6e6'); } };
   const bus = (g, x, k) => { g.rbox(x, g.G - 30, 64, 24, '#e8432d', g.INK); for (let i = 0; i < 6; i++) g.R(x + 4 + i * 10, g.G - 26, 7, 7, '#cfe6ff'); g.R(x + 52, g.G - 18, 8, 10, '#cfe6ff');
     [x + 12, x + 50].forEach(wx => { disc(g, wx, g.G - 4, 4, g.INK); disc(g, wx, g.G - 4, 1, g.GREY); }); };
-  story('makemytrip', '#e8432d', 'keepy', [
+  story('makemytrip', '#e8432d', 'coffee', [
     {c: 'Bus buyers dropped off at seat selection and payment, then called support.',
       draw(g, t, X) { g.board(X + 22, g.G - 66, 30, 40); seats(g, X + 28, g.G - 62, 0, -1); if (t > 1.2) qmark(g, X + 54, g.G - 70);
         g.person(X + 82, t > 1.8 ? PO.phone : PO.think, 'kid', -1); if (t > 2.2 && Math.floor(t * 6) % 2) g.text('RING', X + 94, g.G - 74, RED, 'center'); },
@@ -150,7 +150,7 @@
       me: t => K(t, [[0, PO.stand], [.3, PO.write], [1.6, PO.write], [2, PO.pad]])},
     {c: 'Stripping it down would kill cross-sell: flights, hotels, cabs.',
       draw(g, t, X) { phone(g, X + 26, g.G - 72, 30, 50); g.text('REVIEW', X + 41, g.G - 67, g.INK, 'center'); ['FLIGHT', 'HOTEL', 'CAB'].forEach((s, i) => { if (!g.pop(t, .4 + i * .3)) return; g.box(X + 30, g.G - 59 + i * 10, 22, 8, '#fff1ec'); g.text(s, X + 41, g.G - 57 + i * 10, '#e8432d', 'center'); });
-        if (g.pop(t, 2)) { g.text('$', X + 66, g.G - 56, GREEN, 'left', 2); if (Math.floor(t * 5) % 2) g.px(X + 74, g.G - 58, YEL); } },
+        if (g.pop(t, 2)) { ctag(g, X + 80, g.G - 56, 'REVENUE', GREEN, g.PAPER); } },
       me: t => settle(t, PO.point),
       say: t => say(t, ME(t, 2.2, 4.2, 'Keep the cross-sell.'))},
     {c: 'I changed when info appears, plus one seat picker for every bus layout.',
@@ -175,7 +175,7 @@
     {c: 'Most merchants use two or three features. But 5% of a million is 50,000 people.',
       draw(g, t, X) { phone(g, X + 30, g.G - 72, 38, 60); tiles(g, X + 34, g.G - 66, 64);
         if (t > .8) { g.R(X + 33, g.G - 67, 10, 7, 'rgba(255,255,255,.55)'); ring(g, X + 37, g.G - 63, 7, T(t, .8, .5), YEL); }
-        if (g.pop(t, 2)) ctag(g, X + 88, g.G - 60, '5% = 50,000', RED, g.PAPER); },
+        if (g.pop(t, 2)) ctag(g, X + 88, g.G - 60, '5% IS 50,000', RED, g.PAPER); },
       me: t => settle(t, PO.point)},
     {c: 'Favourites on top, categories as filters, 100+ icons over text.',
       draw(g, t, X) { phone(g, X + 30, g.G - 72, 38, 60); const k = T(t, .3, 1);
@@ -204,7 +204,7 @@
     {c: 'Students and teachers want opposite things: playful versus credible.',
       draw(g, t, X) { g.person(X + 46, PO.cheer, 'kid', -1); g.person(X + 96, PO.stand, 'exec', -1);
         if (g.pop(t, .8)) ctag(g, X + 46, g.G - 80, 'PLAYFUL', YEL); if (g.pop(t, 1.6)) ctag(g, X + 96, g.G - 80, 'CREDIBLE', '#2f3542', g.PAPER);
-        if (t > 2.2) { g.text('<', X + 62, g.G - 40, RED); g.text('>', X + 78, g.G - 40, RED); } },
+        if (t > 2.2) { g.text('VS', X + 71, g.G - 40, RED, 'center'); } },
       me: t => settle(t, PO.think)},
     {c: 'One system that flexes: light for students by day, dark for teachers by night.',
       draw(g, t, X) { const dark = t > 2; g.night(dark ? .8 : 0); if (!dark) disc(g, X + 30, g.G - 70, 5, YEL); else { disc(g, X + 30, g.G - 70, 5, '#f4f1ff'); disc(g, X + 33, g.G - 72, 4, '#3a3f60'); }
@@ -299,7 +299,7 @@
   story('moneylingo', '#2c8a5a', 'coffee', [
     {c: 'Young people carry debt and avoid learning about money.',
       draw(g, t, X) { const p = g.person(X + 70, PO.stand, 'kid', -1); g.box(p.head[0] + 3, p.head[1] + 10, 14, 18, '#c96f4f'); g.text('DEBT', p.head[0] + 10, p.head[1] + 16, g.PAPER, 'center');
-        if (g.pop(t, 1.6)) { g.box(X + 22, g.G - 62, 26, 16, g.PAPER); g.text('$$$', X + 35, g.G - 57, '#2c8a5a', 'center'); cross(g, X + 23, g.G - 61, 24, 14, T(t, 2.2, .4)); } },
+        if (g.pop(t, 1.6)) { g.box(X + 22, g.G - 62, 26, 16, g.PAPER); g.text('MONEY', X + 35, g.G - 57, '#2c8a5a', 'center'); cross(g, X + 23, g.G - 61, 24, 14, T(t, 2.2, .4)); } },
       me: t => settle(t, PO.think),
       say: t => say(t, NPC(t, 1, 2.6, 'I’ll learn later.', 70))},
     {c: 'Grad-school team. 12 interviews: people felt judged asking, so they asked Reddit.',
@@ -324,7 +324,7 @@
 
   /* ===================== Snapshot ===================== */
   const overlay = (g, x, k) => { for (let y = 0; y < 50; y += 3) { g.px(x, g.G - 54 + y, '#c2410c'); g.px(x + 14, g.G - 54 + y, '#c2410c'); } ring(g, x + 7, g.G - 60, 5, k, '#c2410c'); };
-  story('snapshot', '#c2410c', 'keepy', [
+  story('snapshot', '#c2410c', 'guitar', [
     {c: 'Photo apps help after the shot. The moment is when you’re holding the camera.',
       draw(g, t, X) { g.person(X + 82, PO.wave, 'girl', -1); const k = T(t, 2.2, .8); if (k > 0) { phone(g, X + 30, g.G - 72 + Math.round((1 - k) * -10), 24, 30, '#fff1e8'); g.text('EDIT', X + 42, g.G - 62, '#c2410c', 'center'); g.text('LATE', X + 42, g.G - 54, RED, 'center'); } },
       me: t => settle(t, PO.camera),
@@ -344,7 +344,7 @@
         overlay(g, X + 70, T(t, 1.6, .6)); if (t > 1.6) g.person(X + 77, t > 2.4 ? PO.wave : PO.stand, 'girl', -1); if (g.pop(t, 2.8)) ctag(g, X + 37, g.G - 34, 'POSE GUIDE', '#c2410c', g.PAPER); },
       me: t => settle(t, PO.camera)},
     {c: 'Usability score rose from 76 to 82. Testers asked when they could use it.',
-      draw(g, t, X) { big(g, X + 64, g.G - 104, '76→82', g.pop(t, .4, .4), '#c2410c', 'SUS USABILITY SCORE'); },
+      draw(g, t, X) { big(g, X + 64, g.G - 104, '82', g.pop(t, .4, .4), '#c2410c', 'USABILITY SCORE, UP FROM 76'); },
       me: win, say: t => say(t, ME(t, 2.6, 4.2, 'When can we use it?'))}]);
 
   /* ===================== Storewell ===================== */

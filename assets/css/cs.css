@@ -314,3 +314,43 @@
 .mds__scr img{display:block;width:100%;height:auto}
 .mds__hl{position:absolute;border:2px solid #0088ff;border-radius:6px;opacity:0}
 @media (max-width:860px){.mds{grid-template-columns:1fr;padding:36px 18px}}
+
+/* compare slider */
+.cmp{margin:36px 0;padding:31px 36px 27px;background:var(--tile)}
+.cmp__tabs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:0 0 22px}
+.cmp__tab{all:unset;box-sizing:border-box;cursor:pointer;font:400 10px/1 var(--pixel);letter-spacing:.06em;text-transform:uppercase;padding:9px 14px;border-radius:999px;color:var(--muted);box-shadow:inset 0 0 0 1px rgba(20,20,20,.14);transition:background .35s var(--liquid),color .35s var(--liquid)}
+.cmp__tab:hover{color:var(--ink)}
+.cmp__tab[aria-selected=true]{background:var(--ink);color:#fff;box-shadow:none}
+.cmp__tab:focus-visible{outline:2px solid var(--forest);outline-offset:2px}
+.cmp__pair{display:none}.cmp__pair.on{display:block}
+.cmp__stage{--p:50%;position:relative;margin:0 auto;aspect-ratio:var(--ar,16/10);max-width:var(--w,100%);cursor:ew-resize;touch-action:pan-y;user-select:none;-webkit-user-select:none;border-radius:var(--rad,0);overflow:hidden}
+.cmp__a,.cmp__b{position:absolute;inset:0}
+.cmp__b{clip-path:inset(0 0 0 var(--p))}
+.cmp__a img,.cmp__b img{width:100%;height:100%;object-fit:contain;display:block;pointer-events:none}
+.cmp__h{position:absolute;top:0;bottom:0;left:var(--p);width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(20,20,20,.08);pointer-events:none}
+.cmp__h i{position:absolute;top:50%;left:50%;width:42px;height:42px;margin:-21px 0 0 -21px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;box-shadow:0 4px 18px rgba(20,20,20,.18);transition:transform .35s var(--liquid)}
+.cmp__h svg{width:20px;height:20px}
+.cmp__stage:hover .cmp__h i,.cmp__stage.drag .cmp__h i{transform:scale(1.12)}
+.cmp:not(.touched) .cmp__h i::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px solid #fff;animation:cmpPing 2.2s var(--liquid) infinite 2.6s;opacity:0}
+@keyframes cmpPing{0%{transform:scale(.8);opacity:.9}70%,100%{transform:scale(1.5);opacity:0}}
+.cmp__l{position:absolute;top:12px;font:400 10px/1 var(--pixel);letter-spacing:.06em;text-transform:uppercase;padding:7px 10px;border-radius:999px;background:rgba(20,20,20,.72);color:#fff;pointer-events:none;transition:opacity .3s}
+.cmp__la{left:12px}.cmp__lb{right:12px;background:var(--forest)}
+.cmp__stage.b-only .cmp__la,.cmp__stage.a-only .cmp__lb{opacity:0}
+.cmp__r{position:absolute;inset:auto 0 0;width:100%;height:1px;margin:0;opacity:0;pointer-events:none}
+.cmp__stage:has(.cmp__r:focus-visible){outline:2px solid var(--forest);outline-offset:4px}
+.cmp__cap{margin:16px auto 0;max-width:46ch;text-align:center;font-size:14px;line-height:1.45;color:var(--text)}
+.cmp figcaption{margin-top:14px;text-align:center;font-size:13px;color:var(--muted)}
+.cmp__idea{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:9% 10%;background:#fbfaf6;background-image:radial-gradient(rgba(20,20,20,.09) 1px,transparent 1.2px);background-size:18px 18px;color:var(--ink)}
+.cmp__idea .kicker{font:400 10px/1 var(--pixel);letter-spacing:.08em;text-transform:uppercase;color:var(--forest)}
+.cmp__idea p{margin:0;font-size:clamp(17px,2.4vw,26px);line-height:1.3;letter-spacing:-.01em;max-width:24ch}
+.cmp__idea ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:clamp(13px,1.5vw,15px);color:var(--text)}
+.cmp__idea li::before{content:'→ ';color:var(--forest)}
+@media (max-width:760px){.cmp{padding:24px 14px 20px}.cmp__h i{width:36px;height:36px;margin:-18px 0 0 -18px}}
+
+/* annotation draw-in */
+.adraw{position:relative;margin:0;width:100%;aspect-ratio:var(--ar,16/9)}
+.adraw>img{position:absolute;inset:0;width:100%;height:100%;display:block}
+.adraw__g{position:absolute;overflow:hidden;clip-path:inset(-2% 102% -2% -2%);transition:clip-path 1.1s cubic-bezier(.65,0,.35,1)}
+.adraw.is-in .adraw__g{clip-path:inset(-2% -2% -2% -2%)}
+.adraw__g img{position:absolute;max-width:none;height:auto;display:block}
+.cmp__stage.fit-cover img{object-fit:cover;object-position:top}

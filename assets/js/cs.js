@@ -120,6 +120,56 @@
       .to(scr, {clipPath: 'inset(0 0 0% 0)', duration: 1.1, ease: 'expo.inOut'}, '+=.15')
       .to(hl, {opacity: 1, duration: .3, stagger: .15}).to(hl, {opacity: 0, duration: .6, delay: 1.2});
   });
+
+  /* COMPARE: drag the handle (or arrow keys) to wipe "before" → "after". Several pairs = tabs. On first view it wipes itself once as a hint. */
+  qa('[data-cmp]').forEach(f => {
+    const pairs = qa('.cmp__pair', f);
+    const ctl = pairs.map(p => {
+      const st = q('.cmp__stage', p), a = q('.cmp__a', p), b = q('.cmp__b', p);
+      st.insertAdjacentHTML('beforeend', `<span class="cmp__l cmp__la">${a.dataset.label}</span><span class="cmp__l cmp__lb">${b.dataset.label}</span>
+        <span class="cmp__h" aria-hidden="true"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5"/></svg></i></span>
+        <input class="cmp__r" type="range" min="0" max="100" step="1" value="50" aria-label="Compare ${a.dataset.label} with ${b.dataset.label}">`);
+      const r = q('.cmp__r', st), o = {v: 50};
+      const set = v => { o.v = v = Math.max(0, Math.min(100, v)); st.style.setProperty('--p', v + '%'); r.value = Math.round(v);
+        r.setAttribute('aria-valuetext', `${Math.round(100 - v)}% ${b.dataset.label}`); st.classList.toggle('a-only', v > 88); st.classList.toggle('b-only', v < 12); };
+      const fromX = x => { const rc = st.getBoundingClientRect(); set((x - rc.left) / rc.width * 100); };
+      let drag = false, tw = null;
+      const kill = () => { tw && tw.kill(); tw = null; f.classList.add('touched'); };
+      st.addEventListener('pointerdown', e => { if (e.button) return; kill(); drag = true; st.setPointerCapture(e.pointerId); fromX(e.clientX); st.classList.add('drag'); });
+      st.addEventListener('pointermove', e => drag && fromX(e.clientX));
+      const up = () => { drag = false; st.classList.remove('drag'); };
+      st.addEventListener('pointerup', up); st.addEventListener('pointercancel', up);
+      r.addEventListener('input', () => { kill(); set(+r.value); });
+      const intro = (quick) => { if (RM || f.classList.contains('touched')) return set(50); kill(); f.classList.remove('touched'); set(100);
+        tw = gsap.timeline().to(o, {v: 12, duration: quick ? .9 : 1.5, ease: 'expo.inOut', onUpdate: () => set(o.v)}, quick ? .1 : .3)
+          .to(o, {v: 50, duration: 1, ease: 'elastic.out(1,.6)', onUpdate: () => set(o.v)}, '+=.35'); };
+      set(50); return {p, intro};
+    });
+    if (pairs.length > 1) {
+      const tabs = document.createElement('div'); tabs.className = 'cmp__tabs'; tabs.setAttribute('role', 'tablist');
+      pairs.forEach((p, i) => { const t = document.createElement('button'); t.type = 'button'; t.className = 'cmp__tab'; t.setAttribute('role', 'tab'); t.textContent = p.dataset.name;
+        t.addEventListener('click', () => { qa('.cmp__tab', tabs).forEach((x, k) => x.setAttribute('aria-selected', k === i)); pairs.forEach((x, k) => x.classList.toggle('on', k === i)); f.classList.remove('touched'); ctl[i].intro(true); });
+        tabs.appendChild(t); });
+      f.insertBefore(tabs, pairs[0]); q('.cmp__tab', tabs).setAttribute('aria-selected', 'true');
+    }
+    pairs[0].classList.add('on');
+    if (!RM) ScrollTrigger.create({trigger: f, start: 'top 60%', once: true, onEnter: () => ctl[0].intro()});
+  });
+
+  /* ANNOTATION DRAW-IN: the clean board shows first, then each note + its leader line wipes in, in reading order */
+  const io = 'IntersectionObserver' in window && new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }), {threshold: .55});
+  qa('[data-adraw]').forEach(f => {
+    const ann = f.dataset.ann, bx = f.dataset.boxes.split(';').map(s => s.split(',').map(Number));
+    if (RM || !io) { f.insertAdjacentHTML('beforeend', `<img class="adraw__all" src="${ann}" alt="">`); return; }
+    bx.forEach(([x, y, w, h], i) => {
+      const g = document.createElement('span'); g.className = 'adraw__g';
+      Object.assign(g.style, {left: x * 100 + '%', top: y * 100 + '%', width: w * 100 + '%', height: h * 100 + '%', transitionDelay: (.25 + i * .45) + 's'});
+      g.innerHTML = `<img src="${ann}" alt="" loading="lazy" style="width:${100 / w}%;left:${-x / w * 100}%;top:${-y / h * 100}%">`;
+      f.appendChild(g);
+    });
+    io.observe(f);
+  });
+
   if (RM) return;
   SN.fontsReady.then(() => {
 

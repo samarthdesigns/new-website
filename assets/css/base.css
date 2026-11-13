@@ -230,3 +230,4 @@ html.sn-framed,html.sn-framed body{overflow:hidden}
 .comic-drawer__strip:not(:empty)+.comic-drawer__empty{display:none}
 .comic-drawer__empty{padding:22px 0;border-top:1px solid var(--line);max-width:44ch}
 @media (max-width:900px){.comic-drawer__panel{width:100%}.comic-drawer__strip img{max-height:none;width:100%}.comic-drawer__head{padding:14px 22px}.comic-drawer__body{padding:29px 22px 43px}.comic-drawer__body .display{font-size:31px}}
+@media (max-width:380px){.nav__links a{padding:0 9px;font-size:12.5px}}

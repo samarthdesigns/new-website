@@ -25,6 +25,10 @@
     SN.to(h === '#' ? 0 : h);
   });
   SN.fontsReady = (document.fonts ? document.fonts.ready : Promise.resolve());
+  /* intro waits only for the two fonts on the first screen (pixel title + body), never more than 0.9s */
+  SN.introReady = document.fonts ? Promise.race([
+    Promise.all(['400 1em "Geist Pixel"', '400 1em Manrope'].map(f => document.fonts.load(f).catch(() => {}))),
+    new Promise(r => setTimeout(r, 900))]) : Promise.resolve();
 })();
 
 /* ================= DESIGN SYSTEM MOTION (from the landing page, after jithinrp.com) ================= */
@@ -124,21 +128,22 @@
   /* fit pixel titles to their container width */
   const fit = () => titles.forEach(t => { t.style.fontSize = ''; const w = t.parentElement.clientWidth, sw = t.scrollWidth;
     if (sw > w) t.style.fontSize = parseFloat(getComputedStyle(t).fontSize) * w / sw + 'px'; });
-  SN.fontsReady.then(() => { fit(); addEventListener('resize', fit); if (RM) return;
+  SN.fontsReady.then(fit);
+  SN.introReady.then(() => { fit(); addEventListener('resize', fit); if (RM) return;
     const ex = 'expo.out', tl = gsap.timeline({defaults: {ease: ex}});
     qa('[data-intro-lines]').forEach(el => {
       const s = SplitText.create(el, {type: 'lines', mask: 'lines', linesClass: 'line'});
-      tl.from(s.lines, {yPercent: 110, duration: 1.3, stagger: .09}, .1);
+      tl.from(s.lines, {yPercent: 110, duration: .8, stagger: .05}, 0);
     });
-    if (qa('[data-intro-item]').length) tl.from('[data-intro-item]', {y: 14, autoAlpha: 0, duration: 1, stagger: .05}, .35);
-    if (q('.hero')) tl.fromTo('.hero', {'--draw': 0}, {'--draw': 1, duration: 1.6, ease: 'expo.inOut'}, .6);
+    if (qa('[data-intro-item]').length) tl.from('[data-intro-item]', {y: 14, autoAlpha: 0, duration: .7, stagger: .04}, .1);
+    if (q('.hero')) tl.fromTo('.hero', {'--draw': 0}, {'--draw': 1, duration: 1.1, ease: 'expo.inOut'}, .2);
     titles.forEach(t => {
       const pcs = qa('.pc', t); pcs.forEach(c => c.style.setProperty('--elsh', 20));
       const play = () => gsap.timeline({defaults: {ease: ex}})
-        .from(pcs, {yPercent: 105, duration: 1.5, stagger: .045}, 0)
-        .to(pcs, {'--elsh': 1, duration: 1.6, ease: 'power2.out', stagger: .045}, .15);
+        .from(pcs, {yPercent: 105, duration: .9, stagger: .025}, 0)
+        .to(pcs, {'--elsh': 1, duration: 1.1, ease: 'power2.out', stagger: .025}, .1);
       const r = t.getBoundingClientRect();
-      if (r.top < innerHeight) tl.add(play(), .3);
+      if (r.top < innerHeight) tl.add(play(), .05);
       else ScrollTrigger.create({trigger: t, start: 'top 90%', once: true, onEnter: play});
       /* liquidPixels hover: melt then elastic settle */
       qa('.char', t).forEach(c => c.addEventListener('pointerenter', () => {

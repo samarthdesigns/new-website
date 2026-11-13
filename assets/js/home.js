@@ -33,12 +33,12 @@
   const pm = q('.prow__marquee');
   if (pm) new IntersectionObserver(([e]) => pm.classList.toggle('is-off', !e.isIntersecting)).observe(pm);
   if (RM) return;
-  SN.fontsReady.then(() => {
+  SN.introReady.then(() => {
     const ex = 'expo.out';
     /* fit the pixel name to the container width */
     const nm = q('.hero__name'), fit = () => { nm.style.fontSize = ''; const w = nm.parentElement.clientWidth, sw = nm.scrollWidth;
       nm.style.fontSize = Math.min(250, parseFloat(getComputedStyle(nm).fontSize) * w / sw) + 'px'; };
-    fit(); addEventListener('resize', fit);
+    fit(); addEventListener('resize', fit); SN.fontsReady.then(fit);
     const pcs = qa('.hero__name .pc'), chs = qa('.hero__name .char');
     pcs.forEach(c => c.style.setProperty('--elsh', 20));
 
@@ -46,11 +46,11 @@
     const tl = gsap.timeline({defaults: {ease: ex}});
     qa('[data-intro-lines]').forEach(el => {
       const s = SplitText.create(el, {type: 'lines', mask: 'lines', linesClass: 'line'});
-      tl.from(s.lines, {yPercent: 110, duration: 1.3, stagger: .09}, .1);
+      tl.from(s.lines, {yPercent: 110, duration: .8, stagger: .05}, 0);
     });
-    tl.from(pcs, {yPercent: 105, duration: 1.5, stagger: .045}, .3)
-      .to(pcs, {'--elsh': 1, duration: 1.6, ease: 'power2.out', stagger: .045}, .45)
-      .fromTo('.hero', {'--draw': 0}, {'--draw': 1, duration: 1.6, ease: 'expo.inOut'}, .6);
+    tl.from(pcs, {yPercent: 105, duration: .9, stagger: .025}, .05)
+      .to(pcs, {'--elsh': 1, duration: 1.1, ease: 'power2.out', stagger: .025}, .15)
+      .fromTo('.hero', {'--draw': 0}, {'--draw': 1, duration: 1.1, ease: 'expo.inOut'}, .2);
 
     /* liquidPixels: hover a letter → droplets, elastic settle */
     chs.forEach(c => c.addEventListener('pointerenter', () => {
@@ -414,8 +414,8 @@ SN.hush = p => setTimeout(() => { if (!p.mad) { p.say.textContent = ''; p.say.st
     return {morph};
   })();
 
-  SN.fontsReady.then(() => requestAnimationFrame(() => {
-    relayout(); showPets(sets.de, RM ? 0 : 2.2); kick();
+  SN.introReady.then(() => requestAnimationFrame(() => {
+    relayout(); showPets(sets.de, RM ? 0 : 1.1); kick(); SN.fontsReady.then(() => requestAnimationFrame(relayout));
     addEventListener('resize', () => requestAnimationFrame(relayout));
     setTimeout(relayout, 2600);
     next(EVERY);

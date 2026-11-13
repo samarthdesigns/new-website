@@ -206,5 +206,3 @@ a.craft__stat:hover i{transform:translateX(4px)}
 .crafts__grid--2 .craft__stat b{font-size:40px}
 @media (max-width:900px){.crafts__grid--2{grid-template-columns:1fr}.crafts__grid--2 .craft+.craft{border-left:0;border-top:1px solid var(--line)}.crafts__grid--2 .craft{padding:25px 22px 29px;min-height:0}.crafts__grid--2 .craft__no{top:25px;right:22px}.crafts__grid--2 .craft__stat b{font-size:32px}}
 /* one-line about under the title (skim test) */
-.hero .hero__about{margin-top:34px;margin-left:max(var(--gutter),calc((100% - var(--max))/2));margin-right:auto;font-size:16px;line-height:1.5;color:var(--mut);max-width:620px;text-wrap:pretty}
-@media (max-width:600px){.hero .hero__about{margin-top:26px;font-size:15px}}

@@ -12,12 +12,12 @@
   const dark = (c, k = .56) => '#' + rgb(c).map(v => Math.round(v * k).toString(16).padStart(2, '0')).join('');
   const light = (c, k = .18) => '#' + rgb(c).map(v => Math.round(v + (255 - v) * k).toString(16).padStart(2, '0')).join('');
   /* 16-bit: every world pixel is Q x Q sub-pixels. Hand-drawn bitmaps are doubled with Scale2x so their diagonals round off */
-  const Q = 2, q = v => Math.round(v * Q) / Q;
-  const x2 = rows => { const h = rows.length, w = Math.max(...rows.map(r => r.length)), at2 = (x, y) => y < 0 || y >= h || x < 0 || x >= w ? '.' : (rows[y][x] || '.'), o = [];
+  const Q = 1, q = v => Math.round(v * Q) / Q;
+  const x2 = rows => Q === 1 ? rows : x2r(rows), x2r = rows => { const h = rows.length, w = Math.max(...rows.map(r => r.length)), at2 = (x, y) => y < 0 || y >= h || x < 0 || x >= w ? '.' : (rows[y][x] || '.'), o = [];
     for (let y = 0; y < h; y++) { let a = '', b = ''; for (let x = 0; x < w; x++) { const P = at2(x, y), A = at2(x, y - 1), B = at2(x + 1, y), C = at2(x - 1, y), D = at2(x, y + 1); let e0 = P, e1 = P, e2 = P, e3 = P;
       if (A !== D && C !== B) { if (C === A) e0 = A; if (A === B) e1 = B; if (D === C) e2 = C; if (B === D) e3 = D; } a += e0 + e1; b += e2 + e3; } o.push(a, b); } return o; };
   /* 12-bit: only faces get rounded; props, pets and lettering keep their square pixels (each pixel just doubled) */
-  const dbl = rows => rows.flatMap(r => { const d = [...r].map(c => c + c).join(''); return [d, d]; });
+  const dbl = rows => Q === 1 ? rows : rows.flatMap(r => { const d = [...r].map(c => c + c).join(''); return [d, d]; });
 
   /* ---------- heads, drawn by hand, facing right. N marks where the neck meets ---------- */
   const HEADS = {
@@ -130,7 +130,7 @@
           if (x < 0 || y < 0 || x >= FWQ || y >= FHQ) continue; const cx = (x + .5) / Q - a[0], cy = (y + .5) / Q - a[1];
           const s = cl((cx * vx + cy * vy) / ll), dx = cx - s * vx, dy = cy - s * vy, r = lerp(r0, r1, s);
           if (dx * dx + dy * dy <= r * r) { let c = typeof col === 'function' ? col(s, (vx * cy - vy * cx) / len / r) : col;
-            if (!flat && r > 1) { const l = (-dx * .55 - dy * .83) / r; if (l > .58) c = light(c, .2); else if (l < -.62) c = dark(c, .86); }
+            if (!flat && r > 1 && Q > 1) { const l = (-dx * .55 - dy * .83) / r; if (l > .58) c = light(c, .2); else if (l < -.62) c = dark(c, .86); }
             m.set(y * FWQ + x, c); } }
       return m; };
     const add = (a, v, k) => [a[0] + v[0] * k, a[1] + v[1] * k];
@@ -157,11 +157,13 @@
     /* back to front: far arm, far leg, near leg, body, neck, head, guitar, near arm */
     limbArm(AB, true, pose.item2 === 'tablet' || pose.item2 === 'pad' ? null : pose.item2, pose.fb);
     limbLeg(LB, true); limbLeg(LF, false);
+    /* neck first, so the top and its collar sit over it */
+    paint(seg(new Map(), add(sh, up, -.5), add(neck, up, .5), 1.4, 1.3, L.skin));
     const tm = new Map(); seg(tm, add(hip, up, -1.5), sh, 3.5, 3.9, (s, u) => {
       if (L.shirt && s > .55 && u > .35) return L.shirt; if (s < .1 && !L.skirt) return L.topD; return u < -.62 ? L.topD : L.top; });
     paint(tm);
+    { const side = [up[1] * -1, up[0]], cm = new Map(); seg(cm, add(add(sh, up, .2), side, -1.9), add(add(sh, up, .2), side, 1.9), 1.05, 1.05, L.top, true); paint(cm, true); }
     if (pose.item2 === 'tablet' || pose.item2 === 'pad') { const mi = new Map(); item(mi, pose.item2, AB.h, pose.fb); paint(mi, true); }
-    paint(seg(new Map(), add(sh, up, -.5), add(neck, up, .5), 1.4, 1.3, L.skin));
     const hr = HEADS[L.head], hm = new Map();
     const HP = {H: L.hair, h: L.hairHi || L.hair, S: L.skin, s: L.skinD, E: L.skinD, G: '#26201c', L: '#a9c3cf', e: '#1c1b1f', m: '#7b3b2c', M: L.hair, C: L.cap, c: L.capD, T: L.top};
     const tilt = pose.head === 'down' ? [1, 1] : pose.head === 'up' ? [-1, -1] : [0, 0], NK = NECKS[L.head] || NECK;
@@ -212,7 +214,7 @@
   const PETC = {};
   const petsFor = list => (list || ['figma', 'claude', 'gpt']).map(n => PETC[n] || (PETC[n] = (() => { const s = PETDEF()[n], w = Math.max(...s.rows.map(r => r.length));
     const dk = Object.keys(s.c).find(k => k !== 'W' && k !== 'F' && k !== 'L') , leg = s.legs || [[.25, .7], [.18, .78]].map(p => [...Array(w)].map((_, x) => p.some(f => x === Math.round(f * (w - 1))) ? dk : '.').join(''));
-    const pal = s.c; return {n, name: s.n, f: leg.map(l => sprite([...s.rows, l], {...pal, K: pal.K || dark(pal[dk], .6)}, 2 * Q)), w: w * 2, h: (s.rows.length + 1) * 2}; })()));
+    const pal = s.c; return {n, name: s.n, f: leg.map(l => sprite([...s.rows, l], {...pal, K: pal.K || dark(pal[dk], .6)}, Q)), w, h: s.rows.length + 1}; })()));
   const BALLS = [['..kkk..', '.kWWWk.', 'kWWKWWk', 'kWKKKWk', 'kWWKWgk', '.kWWgk.', '..kkk..'], ['..kkk..', '.kKWWk.', 'kKKWWWk', 'kWWWWWk', 'kWWWKKk', '.kgWKk.', '..kkk..']]
     .map(r => sprite(r, {k: '#3a3a3e', K: '#1c1b1f', W: '#ffffff', g: '#cfcfcf'}));
   const NOTES = [sprite(['..K', '..K', '..K', 'KKK', 'KK.'], {K: INK}), sprite(['.KKK', '.K.K', '.K.K', 'KK.K', 'KKKK'], {K: INK})];
@@ -285,6 +287,8 @@
         for (const ch of s) { if (ch === ' ') { cx += 3 * z + z; continue; } const gl = glyph2(ch);
           gl.forEach((r, yy) => [...r].forEach((b, xx) => { if (b === '#') R(cx + xx * h, y + yy * h, h, h, c); })); cx += (gl[0].length / Q + 1) * z; } },
       textW,
+      /* the result number, in the site's font so $ % & read cleanly; it counts up and pops in */
+      stat(x, y, s, k, c = INK, sub) { if (k > 0) stats.push({x, y, s: String(s), k, c, sub}); },
       img(im, x, y, flip, a = 1) { const w = im.width / Q, h = im.height / Q; ctx.globalAlpha = a; if (flip) { ctx.save(); ctx.translate(q(x) - cam + w, q(y)); ctx.scale(-1, 1); ctx.drawImage(im, 0, 0, w, h); ctx.restore(); }
         else ctx.drawImage(im, q(x) - cam, q(y), w, h); ctx.globalAlpha = 1; },
       sprite: (rows, pal) => sprite(rows, pal),
@@ -314,7 +318,13 @@
       toggle(x, y, on, c = '#2e9e5b') { R(x + 1, y, 9, 5, INK); R(x, y + 1, 11, 3, INK); R(x + 1, y + 1, 9, 3, on ? c : GREY); R(on ? x + 6 : x + 1, y + 1, 4, 3, PAPER); }};
 
     /* speech bubbles: crisp HTML text anchored to pixels */
-    const bubs = new Map();
+    const bubs = new Map(), stl = document.createElement('div'); let stats = []; stl.className = 'strip__stat'; stl.hidden = true; stl.innerHTML = '<b></b><span></span>'; says.appendChild(stl);
+    const count = (s, k) => s.replace(/\d[\d,]*(\.\d+)?/, m => { const n = parseFloat(m.replace(/,/g, '')), d = (m.split('.')[1] || '').length, v = n * k;
+      return d ? v.toFixed(d) : (m.includes(',') ? Math.round(v).toLocaleString('en-US') : String(Math.round(v))); });
+    function statLayer() { const o = stats[stats.length - 1]; stats = []; if (!o) { stl.hidden = true; stl.dataset.s = ''; return; }
+      const k = S / dpr, ox = cv.offsetLeft, oy = cv.offsetTop; stl.hidden = false; stl.classList.toggle('has-sub', o.k > .55);
+      if (stl.dataset.s !== o.s) { stl.dataset.s = o.s; stl.querySelector('span').textContent = o.sub || ''; stl.style.setProperty('--c', o.c); stl.classList.remove('is-in'); void stl.offsetWidth; stl.classList.add('is-in'); }
+      stl.querySelector('b').textContent = count(o.s, ease(o.k)); stl.style.left = (ox + (o.x - cam) * k) + 'px'; stl.style.top = (oy + o.y * k) + 'px'; stl.style.setProperty('--u', k + 'px'); }
     function bubble(list) { const seen = new Set(), k = S / dpr, ox = cv.offsetLeft, oy = cv.offsetTop, sw = stage.clientWidth;
       list.filter(Boolean).forEach(o => { const key = o.text; seen.add(key); let el = bubs.get(key);
         if (!el) { el = document.createElement('span'); el.className = 'strip__say' + (o.who === 'me' ? '' : ' strip__say--npc'); el.textContent = o.text; says.appendChild(el); bubs.set(key, el); requestAnimationFrame(() => el.classList.add('is-on')); }
@@ -341,7 +351,7 @@
       /* props of every chapter near the camera; t is chapter-local (negative before it starts) */
       beats.forEach((b, i) => { if (b.X + 170 < cam || b.X - 110 > cam + W) return; const bt = t - b.t0; b.draw && b.draw(g, s.i > i && s.k !== 'idle' ? Math.max(bt, b.d) : bt, b.X); });
       /* the pets trail behind, using where I was a moment ago */
-      let off = 13; PETS.forEach((p, i) => { const lag = .5 + i * .34, px = heroX(t - lag) - off - p.w; off += p.w + 4 + (i % 2) * 2; const moving = Math.abs(heroX(t - lag) - heroX(t - lag - .05)) > .3;
+      let off = 13; PETS.forEach((p, i) => { const lag = .45 + i * .17, px = heroX(t - lag) - off - p.w; off += p.w + 3; const moving = Math.abs(heroX(t - lag) - heroX(t - lag - .05)) > .3;
         let x = px, y = G - p.h + 1, fr = (moving ? Math.floor(Math.abs(t * 9 + i)) : Math.floor(Math.abs(t * 1.2 + i * .3))) % 2;
         if (moving) y -= Math.floor(Math.abs(Math.sin(t * 9 + i)) * 1.6);
         if (s.k === 'fin' && fin.pet) [x, y] = fin.pet(t - finT0, p, i, x, y, hx, g);
@@ -363,10 +373,12 @@
       if (s.k === 'fin' && fin.fx) fin.fx(t - finT0, g, me, hx);
       if (s.k === 'act' && beats[s.i].fx) beats[s.i].fx(bt, g, me, beats[s.i].X);
       out.drawImage(buf, 0, 0, W * Q, H * Q, 0, 0, W * S, H * S);
+      statLayer();
       bubble(said.map(o => o && (o.who === 'me' ? {...o, x: me.head[0] + 1, y: me.head[1] - 2} : {...o, x: beats[s.i].X + o.x, y: G + o.y})));
       const bi = Math.min(beats.length - 1, s.i);
       if (bi !== curBeat) { curBeat = bi; 
-        capEl.innerHTML = beats[bi].c.split(/\s+/).map((w, j) => `<span class="strip__w" style="--i:${j}">${w.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</span>`).join(' '); kEl.textContent = beats[bi].k || ''; nEl.innerHTML = '<b>' + String(bi + 1).padStart(2, '0') + '</b> / ' + String(beats.length).padStart(2, '0'); capEl.style.removeProperty('--capf'); const lw = capEl.lastElementChild; for (let f = parseFloat(getComputedStyle(capEl).fontSize), n = 0; lw && lw.offsetTop + lw.offsetHeight > capEl.clientHeight + 2 && n < 14; n++) capEl.style.setProperty('--capf', (f -= 2) + 'px');
+        let em = false; capEl.innerHTML = beats[bi].c.split(/\s+/).map((w, j) => { const st = w.startsWith('*'), en = /\*[.,!?:;’']*$/.test(w); if (st) em = true; const on = em || /\d/.test(w); if (en) em = false;
+          w = w.replace(/\*/g, ''); return `<span class="strip__w${on ? ' is-em' : ''}" style="--i:${j}">${w.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</span>`; }).join(' '); kEl.textContent = beats[bi].k || ''; nEl.innerHTML = '<b>' + String(bi + 1).padStart(2, '0') + '</b> / ' + String(beats.length).padStart(2, '0'); capEl.style.removeProperty('--capf'); const lw = capEl.lastElementChild; for (let f = parseFloat(getComputedStyle(capEl).fontSize), n = 0; lw && lw.offsetTop + lw.offsetHeight > capEl.clientHeight + 2 && n < 14; n++) capEl.style.setProperty('--capf', (f -= 2) + 'px');
         [capEl, kEl.parentNode].forEach(e => { e.classList.remove('is-in'); void e.offsetWidth; e.classList.add('is-in'); });
         [...segs.children].forEach((d, j) => { d.classList.toggle('is-done', j < bi); d.classList.toggle('is-on', j === bi); }); }
       const b = beats[bi], k = s.k === 'idle' ? 0 : cl((t - b.w0) / (b.t0 + b.d - b.w0));

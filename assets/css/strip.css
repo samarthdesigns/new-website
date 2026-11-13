@@ -18,6 +18,16 @@
 .strip__stage{position:relative;flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .strip__cv{display:block;image-rendering:pixelated;image-rendering:crisp-edges;cursor:pointer}
 .strip__says{position:absolute;inset:0;pointer-events:none}
+/* the result number: crisp type in the site font over the pixel scene, so $ % & read at a glance */
+.strip__stat{position:absolute;translate:-50% 0;display:grid;justify-items:center;gap:calc(var(--u,3px) * 2);text-align:center;width:max-content;max-width:92%;pointer-events:none}
+.strip__stat b{font:600 clamp(40px,calc(var(--u,3px) * 26),112px)/.9 var(--sans);letter-spacing:-.045em;color:var(--c,var(--ink));font-variant-numeric:tabular-nums}
+.strip__stat span{font:500 clamp(12px,calc(var(--u,3px) * 5),17px)/1.2 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--mut,rgba(20,20,20,.6));opacity:0;translate:0 6px;transition:opacity .4s ease,translate .5s var(--liquid)}
+.strip__stat[hidden]{display:none}
+.strip__stat.has-sub span{opacity:1;translate:0 0}
+.strip__stat.is-in b{animation:statIn .7s var(--liquid) both}
+@keyframes statIn{from{opacity:0;scale:.6;filter:blur(8px)}60%{scale:1.06}}
+/* key numbers and words in the narration take the story's colour */
+.strip__w.is-em{color:var(--accent,var(--forest));font-weight:600}
 .strip__say{position:absolute;left:0;top:0;translate:-50% calc(-100% - 10px);scale:.7;opacity:0;transform-origin:var(--tail,50%) 100%;max-width:min(300px,72%);width:max-content;
   padding:8px 12px;border-radius:9px;background:var(--ink,#141414);color:#f6f6f4;font:400 14px/1.35 var(--pixel);letter-spacing:.02em;
   transition:opacity .15s ease,scale .25s cubic-bezier(.34,1.6,.64,1)}
@@ -80,7 +90,7 @@
 @media (max-width:640px){
   .story__top{padding-top:14px}
   .strip__say{font-size:12px;max-width:min(220px,80%);padding:7px 10px}
-  .strip__cap{--capf:24px;height:calc(3 * 1.14 * 24px)}
+  .strip__cap{--capf:32px;height:calc(3 * 1.14 * 32px);letter-spacing:-.03em}
   .strip__btn{width:43px;height:43px}
   .strip__segs{gap:4px}
   .strip__end{flex:1}.strip__cta{flex:1;padding:0 12px;font-size:13px}

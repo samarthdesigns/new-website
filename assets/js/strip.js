@@ -1,6 +1,6 @@
-/* STRIP: each case study told as a short 8-bit story, full screen. Pixel Samarth walks through it chapter by chapter
-   (brief, problem, research, decision, build, result) and acts each one out. Everything is drawn at native pixel size,
-   then scaled up by a whole number of device pixels, so nothing blurs. The whole thing is a pure function of time,
+/* STRIP: each case study told as a short 16-bit story, full screen. Pixel Samarth walks through it chapter by chapter
+   (brief, problem, research, decision, build, result) and acts each one out. Everything is drawn on a half-pixel grid (Q sub-pixels per world pixel), sprites are smoothed
+   with Scale2x, then scaled up by a whole number of device pixels, so nothing blurs. The whole thing is a pure function of time,
    so seeking and stepping are free. */
 (function () {
   const INK = '#1c1b1f', BG = '#f6f6f4', PAPER = '#ffffff', GREY = '#d6d5d0', MID = '#9a9a96', FLOOR = '#ecebe6';
@@ -10,6 +10,12 @@
   const hash = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
   const rgb = c => { const n = parseInt(c.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; };
   const dark = (c, k = .56) => '#' + rgb(c).map(v => Math.round(v * k).toString(16).padStart(2, '0')).join('');
+  const light = (c, k = .18) => '#' + rgb(c).map(v => Math.round(v + (255 - v) * k).toString(16).padStart(2, '0')).join('');
+  /* 16-bit: every world pixel is Q x Q sub-pixels. Hand-drawn bitmaps are doubled with Scale2x so their diagonals round off */
+  const Q = 2, q = v => Math.round(v * Q) / Q;
+  const x2 = rows => { const h = rows.length, w = Math.max(...rows.map(r => r.length)), at2 = (x, y) => y < 0 || y >= h || x < 0 || x >= w ? '.' : (rows[y][x] || '.'), o = [];
+    for (let y = 0; y < h; y++) { let a = '', b = ''; for (let x = 0; x < w; x++) { const P = at2(x, y), A = at2(x, y - 1), B = at2(x + 1, y), C = at2(x - 1, y), D = at2(x, y + 1); let e0 = P, e1 = P, e2 = P, e3 = P;
+      if (A !== D && C !== B) { if (C === A) e0 = A; if (A === B) e1 = B; if (D === C) e2 = C; if (B === D) e3 = D; } a += e0 + e1; b += e2 + e3; } o.push(a, b); } return o; };
 
   /* ---------- heads, drawn by hand, facing right. N marks where the neck meets ---------- */
   const HEADS = {
@@ -105,22 +111,25 @@
     can: {g: [0, 3], rows: ['......K', '.KK..K.', 'KCCCCK.', 'CCCCCC.', 'CCCCCC.', '.CCCC..'], pal: {K: '#6d8a8f', C: '#8fb3b8'}}};
 
   /* ---------- the figure: tapered limbs, hand-drawn head, outlines in a darker shade of each part ---------- */
-  const FW = 88, FH = 100, HX = 44, HY = 60, cache = new Map();
+  const FW = 88, FH = 100, HX = 44, HY = 60, cache = new Map(), HEADS2 = {};
   function figure(pose, lookName) {
     const key = lookName + JSON.stringify(pose, (k, v) => typeof v === 'number' ? Math.round(v) : v);
     let f = cache.get(key); if (f) return f;
-    const L = LOOKS[lookName], K = L.k || 1, px = new Array(FW * FH).fill(null);
+    const L = LOOKS[lookName], K = L.k || 1, FWQ = FW * Q, FHQ = FH * Q, px = new Array(FWQ * FHQ).fill(null);
     /* flat fills. A part drawn over another gets a soft edge where they overlap (inner); the silhouette gets one outline at the end */
-    const paint = (m, inner) => { if (inner) m.forEach((c, i) => { const x = i % FW, y = (i / FW) | 0;
-      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const j = (y + dy) * FW + x + dx; if (x + dx >= 0 && x + dx < FW && y + dy >= 0 && y + dy < FH && !m.has(j) && px[j]) px[j] = dark(c, .74); } });
+    const paint = (m, inner) => { if (inner) m.forEach((c, i) => { const x = i % FWQ, y = (i / FWQ) | 0;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const j = (y + dy) * FWQ + x + dx; if (x + dx >= 0 && x + dx < FWQ && y + dy >= 0 && y + dy < FHQ && !m.has(j) && px[j]) px[j] = dark(c, .74); } });
       m.forEach((c, i) => px[i] = c); };
     /* tapered capsule from a to b, radius r0 to r1; col can be a function of (along 0..1, across -1..1) */
-    const seg = (m, a, b, r0, r1, col) => { const vx = b[0] - a[0], vy = b[1] - a[1], ll = vx * vx + vy * vy || 1e-6, len = Math.sqrt(ll), R = Math.max(r0, r1);
-      for (let y = Math.floor(Math.min(a[1], b[1]) - R - 1); y <= Math.ceil(Math.max(a[1], b[1]) + R + 1); y++)
-        for (let x = Math.floor(Math.min(a[0], b[0]) - R - 1); x <= Math.ceil(Math.max(a[0], b[0]) + R + 1); x++) {
-          if (x < 0 || y < 0 || x >= FW || y >= FH) continue; const cx = x + .5 - a[0], cy = y + .5 - a[1];
+    /* sampled on the sub-pixel grid, lit from the upper left: a highlight on the lit rim, a shade on the far one */
+    const seg = (m, a, b, r0, r1, col, flat) => { const vx = b[0] - a[0], vy = b[1] - a[1], ll = vx * vx + vy * vy || 1e-6, len = Math.sqrt(ll), R = Math.max(r0, r1);
+      for (let y = Math.floor((Math.min(a[1], b[1]) - R - 1) * Q); y <= Math.ceil((Math.max(a[1], b[1]) + R + 1) * Q); y++)
+        for (let x = Math.floor((Math.min(a[0], b[0]) - R - 1) * Q); x <= Math.ceil((Math.max(a[0], b[0]) + R + 1) * Q); x++) {
+          if (x < 0 || y < 0 || x >= FWQ || y >= FHQ) continue; const cx = (x + .5) / Q - a[0], cy = (y + .5) / Q - a[1];
           const s = cl((cx * vx + cy * vy) / ll), dx = cx - s * vx, dy = cy - s * vy, r = lerp(r0, r1, s);
-          if (dx * dx + dy * dy <= r * r) m.set(y * FW + x, typeof col === 'function' ? col(s, (vx * cy - vy * cx) / len / r) : col); }
+          if (dx * dx + dy * dy <= r * r) { let c = typeof col === 'function' ? col(s, (vx * cy - vy * cx) / len / r) : col;
+            if (!flat && r > 1) { const l = (-dx * .55 - dy * .83) / r; if (l > .58) c = light(c, .2); else if (l < -.62) c = dark(c, .86); }
+            m.set(y * FWQ + x, c); } }
       return m; };
     const add = (a, v, k) => [a[0] + v[0] * k, a[1] + v[1] * k];
     const sit = pose.sit, hip = [HX + .5, HY + .5], up = [Math.sin(rad(pose.t)), -Math.cos(rad(pose.t))];
@@ -130,9 +139,9 @@
     const arm = (u, f) => { const s0 = add(sh, up, -1), e = add(s0, dir(u), 11 * K), w = add(e, dir(f), 10 * K); return {s0, e, w, h: add(w, dir(f), 1.4)}; };
     const AF = arm(pose.ua, pose.fa), AB = arm(pose.ub, pose.fb);
     const item = (m, name, hand, fa) => { if (!name || name === 'guitar') return;
-      if (name === 'pen' || name === 'marker') { const d = dir(fa); for (let i = 1; i <= 3; i++) { const p = add(hand, d, i + .6); m.set(Math.floor(p[1]) * FW + Math.floor(p[0]), name === 'pen' ? '#2a2a2e' : '#c8372d'); } return; }
-      const it = ITEMS[name], ox = Math.round(hand[0] - it.g[0] - .5), oy = Math.round(hand[1] - it.g[1] - .5);
-      it.rows.forEach((r, y) => [...r].forEach((ch, x) => { if (ch !== '.') m.set((oy + y) * FW + ox + x, it.pal[ch]); })); };
+      if (name === 'pen' || name === 'marker') { const d = dir(fa); for (let i = 1; i <= 3.6; i += .5) { const p = add(hand, d, i + .6); m.set(Math.floor(p[1] * Q) * FWQ + Math.floor(p[0] * Q), name === 'pen' ? '#2a2a2e' : '#c8372d'); } return; }
+      const it = ITEMS[name], ox = Math.round((hand[0] - it.g[0] - .5) * Q), oy = Math.round((hand[1] - it.g[1] - .5) * Q);
+      (it.r2 || (it.r2 = x2(it.rows))).forEach((r, y) => [...r].forEach((ch, x) => { if (ch !== '.') m.set((oy + y) * FWQ + ox + x, it.pal[ch]); })); };
     const limbArm = (A, far, it, fa) => { const m = new Map(), top = far ? L.topD : L.top, skin = far ? L.skinD : L.skin, sl = L.sleeve;
       seg(m, A.s0, A.e, 1.5, 1.2, s => s < sl * 1.6 ? top : skin); seg(m, A.e, A.w, 1.15, 1, s => sl >= 1 ? (s > .82 ? skin : top) : skin);
       if (sl >= 1) seg(m, A.e, A.w, 1.15, 1.05, s => s > .82 ? skin : top);
@@ -142,7 +151,7 @@
       if (L.skirt) { seg(m, hip, G.k, 2.6, 2.8, pant); seg(m, G.k, G.a, 2.4, 1.3, s => s > .78 ? (far ? L.skinD : L.skin) : pant); }
       else { seg(m, hip, G.k, 2.1, 1.75, pant); seg(m, G.k, G.a, 1.65, 1.3, pant); }
       const sm = new Map(); seg(sm, add(G.heel, [0, 1], 1), add(G.toe, [0, 1], 1), 1.25, 1.1, far ? dark(L.shoe, .9) : L.shoe);
-      sm.forEach((c, i) => { m.set(i, sm.has(i + FW) ? c : L.sole); }); paint(m, !far); };
+      sm.forEach((c, i) => { m.set(i, sm.has(i + FWQ) ? c : L.sole); }); paint(m, !far); };
     /* back to front: far arm, far leg, near leg, body, neck, head, guitar, near arm */
     limbArm(AB, true, pose.item2 === 'tablet' || pose.item2 === 'pad' ? null : pose.item2, pose.fb);
     limbLeg(LB, true); limbLeg(LF, false);
@@ -154,19 +163,19 @@
     const hr = HEADS[L.head], hm = new Map();
     const HP = {H: L.hair, h: L.hairHi || L.hair, S: L.skin, s: L.skinD, E: L.skinD, G: '#26201c', L: '#a9c3cf', e: '#1c1b1f', m: '#7b3b2c', M: L.hair, C: L.cap, c: L.capD, T: L.top};
     const tilt = pose.head === 'down' ? [1, 1] : pose.head === 'up' ? [-1, -1] : [0, 0], NK = NECKS[L.head] || NECK;
-    const hx = Math.round(neck[0] - NK[0] + tilt[0] * .5), hy = Math.round(neck[1] - NK[1] + tilt[1]);
-    hr.forEach((r, y) => [...r].forEach((ch, x) => { if (ch !== '.') hm.set((hy + y) * FW + hx + x, HP[ch]); })); paint(hm);
+    const hx = Math.round((neck[0] - NK[0] + tilt[0] * .5) * Q), hy = Math.round((neck[1] - NK[1] + tilt[1]) * Q);
+    (HEADS2[L.head] || (HEADS2[L.head] = x2(hr))).forEach((r, y) => [...r].forEach((ch, x) => { if (ch !== '.') hm.set((hy + y) * FWQ + hx + x, HP[ch]); })); paint(hm);
     let gtr = null;
     if (pose.item === 'guitar') { const g = new Map(), n = [.87, -.49], c1 = add(add(hip, up, 4.5), [4, 0], 1), c2 = add(c1, n, 5.2), wood = '#d58c47', woodD = '#a8662f';
       seg(g, c1, c1, 5, 5, wood); seg(g, c2, c2, 3.8, 3.8, wood); paint(g, true);
       const nk = new Map(); seg(nk, add(c2, n, 2), add(c2, n, 15), .9, .8, '#5a3a22'); seg(nk, add(c2, n, 15), add(c2, n, 17.5), 1.2, 1.2, '#3c2616'); paint(nk, true);
-      const sh2 = new Map(); seg(sh2, add(c1, n, 1.6), add(c1, n, 1.6), 1.2, 1.2, '#2b1a10'); sh2.forEach((c, i) => px[i] = c);
-      const br = add(c1, n, -2.2); px[Math.floor(br[1]) * FW + Math.floor(br[0])] = woodD; px[Math.floor(br[1]) * FW + Math.floor(br[0]) + 1] = woodD; gtr = {c1, n}; }
+      const sh2 = new Map(); seg(sh2, add(c1, n, 1.6), add(c1, n, 1.6), 1.2, 1.2, '#2b1a10', true); sh2.forEach((c, i) => px[i] = c);
+      const br = add(c1, n, -2.2), bi = Math.floor(br[1] * Q) * FWQ + Math.floor(br[0] * Q); [0, 1, 2, FWQ, FWQ + 1, FWQ + 2].forEach(o => px[bi + o] = woodD); gtr = {c1, n}; }
     limbArm(AF, false, pose.item, pose.fa);
-    const solid = px.slice(); for (let i = 0; i < px.length; i++) { if (solid[i]) continue; const x = i % FW, y = (i / FW) | 0;
-      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const xx = x + dx, yy = y + dy; if (xx < 0 || yy < 0 || xx >= FW || yy >= FH) continue; const c = solid[yy * FW + xx]; if (c) { px[i] = dark(c, .5); break; } } }
-    let low = 0; px.forEach((c, i) => { if (c) low = Math.max(low, (i / FW) | 0); });
-    const cv = document.createElement('canvas'); cv.width = FW; cv.height = FH; const x = cv.getContext('2d'), id = x.createImageData(FW, FH);
+    const solid = px.slice(); for (let i = 0; i < px.length; i++) { if (solid[i]) continue; const x = i % FWQ, y = (i / FWQ) | 0;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const xx = x + dx, yy = y + dy; if (xx < 0 || yy < 0 || xx >= FWQ || yy >= FHQ) continue; const c = solid[yy * FWQ + xx]; if (c) { px[i] = dark(c, .5); break; } } }
+    let lowQ = 0; px.forEach((c, i) => { if (c) lowQ = Math.max(lowQ, (i / FWQ) | 0); }); const low = (lowQ + 1) / Q - 1;
+    const cv = document.createElement('canvas'); cv.width = FWQ; cv.height = FHQ; const x = cv.getContext('2d'), id = x.createImageData(FWQ, FHQ);
     px.forEach((c, i) => { if (!c) return; const [r, gg, b] = rgb(c); id.data[i * 4] = r; id.data[i * 4 + 1] = gg; id.data[i * 4 + 2] = b; id.data[i * 4 + 3] = 255; });
     x.putImageData(id, 0, 0);
     f = {cv, low, sit, hand: AF.h, hand2: AB.h, head: [neck[0] + 1, neck[1] - (NK[1] + 1)], foot: LF.toe, foot2: LB.toe, knee: LF.k};
@@ -174,7 +183,7 @@
   }
 
   /* ---------- small sprites: the pets (smaller than me now), the ball, notes, hearts ---------- */
-  const sprite = (rows, pal) => { const c = document.createElement('canvas'); c.width = Math.max(...rows.map(r => r.length)); c.height = rows.length; const x = c.getContext('2d');
+  const sprite = (rows, pal) => { rows = x2(rows); const c = document.createElement('canvas'); c.width = Math.max(...rows.map(r => r.length)); c.height = rows.length; const x = c.getContext('2d');
     rows.forEach((r, y) => [...r].forEach((ch, i) => { if (ch !== '.' && pal[ch]) { x.fillStyle = pal[ch]; x.fillRect(i, y, 1, 1); } })); return c; };
   const SPR = {
     figma: {c: {R: '#F24E1E', O: '#FF7262', P: '#A259FF', B: '#1ABCFE', G: '#0ACF83', K: '#1c1b1f'}, rows: ['.RROO.', 'RRROOO', '.RROO.', '.PPBB.', 'PPPBKB', '.PPBB.', '.GG...', 'GGG...', '.G....'], legs: ['.K..K.', 'K....K']},
@@ -197,7 +206,7 @@
     '.': './././././#', ',': './././#/#', ':': './#/./#/.', '%': '#.#/..#/.#./#../#.#', '+': '.../.#./###/.#./...', '-': '.../.../###/.../...', '$': '.##/##./.#./.##/##.',
     '!': '#/#/#/./#', '?': '##./..#/.#./.../.#.', '/': '..#/..#/.#./#../#..', '>': '#../.#./..#/.#./#..', '<': '..#/.#./#../.#./..#', "'": '#/#/./././', '=': '.../###/.../###/...', '#': '#.#/###/#.#/###/#.#',
     '→': '..../..#./####/..#./....', '✓': '...#/..#./#.#./.#../....', '×': '.../#.#/.#./#.#/...'};
-  const glyph = ch => FONT[ch] ? FONT[ch].split('/') : null;
+  const glyph = ch => FONT[ch] ? FONT[ch].split('/') : null, G2 = {}, glyph2 = ch => G2[ch] || (G2[ch] = x2(glyph(ch) || glyph('?')));
   const textW = s => [...String(s).toUpperCase()].reduce((w, ch) => w + (ch === ' ' ? 3 : (glyph(ch) || ['###'])[0].length) + 1, 0) - 1;
 
   /* ---------- player ---------- */
@@ -206,11 +215,11 @@
   const words = s => String(s).split(/\s+/).length;
   function Player(root, id, meta) {
     const sc = SCENES[id];
-    root.innerHTML = `<div class="strip__stage"><canvas class="strip__cv" role="img" aria-label="Pixel animation telling this case study"></canvas><div class="strip__says" aria-hidden="true"></div>
+    root.innerHTML = `<div class="strip__head"><p class="strip__chap kicker"><span class="strip__k"></span></p><p class="strip__cap" aria-live="polite"></p></div><div class="strip__stage"><canvas class="strip__cv" role="img" aria-label="Pixel animation telling this case study"></canvas><div class="strip__says" aria-hidden="true"></div>
         <div class="strip__intro" aria-hidden="true"><span class="strip__intro-k">The story of</span><strong>${meta.title}</strong><span>${meta.lede}</span></div>
         </div>
 
-      <div class="strip__foot"><p class="strip__chap kicker"><span class="strip__k"></span></p><p class="strip__cap" aria-live="polite"></p>
+      <div class="strip__foot">
         <div class="strip__segs"></div>
         <div class="strip__bar"><span class="strip__n kicker"></span><div class="strip__end" hidden><button type="button" class="cta strip__cta" data-again><span>Watch again</span></button><button type="button" class="cta strip__cta strip__cta--solid" data-read><span>Read the case study</span></button></div><button type="button" class="strip__btn" data-prev aria-label="Previous chapter"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span></button><button type="button" class="strip__btn strip__btn--play" data-play aria-label="Pause"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="i-pause" d="M9 6v12M15 6v12"/><path class="i-play" d="M8 5.5l11 6.5-11 6.5z"/></svg></span></button><button type="button" class="strip__btn" data-next aria-label="Next chapter"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></button></div></div>`;
     const stage = root.querySelector('.strip__stage'), cv = root.querySelector('canvas'), out = cv.getContext('2d'), says = root.querySelector('.strip__says');
@@ -218,7 +227,7 @@
     const intro = root.querySelector('.strip__intro'), end = root.querySelector('.strip__end');
     root.style.setProperty('--accent', sc.accent || INK);
     const buf = document.createElement('canvas'), ctx = buf.getContext('2d');
-    let W = 260, H = 140, S = 4, dpr = 1, G = 120, cam = 0;
+    let W = 260, H = 140, S = 4, P = 2, dpr = 1, G = 120, cam = 0;
 
     /* timeline: walk in, act, walk on, act ... then a little finale. Each chapter stays long enough to read its caption. */
     const beats = sc.beats, segsT = []; let T = 1.2, x = -GAP * .62;
@@ -238,25 +247,27 @@
       d.addEventListener('click', () => { seek(b.t0 - .01); }); segs.appendChild(d); });
 
     /* drawing kit, in world pixels */
-    const R = (x, y, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(Math.round(x) - cam, Math.round(y), Math.round(w), Math.round(h)); };
+    const R = (x, y, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(q(x) - cam, q(y), q(w), q(h)); };
     const g = {
       INK, PAPER, GREY, MID, BG, at, cl, ease, lerp, hash, dark, get G() { return G; }, get W() { return W; }, accent: sc.accent || INK, R,
       px: (x, y, c) => R(x, y, 1, 1, c),
-      line(x0, y0, x1, y1, c = INK) { x0 = Math.round(x0); y0 = Math.round(y0); x1 = Math.round(x1); y1 = Math.round(y1);
-        const dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1, dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1; let e = dx + dy;
-        for (;;) { R(x0, y0, 1, 1, c); if (x0 === x1 && y0 === y1) break; const e2 = 2 * e; if (e2 >= dy) { e += dy; x0 += sx; } if (e2 <= dx) { e += dx; y0 += sy; } } },
-      box(x, y, w, h, fill = PAPER, edge = INK) { R(x, y, w, h, edge); R(x + 1, y + 1, w - 2, h - 2, fill); },
-      rbox(x, y, w, h, fill = PAPER, edge = INK) { R(x + 1, y, w - 2, h, edge); R(x, y + 1, w, h - 2, edge); R(x + 1, y + 1, w - 2, h - 2, fill); },
-      text(s, x, y, c = INK, align = 'left', z = 1) { s = String(s).toUpperCase(); const tw = textW(s) * z; let cx = Math.round(align === 'center' ? x - tw / 2 : align === 'right' ? x - tw : x);
-        for (const ch of s) { if (ch === ' ') { cx += 3 * z + z; continue; } const gl = glyph(ch) || glyph('?');
-          gl.forEach((r, yy) => [...r].forEach((b, xx) => { if (b === '#') R(cx + xx * z, y + yy * z, z, z, c); })); cx += (gl[0].length + 1) * z; } },
+      /* lines step on the sub-pixel grid, so diagonals are smooth; boxes get a fine one-sub-pixel edge */
+      line(x0, y0, x1, y1, c = INK) { x0 = Math.round(x0 * Q); y0 = Math.round(y0 * Q); x1 = Math.round(x1 * Q); y1 = Math.round(y1 * Q);
+        const dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1, dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1; let e = dx + dy; ctx.fillStyle = c;
+        for (;;) { ctx.fillRect(x0 / Q - cam, y0 / Q, 1, 1); if (x0 === x1 && y0 === y1) break; const e2 = 2 * e; if (e2 >= dy) { e += dy; x0 += sx; } if (e2 <= dx) { e += dx; y0 += sy; } } },
+      box(x, y, w, h, fill = PAPER, edge = INK) { const e = 1 / Q; R(x, y, w, h, edge); R(x + e, y + e, w - 2 * e, h - 2 * e, fill); },
+      rbox(x, y, w, h, fill = PAPER, edge = INK) { const e = 1 / Q; R(x + 1, y, w - 2, h, edge); R(x + e, y + e, w - 2 * e, h - 2 * e, edge); R(x, y + 1, w, h - 2, edge);
+        R(x + 1, y + e, w - 2, h - 2 * e, fill); R(x + e, y + 1, w - 2 * e, h - 2, fill); R(x + .5, y + .5, w - 1, h - 1, fill); },
+      text(s, x, y, c = INK, align = 'left', z = 1) { s = String(s).toUpperCase(); const tw = textW(s) * z, h = z / Q; let cx = Math.round(align === 'center' ? x - tw / 2 : align === 'right' ? x - tw : x);
+        for (const ch of s) { if (ch === ' ') { cx += 3 * z + z; continue; } const gl = glyph2(ch);
+          gl.forEach((r, yy) => [...r].forEach((b, xx) => { if (b === '#') R(cx + xx * h, y + yy * h, h, h, c); })); cx += (gl[0].length / Q + 1) * z; } },
       textW,
-      img(im, x, y, flip, a = 1) { ctx.globalAlpha = a; if (flip) { ctx.save(); ctx.translate(Math.round(x) - cam + im.width, Math.round(y)); ctx.scale(-1, 1); ctx.drawImage(im, 0, 0); ctx.restore(); }
-        else ctx.drawImage(im, Math.round(x) - cam, Math.round(y)); ctx.globalAlpha = 1; },
+      img(im, x, y, flip, a = 1) { const w = im.width / Q, h = im.height / Q; ctx.globalAlpha = a; if (flip) { ctx.save(); ctx.translate(q(x) - cam + w, q(y)); ctx.scale(-1, 1); ctx.drawImage(im, 0, 0, w, h); ctx.restore(); }
+        else ctx.drawImage(im, q(x) - cam, q(y), w, h); ctx.globalAlpha = 1; },
       sprite: (rows, pal) => sprite(rows, pal),
-      shadow(x, w) { R(x - w / 2, G + 1, w, 1, 'rgba(28,27,31,.12)'); },
+      shadow(x, w) { R(x - w / 2 + 1, G + 1, w - 2, .5, 'rgba(28,27,31,.16)'); R(x - w / 2, G + 1.5, w, .5, 'rgba(28,27,31,.08)'); },
       person(x, pose, look = 'me', face = 1) { const f = figure(pose, look), y = f.sit ? Math.min(Math.round(G - f.sit - HY), G - f.low - 1) : G - f.low - 1;
-        const ox = face > 0 ? Math.round(x) - HX : Math.round(x) - (FW - 1 - HX); if (!f.sit) g.shadow(x, 14); g.img(f.cv, ox, y, face < 0);
+        const ox = face > 0 ? q(x) - HX : q(x) - (FW - 1 - HX); if (!f.sit) g.shadow(x, 14); g.img(f.cv, ox, y, face < 0);
         const map = p => [face > 0 ? ox + p[0] : ox + FW - p[0], y + p[1]]; return {hand: map(f.hand), hand2: map(f.hand2), head: map(f.head), foot: map(f.foot), knee: map(f.knee)}; },
       /* furniture and props */
       desk(x, w = 34, h = 14) { R(x, G - h, w, 2, '#8a6a4a'); R(x, G - h + 2, w, 1, dark('#8a6a4a')); R(x + 1, G - h + 3, 2, h - 3, '#6e5238'); R(x + w - 3, G - h + 3, 2, h - 3, '#6e5238'); },
@@ -289,16 +300,18 @@
       bubs.forEach((el, key) => { if (!seen.has(key)) { bubs.delete(key); el.classList.remove('is-on'); setTimeout(() => el.remove(), 200); } }); }
 
     function resize() { dpr = Math.min(devicePixelRatio || 1, 3); const r = stage.getBoundingClientRect(), dw = Math.floor(r.width * dpr), dh = Math.floor(r.height * dpr); if (dw < 40 || dh < 40) return;
-      S = Math.max(2, Math.min(Math.floor(dh / BAND), Math.floor(dw / MINW))); W = Math.floor(dw / S); H = Math.floor(dh / S);
+      S = Math.max(2, Math.min(Math.floor(dh / BAND), Math.floor(dw / MINW))); P = S / Q; W = Math.floor(dw / S); H = Math.floor(dh / S);
       G = Math.min(H - 8, Math.round((H + BAND) / 2) - 12);
-      buf.width = W; buf.height = H; cv.width = W * S; cv.height = H * S; cv.style.width = (W * S / dpr) + 'px'; cv.style.height = (H * S / dpr) + 'px';
+      buf.width = W * Q; buf.height = H * Q; ctx.setTransform(Q, 0, 0, Q, 0, 0); cv.width = W * S; cv.height = H * S; cv.style.width = (W * S / dpr) + 'px'; cv.style.height = (H * S / dpr) + 'px';
       out.imageSmoothingEnabled = false; }
 
     let clock = 0, playing = false, curBeat = -1, ended = false;
     function render() {
       if (!stage.isConnected || buf.width < 2) return;
-      const t = clock, s = segAt(t), hx = heroX(t); cam = Math.round(camC(t) - W / 2);
-      ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H); ctx.fillStyle = FLOOR; ctx.fillRect(0, G + 1, W, H - G);
+      const t = clock, s = segAt(t), hx = heroX(t); cam = q(camC(t) - W / 2);
+      ctx.fillStyle = BG; ctx.fillRect(0, 0, W, G + 1);
+      const flr = ctx.createLinearGradient(0, G, 0, H); flr.addColorStop(0, FLOOR); flr.addColorStop(1, '#e3e1da'); ctx.fillStyle = flr; ctx.fillRect(0, G + 1, W, H - G);
+      R(cam - 2, G - .5, W + 4, .5, '#e4e2dc');
       R(cam - 2, G, W + 4, 1, '#cfcdc6');
       for (let i = Math.floor(cam / 19) - 1; i < (cam + W) / 19 + 1; i++) { if (hash(i) > .5) R(i * 19 + hash(i + 1) * 16, G + 3 + Math.floor(hash(i + 2) * 7), 2 + Math.floor(hash(i + 3) * 3), 1, '#dddbd3'); }
       let said = [];
@@ -326,14 +339,14 @@
       if (mode === 'sip' && wk > .44 && wk < .62) { const a = (t * 3) % 1; g.px(me.hand[0] + 4, me.hand[1] - 9 - a * 3, 'rgba(140,200,220,.8)'); }
       if (s.k === 'fin' && fin.fx) fin.fx(t - finT0, g, me, hx);
       if (s.k === 'act' && beats[s.i].fx) beats[s.i].fx(bt, g, me, beats[s.i].X);
-      out.drawImage(buf, 0, 0, W * S, H * S);
+      out.drawImage(buf, 0, 0, W * Q, H * Q, 0, 0, W * S, H * S);
       bubble(said.map(o => o && (o.who === 'me' ? {...o, x: me.head[0] + 1, y: me.head[1] - 2} : {...o, x: beats[s.i].X + o.x, y: G + o.y})));
       const bi = Math.min(beats.length - 1, s.i);
       if (bi !== curBeat) { curBeat = bi; capEl.textContent = beats[bi].c; kEl.textContent = beats[bi].k || ''; nEl.innerHTML = '<b>' + String(bi + 1).padStart(2, '0') + '</b> / ' + String(beats.length).padStart(2, '0'); capEl.classList.remove('is-in'); void capEl.offsetWidth; capEl.classList.add('is-in');
         [...segs.children].forEach((d, j) => { d.classList.toggle('is-done', j < bi); d.classList.toggle('is-on', j === bi); }); }
       const b = beats[bi], k = s.k === 'idle' ? 0 : cl((t - b.w0) / (b.t0 + b.d - b.w0));
       segs.children[bi].style.setProperty('--k', s.i > bi ? 1 : k);
-      intro.classList.toggle('is-on', t < 2.6);
+      intro.classList.toggle('is-on', t < 2.6); root.classList.toggle('is-intro', t < 2.6);
     }
     const seek = t => { clock = cl(t, 0, TOTAL); curBeat = -1; ended = false; end.hidden = true; root.classList.remove('is-ended'); [...segs.children].forEach(d => d.style.setProperty('--k', 0)); render(); };
     const step = d => { const s = segAt(clock), i = Math.min(beats.length - 1, s.i) + (s.k === 'walk' && d > 0 && s.i < beats.length ? 0 : d);
@@ -377,7 +390,7 @@
     const img = box.querySelector('img'), id = box.dataset.strip || (img && (img.getAttribute('src') || '').split('/').pop().replace(/\.\w+$/, ''));
     if (!id || !SCENES[id]) return;
     const title = (document.querySelector('.chero__t') || {}).textContent || document.title, lede = (document.querySelector('.chero__lede') || {}).textContent || '';
-    const ov = document.createElement('div'); ov.className = 'story'; ov.hidden = true; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', `${title}, as an 8-bit story`); ov.tabIndex = -1;
+    const ov = document.createElement('div'); ov.className = 'story'; ov.hidden = true; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', `${title}, as a 16-bit story`); ov.tabIndex = -1;
     ov.innerHTML = `<div class="story__top"><p class="story__ttl"><span class="story__kick">The story</span><span>${title}</span></p><button type="button" class="story__x" aria-label="Close the story"><span></span><span></span></button></div><div class="strip"></div>`;
     document.body.appendChild(ov);
     let opener = null, pl = null;

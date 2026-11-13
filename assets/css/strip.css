@@ -1,4 +1,4 @@
-/* STRIP: the case study as a full-screen 8-bit story */
+/* STRIP: the case study as a full-screen 16-bit story */
 .story{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;background:#f6f6f4;color:var(--ink,#141414);opacity:0;transition:opacity .26s ease;outline:none}
 .story.is-open{opacity:1}
 .story[hidden]{display:none}
@@ -26,7 +26,7 @@
 .strip__say.is-on{opacity:1;scale:1}
 
 /* opening title card, fades as I walk in */
-.strip__intro{position:absolute;left:50%;top:clamp(20px,9%,90px);translate:-50% 0;width:min(640px,calc(100% - 40px));text-align:center;display:flex;flex-direction:column;gap:10px;pointer-events:none;opacity:0;transition:opacity .5s ease,translate .5s ease}
+.strip__intro{position:absolute;left:50%;top:clamp(12px,5%,60px);translate:-50% 0;width:min(640px,calc(100% - 40px));text-align:center;display:flex;flex-direction:column;gap:10px;pointer-events:none;opacity:0;transition:opacity .5s ease,translate .5s ease}
 .strip__intro.is-on{opacity:1;translate:-50% 0}
 .strip__intro:not(.is-on){translate:-50% -10px}
 .strip__intro-k{font:400 12px/1 var(--pixel);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
@@ -44,8 +44,11 @@
 .strip__cta--solid::before{background:var(--ink)}
 .strip__cta span{position:relative}
 
-/* narration + controls, styled like the case-study carousels */
-.strip__foot{flex:none;padding:0 clamp(16px,3vw,36px) calc(20px + env(safe-area-inset-bottom));display:grid;gap:14px;max-width:1100px;width:100%;margin:0 auto;box-sizing:border-box}
+/* narration sits on top, like a storybook line above the picture */
+.strip__head{flex:none;display:grid;gap:10px;padding:clamp(14px,2.4vh,28px) clamp(16px,3vw,36px) 0;max-width:1100px;width:100%;margin:0 auto;box-sizing:border-box}
+.strip__head{transition:opacity .5s ease}.is-intro .strip__head{opacity:0}
+/* controls, styled like the case-study carousels */
+.strip__foot{flex:none;padding:12px clamp(16px,3vw,36px) calc(20px + env(safe-area-inset-bottom));display:grid;gap:14px;max-width:1100px;width:100%;margin:0 auto;box-sizing:border-box}
 .strip__chap{margin:0}
 .strip__k{color:var(--forest)}
 .strip__cap{margin:0;font:500 clamp(22px,2.9vw,38px)/1.22 var(--sans);letter-spacing:-.02em;color:var(--ink);min-height:calc(2 * 1.22em);max-width:34ch;text-wrap:balance}

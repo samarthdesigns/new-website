@@ -196,7 +196,7 @@ const COVERS = {
     a.sub.textContent = 'in enterprise deals won';
     tr(a.el, [[5.0, { y: 60, o: 0, s: .9 }], [5.7, { y: 0, o: 1, s: 1 }, 'back'], ...out(7.0)]);
     count(a.b, 5.05, 6.3, 500, v => '$' + Math.round(v) + 'M+');
-    const b = mk(null, 'pill', '50+ designers · 5 teams', 'left:880px;top:160px;background:#1f9e8a;color:#fff');
+    const b = mk(null, 'pill', '5+ teams · 3 proposals a week', 'left:800px;top:160px;background:#1f9e8a;color:#fff');
     tr(b, [[5.4, { x: 60, o: 0 }], [6.0, { x: 0, o: 1 }, 'back'], ...out(7.05)]);
   },
 

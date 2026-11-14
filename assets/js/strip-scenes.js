@@ -52,7 +52,7 @@
         [0, 1, 2].forEach(i => fly(g, X + 26 + i * 28, g.G - 30, X + 96, g.G - 62, T(t, 1.6 + i * .5, .8), (x, y) => uiCard(g, x, y, 10, 7, '#eef3ff', '#9fb6e8'))); },
       me: t => t < 2.2 ? settle(t, PO.point) : PO.shrug,
       say: t => say(t, ME(t, 2.4, 4.2, 'Same screens. Again.'))},
-    {c: 'I researched with 10+ designers, then built one documented system: *Voyage.*',
+    {c: 'I researched with 50+ designers, then built one documented system: *Voyage.*',
       draw(g, t, X) { if (t < 2) g.person(X + 92, t > .2 ? talk(t) : PO.stand, 'woman', -1);
         ['DOCS', 'PARTS', 'TYPE', 'COLOR'].forEach((s, i) => { const p = g.pop(t, 1.6 + (3 - i) * .35, .3); if (!p) return; const y = g.G - 10 - i * 10 - Math.round((1 - p) * 10);
           g.box(X + 30, y, 40, 10, ['#dbe7ff', '#cfe0ff', '#bcd2ff', '#9fbcf8'][i]); g.text(s, X + 50, y + 3, g.INK, 'center'); });
@@ -76,7 +76,7 @@
         fly(g, X + 58, g.G - 56, X + 88, g.G - 16, T(t, 3, .8), (x, y) => uiCard(g, x, y, 12, 9, '#eef3ff', '#9fb6e8')); },
       me: t => K(t, [[0, PO.type], [2, PO.type], [2.3, PO.point], [3.4, PO.stand]]),
       say: t => say(t, ME(t, 2.2, 3.6, 'Approved.'))},
-    {c: '$500M+ in deals won. 50+ designers. Turnaround cut 50%.',
+    {c: '$500M+ in deals won. *3 proposals a week, up from 3 a month.*',
       draw(g, t, X) { [10, 16, 24, 34].forEach((v, i) => { const h = Math.round(v * T(t, .2 + i * .15, .5)); g.R(X + 24 + i * 7, g.G - h, 5, h, i === 3 ? BLUE : '#9fb6e8'); });
         big(g, X + 76, g.G - 104, '$500M+', g.pop(t, 1, 1.4), BLUE, 'in enterprise deals won'); },
       me: win, say: t => say(t, ME(t, 2.8, 4.2, 'Okay. That worked.'))}]);

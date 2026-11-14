@@ -51,20 +51,21 @@
         if (g.pop(t, 2)) ctag(g, X + 61, g.G - 50, 'REBUILD ×3', RED, g.PAPER); },
       me: t => t < 2.2 ? settle(t, PO.point) : PO.shrug,
       say: t => say(t, ME(t, 2.4, 4.2, 'Same screens. Again.'))},
-    {c: 'I talked to 50+ designers and built one source of truth: *Voyage.*',
+    {c: 'I talked to 50+ designers. *A system first, demos second.*',
       draw(g, t, X) { if (t < 2) g.person(X + 92, t > .2 ? talk(t) : PO.stand, 'woman', -1);
         ['DOCS', 'PARTS', 'TYPE', 'COLOR'].forEach((s, i) => { const p = g.pop(t, 1.6 + (3 - i) * .35, .3); if (!p) return; const y = g.G - 10 - i * 10 - Math.round((1 - p) * 10);
           g.box(X + 30, y, 40, 10, ['#dbe7ff', '#cfe0ff', '#bcd2ff', '#9fbcf8'][i]); g.text(s, X + 50, y + 3, g.INK, 'center'); });
         if (g.pop(t, 3.2)) ctag(g, X + 50, g.G - 54, 'VOYAGE', BLUE, g.PAPER); },
       me: t => t < 1.6 ? settle(t, PO.pad) : K(t, [[1.6, PO.pad], [2, PO.reach], [3, PO.point]]),
       say: t => say(t, NPC(t, .3, 1.8, 'We rebuild it every pitch.', 92))},
-    {c: 'Then designers left Figma for AI tools. *The system had to work there too.*',
-      draw(g, t, X) { g.desk(X + 14, 40); g.monitor(X + 20, g.G - 34, 26, 18, '#f4f1ff'); g.text('FIGMA', X + 33, g.G - 29, g.MID, 'center'); cross(g, X + 22, g.G - 32, 22, 13, T(t, .8, .6));
-        [['CLAUDE', '#d97757', 0], ['COPILOT', '#6b3fd8', 1], ['CODE', BLUE, 2]].forEach(([s, c, i]) => { if (g.pop(t, 1.6 + i * .4)) ctag(g, X + 84, g.G - 70 + i * 13, s, c, g.PAPER); });
-        if (g.pop(t, 3)) ctag(g, X + 84, g.G - 24, 'CONTRACTS', YEL); },
-      me: t => K(t, [[0, PO.type], [1.4, PO.type], [1.8, PO.point]]),
-      say: t => say(t, ME(t, 3.2, 4.2, 'Teach the AI.'))},
-    {c: 'AI reuses what exists and lists the gaps. *A human approves every new part.*',
+    {c: 'One parent, many children. *Swap the theme and every brand fits.*',
+      draw(g, t, X) { const th = Math.floor(Math.max(0, t - 1.8) / .7) % 3, F = [['#eef3ff', '#3b6fd8'], ['#fff1e6', '#e8742d'], ['#e9f7ef', '#2e9e5b']][th];
+        g.rbox(X + 44, g.G - 74, 30, 14, F[0], '#2a2a2e'); g.R(X + 47, g.G - 71, 24, 2, F[1]); g.text('PARENT', X + 59, g.G - 67, g.INK, 'center');
+        [X + 22, X + 52, X + 82].forEach((cx, i) => { if (!g.pop(t, .5 + i * .3)) return; g.line(X + 59, g.G - 60, cx + 8, g.G - 44, g.INK); uiCard(g, cx, g.G - 44, 16, 14, F[0], F[1]); });
+        if (g.pop(t, 1.8)) ctag(g, X + 59, g.G - 22, ['BRAND A', 'BRAND B', 'BRAND C'][th], F[1], g.PAPER); },
+      me: t => K(t, [[0, PO.stand], [.4, PO.point], [1.8, PO.present]]),
+      say: t => say(t, ME(t, 3, 4.2, 'Built once.'))},
+    {c: 'Contracts taught AI the system. *It lists the gaps and a human approves.*',
       draw(g, t, X) { g.desk(X + 8, 30); g.monitor(X + 14, g.G - 34, 26, 18, '#f4f1ff');
         g.box(X + 16, g.G - 32, 13, 8, '#e2dcff'); g.text('AI', X + 19, g.G - 30, '#6b3fd8'); if (g.pop(t, .6)) g.box(X + 24, g.G - 23, 14, 5, '#cfe0ff');
         if (g.pop(t, .9)) ctag(g, X + 27, g.G - 46, 'GAPS.MD', YEL);
@@ -110,21 +111,23 @@
       me: win}]);
 
   /* ===================== Paytm Chat ===================== */
+  const NAVY = '#002970', CYAN = '#00b9f1';
   const booth = (g, x, s, c) => { g.R(x, g.G - 40, 30, 40, c); g.R(x + 2, g.G - 30, 26, 28, g.PAPER); g.R(x - 2, g.G - 44, 34, 6, c); g.text(s, x + 15, g.G - 43, g.PAPER, 'center'); };
   const pizza = (g, cx, cy, k) => { disc(g, cx, cy, 10, '#e8a35a'); disc(g, cx, cy, 8, '#f2c45a'); [[-3, -3], [3, 1], [-2, 4], [4, -4]].forEach(([a, b]) => g.R(cx + a, cy + b, 2, 2, RED));
     if (k > 0) { g.line(cx, cy, cx, cy - 10, g.INK); g.line(cx, cy, cx + 9, cy + 5, g.INK); g.line(cx, cy, cx - 9, cy + 5, g.INK); } };
-  const chat = (g, x, y, w, h) => { phone(g, x, y, w, h); g.R(x + 2, y + 3, w - 4, 5, '#e6f7fd'); g.R(x + w - 6, y + 4, 1, 1, g.INK); g.R(x + w - 6, y + 6, 1, 1, g.INK); };
-  const payBtn = (g, x, y, w = 14) => { g.rbox(x, y, w, 7, '#00b9f1', g.INK); g.text('PAY', x + w / 2, y + 1, g.PAPER, 'center'); };
-  story('paytm-chat', '#00b9f1', 'pet', [
-    {c: 'People moved to apps with faster payments and *chat built in.*',
-      draw(g, t, X) { booth(g, X + 22, 'PAYTM', '#00b9f1'); booth(g, X + 80, 'RIVAL', '#2e9e5b');
+  const chat = (g, x, y, w, h) => { phone(g, x, y, w, h); g.R(x + 2, y + 3, w - 4, 5, NAVY); g.R(x + w - 6, y + 4, 1, 1, g.PAPER); g.R(x + w - 6, y + 6, 1, 1, g.PAPER); };
+  const payBtn = (g, x, y, w = 14) => { g.rbox(x, y, w, 7, CYAN, g.INK); g.text('PAY', x + w / 2, y + 1, g.PAPER, 'center'); };
+  const payCard = (g, x, y, w, amt, paid) => { g.rbox(x, y, w, 12, g.PAPER, NAVY); g.R(x + 1, y + 1, w - 2, 3, '#e6f7fd'); g.text(amt, x + 3, y + 5, NAVY); if (paid) tick(g, x + w - 7, y + 6, GREEN); };
+  story('paytm-chat', CYAN, 'pet', [
+    {c: 'Paytm users were leaving for apps with *chat built in.*',
+      draw(g, t, X) { booth(g, X + 22, 'PAYTM', NAVY); booth(g, X + 80, 'RIVAL', '#2e9e5b');
         ['kid', 'girl', 'pal'].forEach((l, i) => { const k = T(t, .4 + i * .6, 1.4); g.person(g.lerp(X + 40, X + 92, g.ease(k)) - i * 4, k > 0 && k < 1 ? S.walkPose((t + i) * 40) : PO.stand, l, 1); }); },
       me: t => t < 2.2 ? settle(t, PO.point) : PO.shrug,
       say: t => say(t, ME(t, 2.6, 4.2, 'They want to chat too.'))},
-    {c: 'I talked to users first. *“I come to Paytm to make payments. Let me do that fast.”*',
+    {c: 'I talked to users first. *“Let me pay fast.”*',
       draw(g, t, X) { g.person(X + 70, t > .5 ? talk(t) : PO.stand, 'suit', -1); },
       me: t => settle(t, PO.pad),
-      say: t => say(t, NPC(t, .5, 4.2, 'Let me pay fast.', 70))},
+      say: t => say(t, NPC(t, .5, 4.2, 'I come here to pay.', 70))},
     {c: 'I A/B tested two starts. Chat first lost 34%. *Pay first lost 17%.*',
       draw(g, t, X) { chat(g, X + 22, g.G - 72, 26, 44); chat(g, X + 70, g.G - 72, 26, 44);
         ctag(g, X + 35, g.G - 82, 'A', g.GREY); ctag(g, X + 83, g.G - 82, 'B', g.GREY);
@@ -132,16 +135,18 @@
         if (g.pop(t, 1.4)) ctag(g, X + 35, g.G - 22, 'DROP 34%', RED, g.PAPER); if (g.pop(t, 2.2)) ctag(g, X + 83, g.G - 22, 'DROP 17%', GREEN, g.PAPER); },
       me: t => settle(t, PO.point),
       say: t => say(t, ME(t, 2.8, 4.2, 'B wins.'))},
-    {c: 'B shipped to 100M users. Later, chat came first and *the pay button jumped into the menu.*',
-      draw(g, t, X) { chat(g, X + 30, g.G - 74, 34, 56); g.rbox(X + 34, g.G - 56, 16, 5, '#f1f1ee', g.INK);
-        const k = T(t, 1, 1.2), e = g.ease(k), bx = g.lerp(X + 38, X + 54, e), by = g.lerp(g.G - 30, g.G - 70, e) - Math.sin(k * Math.PI) * 10;
-        if (k < 1) payBtn(g, bx, by, g.lerp(18, 6, e)); else if (t < 3.2) ring(g, X + 58, g.G - 67, 4, T(t, 2.2, .5), '#00b9f1');
-        if (g.pop(t, 2.2)) ctag(g, X + 47, g.G - 12, 'PAY → MENU', YEL);
-        if (g.pop(t, 2.8)) { chat(g, X + 86, g.G - 64, 26, 44); g.rbox(X + 89, g.G - 44, 20, 10, '#00b9f1', g.INK); g.text('PAY', X + 99, g.G - 41, g.PAPER, 'center'); ctag(g, X + 99, g.G - 12, 'EMPTY CHAT', YEL); } },
+    {c: 'Every payment became a card in the chat. *Then pay moved into the menu.*',
+      draw(g, t, X) { chat(g, X + 34, g.G - 76, 40, 60);
+        if (g.pop(t, .3)) payCard(g, X + 38, g.G - 66, 26, '₹250', t > 1);
+        if (g.pop(t, .9)) payCard(g, X + 44, g.G - 51, 26, '₹1,200', t > 1.5);
+        if (g.pop(t, 1.3)) ctag(g, X + 54, g.G - 88, 'COMPLIANT', GREEN, g.PAPER);
+        const k = T(t, 2.2, 1), e = g.ease(k), bx = g.lerp(X + 42, X + 64, e), by = g.lerp(g.G - 32, g.G - 72, e) - Math.sin(k * Math.PI) * 10;
+        if (k < 1) payBtn(g, bx, by, g.lerp(22, 6, e)); else ring(g, X + 67, g.G - 69, 4, T(t, 3.2, .5), CYAN);
+        if (g.pop(t, 3.3)) ctag(g, X + 54, g.G - 12, 'PAY → MENU', YEL); },
       me: t => settle(t, PO.point),
-      say: t => say(t, ME(t, .2, 1, 'Talk first.'))},
+      say: t => say(t, ME(t, 2.2, 3.2, 'Talk first.'))},
     {c: 'Drop-off fell from 17% to 12%. *Repeat payments rose 45%.*',
-      draw(g, t, X) { big(g, X + 64, g.G - 104, '+45%', g.pop(t, .4, 1.4), '#00b9f1', 'REPEAT PAYMENTS');
+      draw(g, t, X) { big(g, X + 64, g.G - 104, '+45%', g.pop(t, .4, 1.4), NAVY, 'REPEAT PAYMENTS');
         if (g.pop(t, 2)) ctag(g, X + 64, g.G - 30, 'DROP-OFF 17% → 12%', GREEN, g.PAPER); },
       me: win, say: t => say(t, ME(t, 2.6, 4.2, 'Talk. Then pay.'))}]);
 

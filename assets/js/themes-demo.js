@@ -84,8 +84,7 @@
   function mount(el) {
     if (el.dataset.on) return; el.dataset.on = 1;
     el.innerHTML = `<div class="themes__seg" role="group" aria-label="Theme">${THEMES.map((n, i) => `<button type="button" aria-pressed="${!i}" data-t="${i}">${n}</button>`).join('')}</div>
-      <div class="themes__fit"></div>
-      <p class="dg-foot">Same screen, four token sets. A simplified code demo with neutral themes, not client branding.</p>`;
+      <div class="themes__fit"></div>`;
     const fit = el.querySelector('.themes__fit');
     const size = () => { const s = fit.firstElementChild; if (!s || !fit.clientWidth) return; const k = fit.clientWidth / 1360; s.style.transform = `scale(${k})`; fit.style.height = s.offsetHeight * k + 'px'; };
     const set = i => {

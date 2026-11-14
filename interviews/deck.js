@@ -278,8 +278,7 @@
   function themes(el, v, applyTx, setCE) {
     el.className = 'themes';
     el.innerHTML = `<div class="themes__seg" role="group" aria-label="Theme">${THEMES.map((n, i) => `<button aria-pressed="${!i}" data-t="${i}">${n}</button>`).join('')}</div>
-      <div class="themes__fit"></div>
-      <span class="k">Same screen, four token sets. Representational, not client brands.</span>`;
+      <div class="themes__fit"></div>`;
     const fit = el.querySelector('.themes__fit');
     applyTx(el, v, 'o'); setCE(el);
     const size = () => { const s = fit.firstElementChild; if (!s || !fit.clientWidth) return; const k = fit.clientWidth / 1360; s.style.transform = `scale(${k})`; fit.style.height = s.offsetHeight * k + 'px'; };

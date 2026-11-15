@@ -102,5 +102,5 @@
   els.forEach(el => { const b = el.querySelector('[data-themes-open]');
     b && b.addEventListener('click', () => { const lk = document.querySelector('[data-lock]'); if (!lk) return;
       lk.scrollIntoView({behavior: 'smooth', block: 'center'}); const c = lk.querySelector('.mlock__cta'); c && !c.hidden && c.click(); }); });
-  document.addEventListener('sn:unlock', () => els.forEach(mount));
+  if (!document.querySelector('[data-lock]')) els.forEach(mount); else document.addEventListener('sn:unlock', () => els.forEach(mount));
 })();

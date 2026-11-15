@@ -230,26 +230,50 @@
   /* ================= Voyage ================= */
   function win(url, body, cls) { return '<div class="ua-win ' + (cls || '') + '"><div class="ua-win__bar"><i></i><i></i><i></i><span class="ua-url">' + url + '</span></div>' + body + '</div>'; }
 
-  /* Research: interview notes, clustered into what kept coming back */
+  /* Research: six months, three strands, one synthesis */
   W['voyage-research'] = function (root, ctx) {
-    var N = [['Every pitch starts from a blank file', 'Interview', 0], ['Made for one client, so nobody can reuse it', 'Interview', 1], ['Every demo looks different', 'Interview', 2],
-      ['Same patterns, built again from scratch', 'Interview', 0], ['Reusing a demo means rebuilding it', 'Interview', 1], ['Nothing looks like one company', 'Interview', 2]];
-    var scat = [[3, 8, -4], [37, 4, 3], [70, 10, -2], [14, 50, 2], [50, 46, -3], [76, 54, 4]];
+    var N = [['Every pitch starts from a blank file', 0], ['Made for one client, so nobody can reuse it', 1], ['Every demo looks different', 2],
+      ['Same patterns, built again from scratch', 0], ['Reusing a demo means rebuilding it', 1], ['Nothing looks like one company', 2],
+      ['A new proposal means a new build', 0], ['Client styling is baked into every screen', 1], ['Each team picks its own type and colors', 2]];
+    var scat = [[2, 4, -4], [36, 2, 3], [69, 6, -2], [10, 36, 2], [44, 32, -3], [72, 38, 4], [3, 68, 3], [38, 66, -2], [68, 70, 2]];
     var T = ['Rebuilt every time', 'Too tied to one client', 'No two demos match'];
-    var board = '<div class="ua-rb"><div class="ua-rb__tool"><span class="ua-rb__t">Designer interviews<small>50+ designers · 10 years of work</small></span><button type="button" class="ua-rb__btn">Cluster</button></div><div class="ua-rb__c">'
-      + T.map(function (t, i) { return '<span class="ua-rb__h" style="left:' + (3 + i * 33) + '%">' + t + '</span>'; }).join('')
-      + N.map(function (n, i) { return '<div class="ua-st t' + n[2] + '" data-i="' + i + '"><p>' + n[0] + '</p><small>' + n[1] + '</small></div>'; }).join('')
-      + '<div class="ua-rb__in"><span>Insight</span>Different clients, same patterns, rebuilt from scratch every time.</div></div></div>';
-    root.innerHTML = win('Voyage research · synthesis', board, 'ua-rbw');
-    var st = $$(root, '.ua-st'), c = $(root, '.ua-rb__c'), btn = $(root, '.ua-rb__btn'), cnt = [0, 0, 0];
+    var NEED = ['Shared parts every pitch starts from', 'Switch to a client\'s look without a rebuild', 'One brand behind every demo'];
+    var TABS = [['int', 'Interviews', '50+ designers'], ['sys', 'Existing systems', 'Plug in or modify'], ['brand', 'Brand vision', 'With marketing'], ['syn', 'Synthesis', 'What it showed']];
+    var tabs = '<div class="ua-rs__tabs" role="tablist">' + TABS.map(function (t, i) { return '<button type="button" role="tab" data-rt="' + t[0] + '"><i>' + (i + 1) + '</i><span><b>' + t[1] + '</b><small>' + t[2] + '</small></span></button>'; }).join('') + '</div>';
+    var p1 = '<div class="ua-rs__p" data-rp="int"><div class="ua-rb__tool"><span class="ua-rb__t">Designer interviews<small>Where demo work hurt, across about 10 years of their work</small></span><button type="button" class="ua-rb__btn">Cluster</button></div><div class="ua-rb__c">'
+      + T.map(function (t, i) { return '<span class="ua-rb__h h' + i + '" style="left:' + (2 + i * 33) + '%">' + t + '</span>'; }).join('')
+      + N.map(function (n, i) { return '<div class="ua-st t' + n[1] + '" data-i="' + i + '"><p>' + n[0] + '</p><small>Interview</small></div>'; }).join('') + '</div></div>';
+    var p2 = '<div class="ua-rs__p" data-rp="sys"><div class="ua-rs__q"><b>Plug in an existing system, or modify one?</b><span>Every option was checked against what designers told me.</span></div>'
+      + '<div class="ua-rs__opts"><button type="button" class="ua-rs__opt" data-ro="0"><small>Option</small><b>Plug in as is</b></button><button type="button" class="ua-rs__opt" data-ro="1"><small>Option</small><b>Modify one</b></button></div>'
+      + '<ul class="ua-rs__ck">' + NEED.map(function (n, i) { return '<li class="t' + i + '"><span class="ua-rs__dot"></span><span><b>' + n + '</b><small>From: ' + T[i] + '</small></span></li>'; }).join('')
+      + '<li class="t3"><span class="ua-rs__dot"></span><span><b>Works across Android, iOS, web and accessibility</b><small>Clients ship on more than one platform</small></span></li></ul></div>';
+    var BR = [['type', 'Fonts', '<span class="ua-rs__aa">Aa</span>'], ['color', 'Colors', '<span class="ua-rs__cl"><i style="background:#2f5bea"></i><i style="background:#16181d"></i><i style="background:#e9ebf0"></i><i style="background:#1f8a5b"></i></span>'],
+      ['ill', 'Illustration', '<span class="ua-rs__il"><i></i><i></i><i></i></span>'], ['viz', 'Data visualization', '<span class="ua-rs__vz">' + [40, 62, 50, 78].map(function (v, i) { return '<i style="height:' + v + '%' + (i === 3 ? ';background:#2f5bea' : '') + '"></i>'; }).join('') + '</span>'],
+      ['copy', 'Content', '<span class="ua-rs__cp"><b>Plain words.</b> Short sentences.</span>']];
+    var p3 = '<div class="ua-rs__p" data-rp="brand"><div class="ua-rs__q"><b>What should the company look and sound like?</b><span>I worked with marketing on the brand vision. It became the brand philosophy at the top of Voyage.</span></div>'
+      + '<div class="ua-rs__mb">' + BR.map(function (x) { return '<button type="button" class="ua-rs__tile" data-rb="' + x[0] + '">' + x[2] + '<b>' + x[1] + '</b></button>'; }).join('') + '</div><div class="ua-rs__bd"><small>Direction</small><p></p></div></div>';
+    var p4 = '<div class="ua-rs__p" data-rp="syn"><div class="ua-rs__map">' + T.map(function (t, i) { return '<div class="ua-rs__row t' + i + '"><span class="ua-rs__heard"><small>We heard</small>' + t + '</span><span class="ua-rs__ar">' + I.chev + '</span><span class="ua-rs__need"><small>The system needs</small>' + NEED[i] + '</span></div>'; }).join('')
+      + '</div><div class="ua-rs__ans"><span>Answer</span>One source of truth</div>'
+      + '<div class="ua-rs__tl">' + [['6 months', 'Research'], ['Next', 'MVP'], ['6 months', 'Building it out'], ['Months', 'Feedback sessions']].map(function (x) { return '<span><small>' + x[0] + '</small><b>' + x[1] + '</b></span>'; }).join('') + '</div></div>';
+    root.innerHTML = win('Voyage research · 6 months', tabs + '<div class="ua-rs__ps">' + p1 + p2 + p3 + p4 + '</div>', 'ua-rbw');
+    var st = $$(root, '.ua-st'), c = $(root, '.ua-rb__c'), btn = $(root, '.ua-rb__btn');
     function place(on) {
-      cnt = [0, 0, 0]; root.classList.toggle('clus', on); btn.textContent = on ? 'Scatter' : 'Cluster';
+      var cnt = [0, 0, 0]; root.classList.toggle('clus', on); btn.textContent = on ? 'Scatter' : 'Cluster';
       st.forEach(function (s, i) { var n = N[i];
-        if (on) { var r = cnt[n[2]]++; s.style.left = (3 + n[2] * 33) + '%'; s.style.top = (15 + r * 31) + '%'; s.style.transform = 'rotate(0deg)'; }
+        if (on) { var r = cnt[n[1]]++; s.style.left = (2 + n[1] * 33) + '%'; s.style.top = (13 + r * 29) + '%'; s.style.transform = 'rotate(0deg)'; }
         else { s.style.left = scat[i][0] + '%'; s.style.top = scat[i][1] + '%'; s.style.transform = 'rotate(' + scat[i][2] + 'deg)'; } });
     }
+    function tab(k) { $$(root, '[data-rt]').forEach(function (b) { var on = b.dataset.rt === k; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+      $$(root, '[data-rp]').forEach(function (p) { p.classList.toggle('on', p.dataset.rp === k); });
+      var tb = $(root, '.ua-rs__tabs'), on = $(tb, '.on'); if (on && tb.scrollWidth > tb.clientWidth + 2) tb.scrollTo({ left: on.offsetLeft - 12, behavior: ctx.instant ? 'auto' : 'smooth' }); }
+    function opt(k) { $$(root, '[data-ro]').forEach(function (b) { b.classList.toggle('on', b.dataset.ro === k); }); var l = $$(root, '.ua-rs__ck li');
+      l.forEach(function (li) { li.classList.remove('ck'); }); if (k == null) return; l.forEach(function (li, i) { ctx.fx(180 * i + 150, function () { li.classList.add('ck'); }); }); }
+    var BD = { type: 'One type family in every demo, on a fixed scale from display to caption.', color: 'A small core palette. A client theme swaps the color tokens, never the components.', ill: 'Simple shapes in brand colors, so every visual feels like one company.', viz: 'One highlight color per chart. Everything else stays quiet.', copy: 'Plain, short sentences. Labels say what happens next.' };
+    function tile(k) { $$(root, '[data-rb]').forEach(function (b) { b.classList.toggle('on', b.dataset.rb === k); }); var bd = $(root, '.ua-rs__bd'); bd.classList.toggle('on', !!k); $(bd, 'p').textContent = k ? BD[k] : ''; }
     ctx.on('.ua-rb__btn', function () { place(!root.classList.contains('clus')); });
-    // drag notes around
+    ctx.on('[data-rt]', function (el) { tab(el.dataset.rt); });
+    ctx.on('[data-ro]', function (el) { opt(el.dataset.ro); });
+    ctx.on('[data-rb]', function (el) { tile(el.dataset.rb); });
     st.forEach(function (s) {
       s.addEventListener('pointerdown', function (e) {
         e.preventDefault(); var r = c.getBoundingClientRect(), k = r.width / c.offsetWidth, x0 = e.clientX, y0 = e.clientY, l0 = s.offsetLeft, t0 = s.offsetTop;
@@ -259,7 +283,13 @@
         s.addEventListener('pointermove', mv); s.addEventListener('pointerup', up);
       });
     });
-    return { reset: function () { place(false); }, final: function () { place(true); }, loop: 8000, script: [[2200, '.ua-rb__btn']] };
+    return {
+      reset: function () { place(false); tab('int'); opt(null); tile(null); },
+      final: function () { place(true); opt('1'); tile('type'); tab('syn'); },
+      loop: 17000,
+      script: [[1600, '.ua-rb__btn'], [4600, '[data-rt=sys]'], [5600, '[data-ro="0"]'], [6900, '[data-ro="1"]'], [8400, '[data-rt=brand]'], [9300, '[data-rb=type]'], [10100, '[data-rb=color]'],
+        [10900, '[data-rb=ill]'], [11700, '[data-rb=viz]'], [12500, '[data-rb=copy]'], [13400, '[data-rt=syn]']]
+    };
   };
 
   /* Silos vs one system */

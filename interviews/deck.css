@@ -79,6 +79,8 @@ button{font:inherit;color:inherit}
 .row__n{font:400 22px var(--d-num);color:var(--d-mut)}
 .row__t{font-family:var(--d-display);font-style:var(--d-display-style);font-size:36px;line-height:1}
 .row__go{justify-self:end;font-weight:600}
+.grp{margin:40px 0 14px}.head+.grp{margin-top:0}
+.grp__new{margin-top:20px}
 .foot{margin-top:56px;color:var(--d-mut);font-size:13px}
 .back{display:inline-flex;gap:8px;color:var(--d-mut);font-size:13px;font-weight:500}
 .back:hover{color:var(--d-ink)}

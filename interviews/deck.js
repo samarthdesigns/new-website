@@ -91,7 +91,16 @@
   /* ---------- helpers */
   const fmtDate = s => new Date(s + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   const pad = n => String(n).padStart(2, '0');
-  const deckById = id => data.decks.find(d => d.id === id);
+  /* Base decks ("All"): the intro and each case study on their own. They edit data.sections, the template.
+     Company decks carry their own copy in deck.sections, made from the template when the deck is created,
+     so editing one company deck never touches the template or another company. */
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const baseDecks = () => [{ id: 'all-intro', company: 'Intro', only: ['intro', 'close'] },
+    ...Object.entries(data.caseStudies).map(([id, c]) => ({ id: 'all-' + id, company: c.short, only: [id] }))]
+    .map(d => ({ ...d, base: true, caseStudies: d.only }));
+  const prep = () => { data.decks.forEach(d => { if (!d.sections) d.sections = clone(data.sections); }); };
+  const secsOf = deck => deck && !deck.base ? deck.sections : data.sections;
+  const deckById = id => data.decks.find(d => d.id === id) || baseDecks().find(d => d.id === id);
   const go = h => { location.hash = h; };
   function top(right = '', deck) {
     return `<header class="top"><a href="/" rel="nofollow">${data.owner}</a><div style="display:flex;gap:12px;align-items:center">${themeSwitch(deck)}${right}${PUB ? '' : '<button class="pill" data-lock><span class="dot"></span>Lock</button>'}</div></header>`;
@@ -105,23 +114,39 @@
   function hub() {
     document.title = 'Interviews · ' + data.owner;
     app.innerHTML = `<div class="page">${top()}
-      <section class="head"><h1 class="disp">Interview decks</h1><p>${PUB ? 'View only. Pick a company, choose the case studies you want to see, then present.' : 'One deck per conversation. Pick a deck, choose the case studies that fit the panel, then present.'}</p></section>
+      <section class="head"><h1 class="disp">Interview decks</h1><p>${PUB ? 'View only. Open any case study under All, or a company deck.' : 'All holds the main decks. A new company deck starts as a copy of them, so edits there stay with that company.'}</p></section>
+      <h2 class="grp k">All</h2>
+      <ol class="rows">${baseDecks().map((d, i) => `<li class="row" tabindex="0" data-deck="${d.id}" data-to="${d.id}/play/${d.only.join(',')}/1">
+        <span class="row__n">${pad(i + 1)}</span><span class="row__t">${d.company}</span>
+        <span class="k">${d.only[0] === 'intro' ? 'Intro and thank-you' : data.caseStudies[d.only[0]].name}</span><span class="k">${countIn(data.sections, d.only)} slides</span><span class="row__go">Open →</span></li>`).join('')}</ol>
+      <h2 class="grp k">By company</h2>
       <ol class="rows">${data.decks.map((d, i) => `<li class="row" tabindex="0" data-deck="${d.id}">
         <span class="row__n">${pad(i + 1)}</span><span class="row__t">${d.company}</span>
         <span class="k">${fmtDate(d.date)}</span><span class="k">${d.caseStudies.length} case studies</span><span class="row__go">Open →</span></li>`).join('')}</ol>
+      ${PUB ? '' : '<button class="pill grp__new" data-new>+ New company deck</button>'}
       ${PUB ? '' : '<p class="foot">Private and unlisted. Please don’t share the link without asking.</p>'}</div>`;
     bindTop();
     app.querySelectorAll('[data-deck]').forEach(r => {
-      const open = () => go('#/' + r.dataset.deck);
+      const open = () => go('#/' + (r.dataset.to || r.dataset.deck));
       r.addEventListener('click', open);
       r.addEventListener('keydown', e => { if (e.key === 'Enter') open(); });
+    });
+    app.querySelector('[data-new]')?.addEventListener('click', () => {
+      const company = (prompt('Company name') || '').trim();
+      if (!company) return;
+      let id = company.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'deck', k = 2;
+      while (deckById(id)) id = id.replace(/-\d+$/, '') + '-' + k++;
+      data.decks.push({ id, company, date: new Date().toISOString().slice(0, 10), caseStudies: Object.keys(data.caseStudies), themes: ['site'], sections: clone(data.sections) });
+      dirty = true;
+      go('#/' + id);
     });
   }
 
   /* ---------- picker */
   const picks = {};
-  const ownedCount = id => data.sections.filter(s => s.owner === id).reduce((n, s) => n + s.slides.length, 0);
-  const ownerPos = id => data.sections.findIndex(s => s.owner === id);
+  const countIn = (secs, ids) => secs.filter(s => ids.includes(s.owner)).reduce((n, s) => n + s.slides.length, 0);
+  const ownedCount = (deck, id) => countIn(secsOf(deck), [id]);
+  const ownerPos = (deck, id) => secsOf(deck).findIndex(s => s.owner === id);
   function picker(deck) {
     document.title = deck.company + ' · ' + data.owner;
     const sel = picks[deck.id] ||= [...deck.caseStudies];
@@ -131,19 +156,19 @@
       <div class="picks">${deck.caseStudies.map(id => { const c = data.caseStudies[id]; return `
         <button class="pick" data-cs="${id}" aria-pressed="false">
           <span class="pick__img"><img src="${c.card}" alt="" loading="lazy"></span><span class="pick__n"></span>
-          <span class="pick__s"><span class="k">${c.name} · ${ownedCount(id)} slides</span><h2 class="pick__t">${c.short}</h2><p class="pick__l">${c.lede}</p>
+          <span class="pick__s"><span class="k">${c.name} · ${ownedCount(deck, id)} slides</span><h2 class="pick__t">${c.short}</h2><p class="pick__l">${c.lede}</p>
           <span class="chips">${c.tags.map(t => `<span class="chip">${t}</span>`).join('')}</span></span></button>`; }).join('')}</div>
       <div class="bar"><span class="bar__s"></span><div class="bar__r">
         <button class="go" data-go>Open deck →</button></div></div></div>`;
     bindTop(deck);
     const sync = () => {
-      const ordered = [...sel].sort((a, b) => ownerPos(a) - ownerPos(b));
+      const ordered = [...sel].sort((a, b) => ownerPos(deck, a) - ownerPos(deck, b));
       app.querySelectorAll('.pick').forEach(b => {
         const n = ordered.indexOf(b.dataset.cs);
         b.setAttribute('aria-pressed', n > -1);
         b.querySelector('.pick__n').textContent = n > -1 ? n + 1 : '';
       });
-      const total = data.sections.filter(s => s.owner === 'intro' || s.owner === 'close' || sel.includes(s.owner)).reduce((n, s) => n + s.slides.length, 0);
+      const total = countIn(secsOf(deck), ['intro', 'close', ...sel]);
       app.querySelector('.bar__s').textContent = sel.length
         ? `Intro → ${ordered.map(id => data.caseStudies[id].short).join(' → ')} → Thank you · ${total} slides`
         : 'Pick at least one case study';
@@ -396,18 +421,17 @@
   }
   /* Public copy: hidden slides and speaker notes are removed from the data itself, and locked images used by what's left are written unencrypted. */
   function publicJson(d) {
-    const c = JSON.parse(JSON.stringify(d));
-    c.sections.forEach(s => {
-      s.slides = s.slides.filter(o => !o.hidden);
-      s.slides.forEach(o => { delete o.notes; Object.values(o.vibe || {}).forEach(v => { delete v.notes; }); });
+    const c = clone(d);
+    const clean = secs => secs.map(s => ({ ...s, slides: s.slides.filter(o => !o.hidden) })).filter(s => s.slides.length)
+      .map(s => { s.slides.forEach(o => { delete o.notes; Object.values(o.vibe || {}).forEach(v => { delete v.notes; }); }); return s; });
+    c.sections = clean(c.sections);
+    c.decks.forEach(k => {
+      k.sections = clean(k.sections || c.sections);
+      const owned = new Set(k.sections.map(s => s.owner));
+      k.caseStudies = k.caseStudies.filter(id => owned.has(id));
+      k.sections = k.sections.filter(s => s.owner === 'intro' || s.owner === 'close' || k.caseStudies.includes(s.owner));
     });
-    c.sections = c.sections.filter(s => s.slides.length);
-    const owned = new Set(c.sections.map(s => s.owner));
-    c.decks.forEach(k => { k.caseStudies = k.caseStudies.filter(id => owned.has(id)); });
     c.decks = c.decks.filter(k => k.caseStudies.length);
-    const used = new Set(c.decks.flatMap(k => k.caseStudies));
-    Object.keys(c.caseStudies).forEach(id => { if (!used.has(id)) delete c.caseStudies[id]; });
-    c.sections = c.sections.filter(s => s.owner === 'intro' || s.owner === 'close' || used.has(s.owner));
     return JSON.stringify(c);
   }
   const imgExt = u => u[0] === 0x89 ? 'png' : u[0] === 0xff ? 'jpg' : u[0] === 0x47 ? 'gif' : u[0] === 0x3c ? 'svg' : 'webp';
@@ -443,12 +467,12 @@
   /* ---------- player: slide rail + selected slide while editing; Present shows only the slideshow */
   function play(deck, ids, n) {
     ids = ids.filter(id => deck.caseStudies.includes(id));
-    if (!ids.length) return go('#/' + deck.id);
+    if (!ids.length) return go(deck.base ? '#/' : '#/' + deck.id);
     picks[deck.id] = ids;
     const base = `#/${deck.id}/play/${ids.join(',')}/`;
     document.title = deck.company + ' deck · ' + data.owner;
     app.innerHTML = `<div class="player">
-      <header class="topb"><div class="topb__l"><a class="lnkb" href="#/${deck.id}" aria-label="Back to case studies">←</a><b>${deck.company}</b></div>
+      <header class="topb"><div class="topb__l"><a class="lnkb" href="#/${deck.base ? '' : deck.id}" aria-label="${deck.base ? 'Back to all decks' : 'Back to case studies'}">←</a><b>${deck.company}</b></div>
         <div class="topb__r">${themeSwitch(deck)}<span class="sv" aria-live="polite"></span>
           ${PUB ? '<button class="pill" data-share>Share</button><div hidden>' : ''}<button class="ib ib--t" data-notes aria-pressed="false" aria-label="Speaker notes (N)" title="Speaker notes (N)">N</button>
           <button class="pill" data-more aria-expanded="false" aria-label="Publishing settings">⋯</button>
@@ -473,7 +497,8 @@
     let secs = [], list = [], slides = [], at = -1, playing = false, narrow = false, wasFs = false, anchor = null, drag = null, target = null, uiT = 0, toastT = 0, ctx = null;
     const sel = new Set(), undo = [];
     const collapsed = new Set(JSON.parse(localStorage.getItem(COL) || '[]'));
-    const inView = s => s.owner === 'intro' || s.owner === 'close' || ids.includes(s.owner);
+    const inView = deck.base ? s => deck.only.includes(s.owner) : s => s.owner === 'intro' || s.owner === 'close' || ids.includes(s.owner);
+    const SS = () => secsOf(deck), setSS = a => { if (deck.base) SS() = a; else deck.sections = a; };
     const canEdit = () => !PUB && !playing && !narrow;
 
     /* status */
@@ -498,12 +523,12 @@
       toastEl.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { toastEl.hidden = true; }, 6000);
     };
     const mutate = (fn, msg) => {
-      undo.push(JSON.stringify(data.sections)); if (undo.length > 40) undo.shift();
+      undo.push(JSON.stringify(SS())); if (undo.length > 40) undo.shift();
       fn(); markDirty(); build(list[at]?.o); if (msg) toast(msg, true); else toastEl.hidden = true;
     };
     const doUndo = () => {
       const snap = undo.pop(); if (!snap) return;
-      const idx = at; data.sections = JSON.parse(snap); sel.clear(); toastEl.hidden = true; markDirty();
+      const idx = at; setSS(JSON.parse(snap)); sel.clear(); toastEl.hidden = true; markDirty();
       build(null, idx);
     };
 
@@ -580,7 +605,7 @@
     const saveCollapsed = () => localStorage.setItem(COL, JSON.stringify([...collapsed]));
     const flat = () => list.map(x => x.o);
     const secOf = o => secs.find(s => s.slides.includes(o));
-    const takeSelected = () => { const moved = flat().filter(o => sel.has(o)); data.sections.forEach(s => { s.slides = s.slides.filter(o => !sel.has(o)); }); return moved; };
+    const takeSelected = () => { const moved = flat().filter(o => sel.has(o)); SS().forEach(s => { s.slides = s.slides.filter(o => !sel.has(o)); }); return moved; };
     const plural = (n, w = 'slide') => `${n} ${w}${n === 1 ? '' : 's'}`;
     const delSlides = () => {
       const n = sel.size; if (!n) return;
@@ -602,25 +627,25 @@
     const newSection = (after, slidesFrom) => {
       const sec = { id: 's' + Date.now().toString(36), name: 'New section', owner: after?.owner || secs[0].owner, slides: [] };
       mutate(() => {
-        if (slidesFrom) { const s = secOf(slidesFrom), k = s.slides.indexOf(slidesFrom); sec.owner = s.owner; sec.slides = s.slides.splice(k); data.sections.splice(data.sections.indexOf(s) + 1, 0, sec); if (!s.slides.length) { data.sections.splice(data.sections.indexOf(s), 1, sec); data.sections.splice(data.sections.lastIndexOf(sec), 1, s); s.slides = sec.slides; sec.slides = []; } }
-        else data.sections.splice(data.sections.indexOf(after) + 1, 0, sec);
+        if (slidesFrom) { const s = secOf(slidesFrom), k = s.slides.indexOf(slidesFrom); sec.owner = s.owner; sec.slides = s.slides.splice(k); SS().splice(SS().indexOf(s) + 1, 0, sec); if (!s.slides.length) { SS().splice(SS().indexOf(s), 1, sec); SS().splice(SS().lastIndexOf(sec), 1, s); s.slides = sec.slides; sec.slides = []; } }
+        else SS().splice(SS().indexOf(after) + 1, 0, sec);
       });
       renameSec(sec);
     };
     const moveSec = (s, d) => {
       const k = secs.indexOf(s), o = secs[k + d]; if (!o) return;
-      mutate(() => { const a = data.sections; a.splice(a.indexOf(s), 1); a.splice(a.indexOf(o) + (d > 0 ? 1 : 0), 0, s); });
+      mutate(() => { const a = SS(); a.splice(a.indexOf(s), 1); a.splice(a.indexOf(o) + (d > 0 ? 1 : 0), 0, s); });
     };
     const removeSec = (s, keep) => {
       const k = secs.indexOf(s), n = s.slides.length;
       if (keep) {
         const to = secs[k - 1] || secs[k + 1];
         if (!to) return toast('This is the only section.');
-        mutate(() => { k > 0 ? to.slides.push(...s.slides) : to.slides.unshift(...s.slides); data.sections.splice(data.sections.indexOf(s), 1); }, `Removed section “${s.name}”.`);
+        mutate(() => { k > 0 ? to.slides.push(...s.slides) : to.slides.unshift(...s.slides); SS().splice(SS().indexOf(s), 1); }, `Removed section “${s.name}”.`);
       } else {
         if (n >= list.length) return toast('A deck needs at least one slide.');
         const cur = list[at].o, next = s.slides.includes(cur) ? (secs[k + 1]?.slides[0] || secs[k - 1]?.slides.at(-1) || list.find(x => !s.slides.includes(x.o)).o) : cur;
-        mutate(() => { data.sections.splice(data.sections.indexOf(s), 1); s.slides.forEach(o => sel.delete(o)); list[at] = { o: next }; }, `Deleted “${s.name}” and ${plural(n)}.`);
+        mutate(() => { SS().splice(SS().indexOf(s), 1); s.slides.forEach(o => sel.delete(o)); list[at] = { o: next }; }, `Deleted “${s.name}” and ${plural(n)}.`);
       }
     };
     function renameSec(s) {
@@ -733,7 +758,7 @@
       if (!d) return; e.preventDefault();
       if (kind.type === 'sec') {
         if (d.tgt === kind.sec) return;
-        return mutate(() => { const a = data.sections; a.splice(a.indexOf(kind.sec), 1); a.splice(a.indexOf(d.tgt) + (d.after ? 1 : 0), 0, kind.sec); });
+        return mutate(() => { const a = SS(); a.splice(a.indexOf(kind.sec), 1); a.splice(a.indexOf(d.tgt) + (d.after ? 1 : 0), 0, kind.sec); });
       }
       if (d.o && sel.has(d.o)) return;
       mutate(() => {
@@ -866,9 +891,9 @@
     }
     function build(keep, fallback) {
       const prev = fallback ?? at;
-      secs = data.sections.filter(inView);
+      secs = SS().filter(inView);
       list = secs.flatMap((s, si) => s.slides.map(o => ({ s: withVibe(o), o, name: s.name, si })));
-      if (!list.length) return go('#/' + deck.id);
+      if (!list.length) return go(deck.base ? '#/' : '#/' + deck.id);
       stage.innerHTML = list.map((x, i) => slideHtml(x.s, x.name, i)).join('');
       slides = [...stage.children];
       list.forEach((x, i) => initSlide(slides[i], x));
@@ -903,7 +928,7 @@
       applyCE(); paint(); fit();
     };
     root.querySelector('[data-present]').addEventListener('click', enterPlay);
-    root.querySelector('[data-x]').addEventListener('click', () => { if (narrow && !playing) go('#/' + deck.id); else exitPlay(); });
+    root.querySelector('[data-x]').addEventListener('click', () => { if (narrow && !playing) go(deck.base ? '#/' : '#/' + deck.id); else exitPlay(); });
     root.querySelector('[data-undo]').addEventListener('click', doUndo);
     const onMove = () => { if (!playing) return; root.classList.add('show-ui'); clearTimeout(uiT); uiT = setTimeout(() => root.classList.remove('show-ui'), 2200); };
     root.addEventListener('mousemove', onMove);
@@ -923,7 +948,7 @@
       else if (k === 'f' || k === 'F') playing ? exitPlay() : enterPlay();
       else if (k === 'n' || k === 'N') toggleNotes();
       else if ((k === 'Delete' || k === 'Backspace') && canEdit()) { e.preventDefault(); delSlides(); }
-      else if (k === 'Escape') { if (playing) exitPlay(); else if (narrow) go('#/' + deck.id); }
+      else if (k === 'Escape') { if (playing) exitPlay(); else if (narrow) go(deck.base ? '#/' : '#/' + deck.id); }
     };
     let tx = 0, ty = 0;
     const ts = e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; };
@@ -950,11 +975,12 @@
   /* ---------- router */
   function route() {
     if (!data) return;
+    prep();
     player?.(); player = null;
     const [deckId, mode, ids, n] = location.hash.replace(/^#\/?/, '').split('/');
     const deck = deckId && deckById(deckId);
     if (!deck) return hub();
-    if (mode === 'play') return play(deck, (ids || '').split(',').filter(Boolean), n);
+    if (mode === 'play' || deck.base) return play(deck, mode === 'play' ? (ids || '').split(',').filter(Boolean) : deck.only, n);
     picker(deck);
   }
   addEventListener('hashchange', route);

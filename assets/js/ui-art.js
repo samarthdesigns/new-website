@@ -242,7 +242,7 @@
     var tabs = '<div class="ua-rs__tabs" role="tablist">' + TABS.map(function (t, i) { return '<button type="button" role="tab" data-rt="' + t[0] + '"><i>' + (i + 1) + '</i><span><b>' + t[1] + '</b><small>' + t[2] + '</small></span></button>'; }).join('') + '</div>';
     var p1 = '<div class="ua-rs__p" data-rp="int"><div class="ua-rb__tool"><span class="ua-rb__t">Designer interviews<small>Where demo work hurt, across about 10 years of their work</small></span><button type="button" class="ua-rb__btn">Cluster</button></div><div class="ua-rb__c">'
       + T.map(function (t, i) { return '<span class="ua-rb__h h' + i + '" style="left:' + (2 + i * 33) + '%">' + t + '</span>'; }).join('')
-      + N.map(function (n, i) { return '<div class="ua-st t' + n[1] + '" data-i="' + i + '"><p>' + n[0] + '</p><small>Interview</small></div>'; }).join('') + '</div></div>';
+      + N.map(function (n, i) { return '<div class="ua-st t' + n[1] + '" data-i="' + i + '"><p>' + n[0] + '</p><small>Heard in interviews</small></div>'; }).join('') + '</div></div>';
     var p2 = '<div class="ua-rs__p" data-rp="sys"><div class="ua-rs__q"><b>Plug in an existing system, or modify one?</b><span>Every option was checked against what designers told me.</span></div>'
       + '<div class="ua-rs__opts"><button type="button" class="ua-rs__opt" data-ro="0"><small>Option</small><b>Plug in as is</b></button><button type="button" class="ua-rs__opt" data-ro="1"><small>Option</small><b>Modify one</b></button></div>'
       + '<ul class="ua-rs__ck">' + NEED.map(function (n, i) { return '<li class="t' + i + '"><span class="ua-rs__dot"></span><span><b>' + n + '</b><small>From: ' + T[i] + '</small></span></li>'; }).join('')
@@ -254,7 +254,7 @@
       + '<div class="ua-rs__mb">' + BR.map(function (x) { return '<button type="button" class="ua-rs__tile" data-rb="' + x[0] + '">' + x[2] + '<b>' + x[1] + '</b></button>'; }).join('') + '</div><div class="ua-rs__bd"><small>Direction</small><p></p></div></div>';
     var p4 = '<div class="ua-rs__p" data-rp="syn"><div class="ua-rs__map">' + T.map(function (t, i) { return '<div class="ua-rs__row t' + i + '"><span class="ua-rs__heard"><small>We heard</small>' + t + '</span><span class="ua-rs__ar">' + I.chev + '</span><span class="ua-rs__need"><small>The system needs</small>' + NEED[i] + '</span></div>'; }).join('')
       + '</div><div class="ua-rs__ans"><span>Answer</span>One source of truth</div>'
-      + '<div class="ua-rs__tl">' + [['6 months', 'Research'], ['Next', 'MVP'], ['6 months', 'Building it out'], ['Months', 'Feedback sessions']].map(function (x) { return '<span><small>' + x[0] + '</small><b>' + x[1] + '</b></span>'; }).join('') + '</div></div>';
+      + '<div class="ua-rs__tl">' + [['6 months', 'Research'], ['Then', 'MVP'], ['6 months', 'Building it out'], ['Months', 'Feedback sessions']].map(function (x) { return '<span><small>' + x[0] + '</small><b>' + x[1] + '</b></span>'; }).join('') + '</div></div>';
     root.innerHTML = win('Voyage research · 6 months', tabs + '<div class="ua-rs__ps">' + p1 + p2 + p3 + p4 + '</div>', 'ua-rbw');
     var st = $$(root, '.ua-st'), c = $(root, '.ua-rb__c'), btn = $(root, '.ua-rb__btn');
     function place(on) {

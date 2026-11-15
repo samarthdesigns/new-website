@@ -28,14 +28,14 @@
 <link href="../assets/css/base.css?v=40" rel="stylesheet"/>
 <link href="../assets/css/cs.css?v=43" rel="stylesheet"/>
 <link href="../assets/css/cs-viz.css?v=1" rel="stylesheet"/>
-<link href="../assets/css/ui-art.css?v=4" rel="stylesheet"/>
+<link href="../assets/css/ui-art.css?v=5" rel="stylesheet"/>
 <link href="../assets/css/strip.css?v=5" rel="stylesheet"/>
 <script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script><script defer="" src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js"></script>
 <script defer="" src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js"></script>
 <script defer="" src="../assets/js/base.js?v=40"></script>
 <script defer="" src="../assets/js/cs.js?v=43"></script>
 <script defer="" src="../assets/js/cs-viz.js?v=1"></script>
-<script defer="" src="../assets/js/ui-art.js?v=4"></script>
+<script defer="" src="../assets/js/ui-art.js?v=5"></script>
 <script defer="" src="../assets/js/strip.js?v=12"></script>
 <script defer="" src="../assets/js/strip-scenes.js?v=9"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Article","headline":"Paytm Chat: Chat Payments for 100M+ Users","description":"Designing chat-payments primitives from zero for 100M+ users, where every component needed legal and compliance sign-off before it could ship.","image":"https://samarthnayyar.com/framerusercontent.com/assets/6vNBm5jMFSHAAXq6AwVOzZv8vE.png","url":"https://samarthnayyar.com/case-studies/paytm-chat.html","mainEntityOfPage":"https://samarthnayyar.com/case-studies/paytm-chat.html","inLanguage":"en-US","author":{"@id":"https://samarthnayyar.com/#person"},"publisher":{"@id":"https://samarthnayyar.com/#person"},"about":"Product design case study"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://samarthnayyar.com/"},{"@type":"ListItem","position":2,"name":"Work","item":"https://samarthnayyar.com/case-studies.html"},{"@type":"ListItem","position":3,"name":"Paytm Chat","item":"https://samarthnayyar.com/case-studies/paytm-chat.html"}]},{"@type":"Person","@id":"https://samarthnayyar.com/#person","name":"Samarth Nayyar","jobTitle":["Product Designer","Design Engineer"],"url":"https://samarthnayyar.com/","email":"mailto:contact@samarthnayyar.com","image":"https://samarthnayyar.com/assets/img/og-image-2.png","address":{"@type":"PostalAddress","addressLocality":"San Francisco","addressRegion":"CA","addressCountry":"US"},"knowsAbout":["Product Design","UX Design","Design Systems","AI-native product design","Interaction Design","Prototyping","User Research","Fintech UX"]}]}</script>
@@ -59,7 +59,7 @@
 <div class="logo-sq"><img alt="Paytm Chat logo" src="../framerusercontent.com/images/vgLV046QkYTYPyRAKUnvErMPyY__Q__width__E__500__A__height__E__281.png"/></div>
 </div>
 <div class="chips" data-intro-item=""><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">Mobile</span><span class="chip">Scale</span></div>
-<div class="comic" data-intro-item=""><p class="muted">Not everyone likes to read too much nowadays (thanks TikTok). See a comic strip?</p><button class="cta" data-comic-open="" type="button"><span>Comic Strip</span></button></div>
+<div class="comic" data-intro-item=""><p class="muted">Short on time? See it as a comic strip.</p><button class="cta" data-comic-open="" type="button"><span>Comic Strip</span></button></div>
 </div>
 </header>
 <section class="mfacts band"><div class="container mfacts__grid">
@@ -98,11 +98,11 @@
 <section class="msec" id="decision"><h2 class="display" data-liquid="">The A/B test</h2>
 <div class="mbody"><p data-reveal="">With 100M users landing on it, we didn't want to bet on one way in. We built two launch experiences and tested them. In A, you open a chat and find Pay in the menu. In B, paying opens the chat and the pay button stays in view.</p>
 <figure class="ua-fig" data-reveal=""><div class="ua" data-ua="paytm-ab" role="group" aria-label="Chat first: open a chat, find Pay in the menu. 34% left without paying. Pay first: Pay is in view and opens the payment sheet. 17% left without paying."></div></figure>
-<p data-reveal="">B halved the drop, so we shipped it. Competitors moved to a similar model within months.</p></div></section>
+<p data-reveal="">In A, 34% left the chat without paying. In B, 17% did. B halved the drop, so we shipped it. Competitors moved to a similar model within months.</p></div></section>
 
 <section class="msec" id="s4"><h2 class="display" data-liquid="">Building the chat</h2>
 <div class="mbody"><p data-reveal="">Paytm's design system had no chat patterns, so I built them from scratch. People reach chat from other parts of the app, so hierarchy and style had to match what they had just seen.</p>
-<p data-reveal="">Every payment shows up in the chat as a card. I worked with the regulation, compliance and payments teams on what each card could show: status, traceability and the icons the RBI allowed. In some places my input changed their experiences. In others I adapted to theirs.</p>
+<p data-reveal="">Every payment shows up in the chat as a card. I worked with the regulation, compliance and payments teams on what each card could show: status, traceability and the icons the RBI allowed. We didn't always agree, and some of their screens changed because of my input.</p>
 <figure class="ua-fig" data-reveal=""><div class="ua" data-ua="paytm-cards" role="group" aria-label="Payment cards in a chat: a sent payment with its status and UPI reference, a request with Pay and Decline, and a split bill that fills as people pay."></div></figure>
 <p data-reveal="">Version one launched to 100M users. Split Bills was part of it.</p>
 <figure class="mflow" data-flow data-reveal aria-label="Split Bills flow, played in a phone"><div class="mflow__ph"><div class="mflow__scr"></div><div class="mflow__hit"><span class="mflow__cur"></span></div></div><ol class="mflow__steps"><li data-src="../assets/flows/onb-1.webp" data-tap=".5,.955"><button type="button">Onboarding: the problem</button></li><li data-src="../assets/flows/onb-2.webp" data-tap=".5,.955"><button type="button">Onboarding: everyone gets a share</button></li><li data-src="../assets/flows/onb-3.webp" data-tap=".5,.955"><button type="button">Onboarding: get started</button></li><li data-src="../assets/flows/split-1.webp" data-tap=".25,.6;.5,.885"><button type="button">Create a group</button></li><li data-src="../assets/flows/split-3.webp" data-tap=".5,.955"><button type="button">Add an expense</button></li><li data-src="../assets/flows/split-2.webp"><button type="button">See who owes what</button></li></ol></figure>
@@ -123,7 +123,7 @@
 <div class="vz-bar"><b>A: chat first<small>A/B test</small></b><div class="vz-track"><span class="vz-fill" style="--v:100%;--c:var(--hot)">34%</span></div></div>
 <div class="vz-bar"><b>B: pay first<small>Shipped at launch</small></b><div class="vz-track"><span class="vz-fill" style="--v:50%;--c:var(--who)">17%</span></div></div>
 <div class="vz-bar"><b>Merged flow<small>After feedback</small></b><div class="vz-track"><span class="vz-fill" style="--v:35.3%;--c:var(--ok)">12%</span></div></div>
-</div><div class="vz-plus"><span class="n">+45%</span><span>repeat payments: pay-button taps inside chat after the merge</span></div></div></figure></div></section>
+</div><div class="vz-plus"><span class="n">+45%</span><span>repeat payments in chat</span></div></div></figure></div></section>
 
 <section class="msec" id="s6"><h2 class="display" data-liquid="">What I learned</h2>
 <div class="mbody"><div class="mcards mcols"><div class="mcard" data-reveal=""><h3 class="msub">Ask users before copying the market</h3><p>The market said chat first. Our users said pay first, and the A/B test backed them.</p></div><div class="mcard" data-reveal=""><h3 class="msub">A test winner isn't the end</h3><p>B won, but it still missed that people talk before paying. Listening after launch took the drop from 17% to 12%.</p></div></div></div></section>

@@ -20,7 +20,7 @@
   }
   const encUrls = new Map();
   function encImg(path) {
-    if (!encUrls.has(path)) encUrls.set(path, fetch(path).then(r => r.arrayBuffer()).then(b => decrypt(b, pw))
+    if (!encUrls.has(path)) encUrls.set(path, authed(path).then(r => r.arrayBuffer()).then(b => decrypt(b, pw))
       .then(d => URL.createObjectURL(new Blob([d], { type: 'image/webp' }))));
     return encUrls.get(path);
   }
@@ -33,17 +33,28 @@
     const out = new Uint8Array(28 + ct.length); out.set(salt); out.set(iv, 16); out.set(ct, 28);
     return out;
   }
-  async function gitSha(bytes) {
-    const head = new TextEncoder().encode(`blob ${bytes.length}\0`), all = new Uint8Array(head.length + bytes.length);
-    all.set(head); all.set(bytes, head.length);
-    return hex(new Uint8Array(await crypto.subtle.digest('SHA-1', all)));
-  }
 
   /* ---------- gate */
+  /* The deck lives on samarthnayyar.com's own server. The password signs in there (it is checked by decrypting the
+     stored deck, never saved), and the deck is still decrypted here in the browser. */
+  async function login(pass) {
+    const r = await fetch('/api/interviews/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ password: pass }), cache: 'no-store' });
+    if (r.status === 429) throw new Error('Too many tries. Wait 15 minutes.');
+    if (!r.ok) throw new Error('wrong');
+  }
+  // Fetch with the session cookie; if the server restarted and forgot it, sign in again once.
+  async function authed(path, opts = {}) {
+    let r = await fetch(path, { cache: 'no-store', ...opts });
+    if (r.status === 401 && pw) { await login(pw); r = await fetch(path, { cache: 'no-store', ...opts }); }
+    return r;
+  }
   async function unlock(pass) {
-    const buf = await fetch('deck.bin', { cache: 'no-cache' }).then(r => r.arrayBuffer());
+    await login(pass);
+    const r = await fetch('/interviews/deck.bin', { cache: 'no-store' });
+    if (!r.ok) throw new Error('deck ' + r.status);
+    const buf = await r.arrayBuffer();
     data = JSON.parse(new TextDecoder().decode(await decrypt(buf, pass)));
-    loadedSha = await gitSha(new Uint8Array(buf));
+    loadedSha = (r.headers.get('etag') || '').replace(/"/g, '');
     pw = pass;
     sessionStorage.setItem(KEY, pass);
   }
@@ -56,7 +67,7 @@
       e.preventDefault();
       btn.disabled = true; err.textContent = '';
       try { await unlock(input.value); route(); }
-      catch { err.textContent = 'That password didn’t work.'; f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); input.select(); }
+      catch (x) { err.textContent = /Too many/.test(x?.message) ? x.message : 'That password didn’t work.'; f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake'); input.select(); }
       finally { btn.disabled = false; }
     });
   }
@@ -107,7 +118,7 @@
   }
   function bindTop(deck) {
     bindTheme(app, deck);
-    app.querySelector('[data-lock]')?.addEventListener('click', () => { sessionStorage.removeItem(KEY); location.hash = ''; location.reload(); });
+    app.querySelector('[data-lock]')?.addEventListener('click', async () => { sessionStorage.removeItem(KEY); await fetch('/api/interviews/logout', { method: 'POST' }).catch(() => {}); location.hash = ''; location.reload(); });
   }
 
   /* ---------- hub */
@@ -389,9 +400,9 @@
     });
   }
 
-  /* ---------- editor helpers: edits apply to the decrypted deck in memory; Publish re-encrypts and commits via the GitHub Contents API.
-     The token is typed in here by Samarth and kept only in this browser's localStorage. */
-  const TOK = 'sn-interviews-gh', REPO = 'samarthdesigns/new-website', COL = 'sn-interviews-collapsed', newBins = new Map();
+  /* ---------- editor helpers: edits apply to the decrypted deck in memory; Publish re-encrypts here and saves to
+     samarthnayyar.com's server (link-service/interviews.js on Fly), which keeps the last 50 versions. */
+  const COL = 'sn-interviews-collapsed', newBins = new Map();
   const fieldOwner = (o, f) => (o.vibe?.[vibe()] && f in o.vibe[vibe()]) ? o.vibe[vibe()] : o;
   function swap(obj, from, to) {
     for (const k in obj) {
@@ -406,18 +417,11 @@
     c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
     return new Promise(r => c.toBlob(r, 'image/webp', 0.86));
   }
-  const b64 = u => { let s = ''; for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode(...u.subarray(i, i + 0x8000)); return btoa(s); };
-  async function gh(path, bytes, message) {
-    const token = localStorage.getItem(TOK), api = `https://api.github.com/repos/${REPO}/contents/${path}`;
-    const h = { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
-    const cur = await fetch(api + '?ref=main', { headers: h, cache: 'no-store' });
-    if (!cur.ok && cur.status !== 404) throw new Error(`${path}: GitHub said ${cur.status}`);
-    const sha = cur.ok ? (await cur.json()).sha : undefined;
-    if (path === 'interviews/deck.bin' && sha && sha !== loadedSha) throw new Error('The deck changed on GitHub since you opened it. Reload, then redo these edits.');
-    const r = await fetch(api, { method: 'PUT', headers: h, body: JSON.stringify({ message, content: b64(bytes), branch: 'main', ...(sha && { sha }) }) });
+  async function put(path, body, headers = {}) {
+    const r = await authed(path, { method: 'PUT', body, headers });
     const j = await r.json().catch(() => ({}));
-    if (!r.ok) throw new Error(`${path}: ${r.status} ${j.message || ''}`);
-    return j.content?.sha;
+    if (!r.ok) throw new Error(j.error || `${path}: ${r.status}`);
+    return j;
   }
   /* Public copy: hidden slides and speaker notes are removed from the data itself, and locked images used by what's left are written unencrypted. */
   function publicJson(d) {
@@ -435,12 +439,6 @@
     return JSON.stringify(c);
   }
   const imgExt = u => u[0] === 0x89 ? 'png' : u[0] === 0xff ? 'jpg' : u[0] === 0x47 ? 'gif' : u[0] === 0x3c ? 'svg' : 'webp';
-  async function ghList(path) {
-    const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}?ref=main`, { headers: { Authorization: `Bearer ${localStorage.getItem(TOK)}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' }, cache: 'no-store' });
-    if (r.status === 404) return [];
-    if (!r.ok) throw new Error(`${path}: GitHub said ${r.status}`);
-    return r.json();
-  }
   async function syncPublic() {
     let json = publicJson(data);
     const imgs = new Map();
@@ -450,15 +448,10 @@
       imgs.set(name, bytes);
       json = json.split('enc:' + p).join('/interviews/public/img/' + name);
     }
-    const have = await ghList('interviews/public/img');
-    for (const [name, bytes] of imgs) if (!have.some(f => f.name === name)) await gh(`interviews/public/img/${name}`, bytes, 'Interviews: add image to the public view');
-    const out = new TextEncoder().encode(json), cur = (await ghList('interviews/public')).find(f => f.name === 'deck.json');
-    if (cur?.sha !== await gitSha(out)) await gh('interviews/public/deck.json', out, 'Interviews: sync the public view');
-    // images no longer used (a slide was hidden or removed) must not stay public
-    for (const f of have) if (!imgs.has(f.name)) {
-      const r = await fetch(`https://api.github.com/repos/${REPO}/contents/${f.path}`, { method: 'DELETE', headers: { Authorization: `Bearer ${localStorage.getItem(TOK)}`, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' }, body: JSON.stringify({ message: 'Interviews: remove image from the public view', sha: f.sha, branch: 'main' }) });
-      if (!r.ok) throw new Error(`${f.path}: GitHub said ${r.status}`);
-    }
+    const have = (await authed('/api/interviews/public-img').then(r => r.json())).names || [];
+    for (const [name, bytes] of imgs) if (!have.includes(name)) await put(`/api/interviews/public-img/${name}`, bytes);
+    // the server rejects a copy with notes or hidden slides, and deletes images it no longer uses
+    await put('/api/interviews/public', json, { 'content-type': 'application/json' });
   }
   const getPath = (o, p) => p.split('.').reduce((a, k) => a?.[k], o);
   const setPath = (o, p, v) => { const ks = p.split('.'), last = ks.pop(); ks.reduce((a, k) => a[k], o)[last] = v; };
@@ -505,16 +498,9 @@
     const say = t => { sv.textContent = t; };
     const syncSave = () => {
       if (PUB) return;
-      const has = !!localStorage.getItem(TOK);
       saveB.disabled = !dirty;
-      if (!/Saving|Encrypting|Uploading|Committing|failed|Live in/.test(sv.textContent) || dirty) say(dirty ? 'Unsaved changes' : '');
-      const tok = panel.querySelector('.ed__tok');
-      tok.innerHTML = has
-        ? `<span class="k">GitHub token saved in this browser</span> <button class="lnk" data-forget>Forget</button>`
-        : `<form class="ed__f"><input type="password" placeholder="GitHub fine-grained token" aria-label="GitHub fine-grained token" autocomplete="off"><button class="pill">Keep</button></form>
-           <span class="ed__h">Contents: read &amp; write on ${REPO} only. Stored in this browser, never in the repo.</span>`;
-      tok.querySelector('form')?.addEventListener('submit', e => { e.preventDefault(); const v = e.target.querySelector('input').value.trim(); if (v) { localStorage.setItem(TOK, v); syncSave(); } });
-      tok.querySelector('[data-forget]')?.addEventListener('click', () => { localStorage.removeItem(TOK); syncSave(); });
+      if (!/Saving|Encrypting|Uploading|failed|Published/.test(sv.textContent) || dirty) say(dirty ? 'Unsaved changes' : '');
+      panel.querySelector('.ed__tok').innerHTML = '<span class="ed__h">Publish saves to samarthnayyar.com. The last 50 versions are kept.</span>';
     };
     const markDirty = () => { dirty = true; syncSave(); };
     const toast = (msg, canUndo) => {
@@ -823,18 +809,17 @@
       dirty = false; newBins.clear(); location.reload();
     });
     saveB.addEventListener('click', async () => {
-      if (!localStorage.getItem(TOK)) { panel.hidden = false; panel.querySelector('input')?.focus(); return; }
       saveB.disabled = true; dirty = false;
       try {
-        for (const [name, bytes] of newBins) { say('Uploading image…'); await gh(`assets/img/locked/${name}`, bytes, 'Interviews: add locked image from the deck editor'); }
+        for (const [name, bytes] of newBins) { say('Uploading image…'); await put(`/api/interviews/locked/${name}`, bytes); }
         newBins.clear();
         say('Encrypting…');
         const bin = await encrypt(new TextEncoder().encode(JSON.stringify(data)));
-        say('Committing…');
-        loadedSha = await gh('interviews/deck.bin', bin, 'Interviews: edit deck from the browser editor');
+        say('Saving…');
+        loadedSha = (await put('/api/interviews/deck', bin, { 'if-match': loadedSha })).etag;
         say('Updating the public view…');
         await syncPublic();
-        say('Published. Live in about a minute.');
+        say('Published.');
       } catch (err) { dirty = true; say('Publish failed: ' + err.message); }
       saveB.disabled = !dirty;
     });

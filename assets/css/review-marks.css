@@ -1,0 +1,3 @@
+/* TEMPORARY review markers. Remove with: git revert <this commit> */
+[data-new]{outline:2px dashed #e5484d;outline-offset:6px;position:relative}
+[data-new]::after{content:"EDIT " attr(data-new);position:absolute;top:-14px;right:0;z-index:5;padding:1px 6px;background:#e5484d;color:#fff;font:700 9px/1.6 system-ui,sans-serif;letter-spacing:.5px;pointer-events:none}

@@ -98,18 +98,5 @@
 }
 @media (prefers-reduced-motion:reduce){.vz-jump.run,.vz-keb.run::after{animation:none}}
 
-/* data-dense placeholder screen */
-.dd-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:9px;margin-bottom:14px}
-.dd-kpis{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--rule);margin-bottom:14px}
-.dd-kpis>div{padding:9px 11px}.dd-kpis>div+div{border-left:1px solid var(--rule)}
-.dd-kpis small{display:block;color:rgba(20,20,20,.6);font-size:10px}.dd-kpis b{font-size:16px;font-variant-numeric:tabular-nums}
-.dd-r{display:grid;grid-template-columns:1.5fr 1fr .9fr .8fr .8fr 1fr .9fr;gap:8px;padding:7px 0;border-top:1px solid var(--rule);font-size:11px;font-variant-numeric:tabular-nums}
-.dd-h{font-weight:600;color:rgba(20,20,20,.6);border-top:0;text-transform:uppercase;font-size:9px;letter-spacing:.5px}
-.dd-r span{min-width:0;overflow-wrap:anywhere}
-.dd figcaption{margin-top:12px;font-size:11px;color:rgba(20,20,20,.6)}
+/* Future Samarth note tag */
 .fnote .kicker .vz-tag{margin-left:0;margin-top:6px;display:table}
-@media (max-width:640px){
-  .dd-kpis{grid-template-columns:repeat(2,1fr)}.dd-kpis>div:nth-child(3){border-left:0}.dd-kpis>div:nth-child(n+3){border-top:1px solid var(--rule)}
-  .dd-h{display:none}.dd-r{grid-template-columns:1fr 1fr;gap:3px 12px;padding:10px 0}
-  .dd-r span::before{content:attr(data-k) " ";color:rgba(20,20,20,.55);font-size:9px;text-transform:uppercase;letter-spacing:.4px;display:block}
-}

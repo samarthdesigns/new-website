@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PopTalk: Calls That Stay Out of the Way | Side Project by Samarth Nayyar</title>
+<meta name="description" content="PopTalk turns a Google Meet call into a small island and speaker bubbles that float over your work. Designed and built solo, with Claude as the engineer.">
+<meta property="og:title" content="PopTalk: Calls That Stay Out of the Way | Side Project by Samarth Nayyar">
+<meta property="og:description" content="PopTalk turns a Google Meet call into a small island and speaker bubbles that float over your work. Designed and built solo, with Claude as the engineer.">
+<meta property="og:image" content="https://samarthnayyar.com/assets/fun/poptalk/cover/poptalk-card-1920x1080.min.webp">
+<link rel="canonical" href="https://samarthnayyar.com/fun/poptalk">
+<meta property="og:url" content="https://samarthnayyar.com/fun/poptalk">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Samarth Nayyar">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PopTalk: Calls That Stay Out of the Way | Side Project by Samarth Nayyar">
+<meta name="author" content="Samarth Nayyar">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:locale" content="en_US">
+<meta name="theme-color" content="#f6f6f4">
+<meta name="twitter:description" content="PopTalk turns a Google Meet call into a small island and speaker bubbles that float over your work. Designed and built solo, with Claude as the engineer.">
+<meta name="twitter:image" content="https://samarthnayyar.com/assets/fun/poptalk/cover/poptalk-card-1920x1080.min.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="preload" href="../assets/fonts/GeistPixel-VF.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/GeistPixel-VF.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/base.css?v=40">
+<link rel="stylesheet" href="/assets/css/cs.css?v=44">
+<style>
+/* PopTalk page: video in the case-study frames (flat, no elevation) */
+.vz-tag{display:inline-block;padding:2px 6px;font:600 9px/1.4 var(--sans);letter-spacing:.6px;text-transform:uppercase;white-space:nowrap}
+.vz-tag.mark{background:var(--hot-bg,#fbeef1);color:var(--hot,#a8475b);margin-left:6px;vertical-align:2px}
+.mfig video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.mfig figcaption,.pt-cap{margin:11px 0 0;font-size:13px;color:var(--muted)}
+.mfig.pt-has-cap{overflow:visible;background:none}.mfig.pt-has-cap>video,.mfig.pt-has-cap>img{background:var(--tile)}
+.mcar__s--v{aspect-ratio:auto;display:block;background:none;place-items:initial}
+.pt-slide{margin:0}
+.pt-frame{aspect-ratio:16/9;background:var(--tile);overflow:hidden}
+.pt-frame video,.pt-frame img,.mcar__s--v .pt-frame img{display:block;width:100%;height:100%;object-fit:cover}
+.pt-cap b{color:var(--ink);font-weight:600}
+.mspec--wide{grid-template-columns:1fr;gap:24px;padding:36px clamp(14px,3vw,36px)}
+.mspec--wide .mspec__col,.mspec--wide .mspec__svg{display:none}
+.mspec--wide .mspec__ph{width:100%;padding:0;border-radius:0;background:none}
+.mspec--wide .mflow__scr{border-radius:6px;background:#141414}
+.mspec--wide .mflow__hit{inset:0}
+.mspec--wide .mspec__list{display:grid;grid-template-columns:1fr 1fr;column-gap:29px}
+.mspec--wide .mspec__n{position:static;text-align:left;grid-template-columns:24px 1fr;padding:9px 0;border-top:1px solid var(--line)}
+@media (max-width:860px){.mspec--wide .mspec__list{grid-template-columns:1fr}}
+.pt-get{margin-top:29px}
+.pt-get .links{margin-top:18px}
+.links .pt-soon{position:relative;height:59px;display:grid;place-items:center;padding:0 16px;font-weight:500;font-size:14px;line-height:1.1;text-transform:uppercase;color:var(--muted);border-left:1px solid var(--line);cursor:default}
+.pt-small{font-size:13px;color:var(--muted);margin-top:14px}
+.pt-ai{margin:0;padding:0;list-style:none}
+.pt-ai li{padding:14px 0;border-top:1px solid var(--line)}
+.pt-ai li b{color:var(--ink);font-weight:600}
+@media (max-width:600px){.links{grid-auto-flow:row}.links .pt-soon{border-left:0;border-top:1px solid var(--line)}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js" defer></script>
+<script src="/assets/js/base.js?v=40" defer></script>
+<script src="/assets/js/cs.js?v=43" defer></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"PopTalk","headline":"PopTalk: Calls That Stay Out of the Way","description":"PopTalk turns a Google Meet call into a small island and speaker bubbles that float over your work. Designed and built solo, with Claude as the engineer.","image":"https://samarthnayyar.com/assets/fun/poptalk/cover/poptalk-card-1920x1080.min.webp","url":"https://samarthnayyar.com/fun/poptalk","inLanguage":"en-US","author":{"@type":"Person","@id":"https://samarthnayyar.com/#person","name":"Samarth Nayyar","url":"https://samarthnayyar.com/"}}</script>
+<script src="/assets/js/app-link.js"></script><script data-before-send="snAppLink" defer src="https://cloud.umami.is/script.js" data-website-id="12ea2061-77c4-4a85-aa50-0a532e9b67d4"></script></head>
+<body class="pg-cs" data-lenis="{&quot;lerp&quot;: 0.09}">
+<div class="navbar"><header class="nav">
+  <a class="nav__brand" href="/index.html" aria-label="Samarth Nayyar, home">Samarth</a>
+  <nav class="nav__links" aria-label="Primary"><a class="" href="/index.html">Index</a><a class="" href="/case-studies.html">Work</a><a class="" href="/story.html">Story</a><a class="" href="/resume.html">Resume</a></nav>
+  <button class="nav__music" type="button" aria-pressed="false" aria-label="Listen to what I like (plays music)"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="nav__music-t"><span class="nav__music-l">Listen to what I like</span></span></button>
+</header></div>
+<div class="navbar-spacer"></div>
+<div class="progress" aria-hidden="true"><span class="progress__v">0%</span><span class="progress__line"><i></i></span></div>
+<div class="cursor-pill" aria-hidden="true"><span class="cursor-pill__body"></span><span class="cursor-pill__t"></span></div>
+<main id="top">
+<header class="chero hero">
+  <div class="container">
+    <span class="crumb kicker" data-intro-item><a href="/case-studies.html">&larr; Work</a><span>(Side project)</span></span>
+    <h1 class="chero__t" data-intro-lines>PopTalk</h1>
+    <div class="chero__row">
+      <p class="chero__lede" data-intro-item>Calls that stay out of the way</p>
+      <div class="logo-sq"><img src="/assets/fun/poptalk/brand/poptalk-mark.svg" alt="PopTalk logo" width="43" height="43"></div>
+    </div>
+    <div class="chips" data-intro-item><span class="chip">UX Design</span><span class="chip">Motion</span><span class="chip">0→1</span><span class="chip">AI-assisted</span></div>
+    <div class="comic" data-intro-item><p class="muted">Not everyone likes to read too much nowadays. Watch the 30-second version?</p><a class="cta" href="#s6"><span>Launch Video</span></a></div>
+  </div>
+</header>
+<section class="mfacts band"><div class="container mfacts__grid">
+  <div class="mtable" data-reveal><div class="tr"><span class="th">Timeline</span><span class="td">2026</span></div><div class="tr"><span class="th">Role</span><span class="td">Concept, design, motion, brand</span></div><div class="tr"><span class="th">Built with</span><span class="td">Claude</span></div></div>
+  <div class="mtable stats" data-reveal><div class="tr"><span class="th">Platforms</span><span class="td">Windows, macOS, Linux</span></div><div class="tr"><span class="th">Servers</span><span class="td">0</span></div></div>
+</div></section>
+<div class="mwrap container">
+<aside class="maside"><div class="aside-stick">
+  <nav class="mindex">
+    <span class="kicker hd">Contents</span>
+    <a class="ni main" href="#top"><span class="no">&#8866;</span><span>PopTalk</span><i class="prog"></i></a>
+    <a class="ni" href="#tldr" data-sec="tldr"><span class="no">00</span><span>TLDR</span><i class="prog"></i></a><a class="ni" href="#s1" data-sec="s1"><span class="no">01</span><span>Where it came from</span><i class="prog"></i></a><a class="ni" href="#s2" data-sec="s2"><span class="no">02</span><span>The insight</span><i class="prog"></i></a><a class="ni" href="#s3" data-sec="s3"><span class="no">03</span><span>The decision</span><i class="prog"></i></a><a class="ni" href="#s4" data-sec="s4"><span class="no">04</span><span>What was shipped</span><i class="prog"></i></a><a class="ni" href="#s5" data-sec="s5"><span class="no">05</span><span>The result</span><i class="prog"></i></a><a class="ni" href="#s6" data-sec="s6"><span class="no">06</span><span>Launch video</span><i class="prog"></i></a><a class="ni" href="#s7" data-sec="s7"><span class="no">07</span><span>How AI was used</span><i class="prog"></i></a>
+  </nav>
+  <nav class="mindex mothers"><span class="kicker hd">Case Studies</span><a class="ni" href="/case-studies/ai-native-design-system.html"><span class="no">01</span><span>AI Native Design System</span></a><a class="ni" href="/case-studies/paytm-chat.html"><span class="no">02</span><span>Paytm Chat</span></a><a class="ni" href="/case-studies/makemytrip.html"><span class="no">03</span><span>MakeMyTrip</span></a><a class="ni" href="/case-studies/insider-vibes.html"><span class="no">04</span><span>Paytm Insider</span></a><a class="ni" href="/case-studies/airtel.html"><span class="no">05</span><span>Airtel</span></a><a class="ni" href="/case-studies/poll-police.html"><span class="no">06</span><span>Poll Police</span></a><a class="ni" href="/case-studies/winuall.html"><span class="no">07</span><span>Winuall</span></a><a class="ni" href="/case-studies/hope-house.html"><span class="no">08</span><span>Hope House</span></a><a class="ni" href="/case-studies/snapshot.html"><span class="no">09</span><span>Snapshot</span></a><a class="ni" href="/case-studies/planteria.html"><span class="no">10</span><span>Planteria</span></a><a class="ni" href="/case-studies/storewell.html"><span class="no">11</span><span>Storewell</span></a><a class="ni" href="/case-studies/moneylingo.html"><span class="no">12</span><span>MoneyLingo</span></a><a class="ni" href="/case-studies/group-alarm.html"><span class="no">13</span><span>Group Alarm</span></a><a class="ni" href="/case-studies/divergent-minds-convergent-design.html"><span class="no">14</span><span>Divergent Minds, Convergent Design</span></a></nav>
+
+</div></aside>
+<div class="mmain">
+<section class="msec bare" id="tldr"><h2 class="display" data-liquid>TLDR</h2>
+<div class="mbody"><div class="mcar mcar--tldr" data-car data-reveal role="region" aria-roledescription="carousel" aria-label="TLDR"><ul class="mcar__track" tabindex="0"><li class="mcar__s mcar__s--t" aria-label="1 of 4"><h3 class="msub">What problem did I solve?</h3><p>On a Google Meet call, the call lives in one tab and I live in all the others. Meet&#x27;s pop-out window fixes that by covering the thing I&#x27;m actually working on.</p></li><li class="mcar__s mcar__s--t" aria-label="2 of 4"><h3 class="msub">What was my role?</h3><p>Everything. I did the concept, interaction design, motion and brand. I also built it with Claude as my engineer and directed and tested every build.</p></li><li class="mcar__s mcar__s--t" aria-label="3 of 4"><h3 class="msub">What decisions did I make?</h3><p>I split the call in two. A small island at the top of the screen holds the controls and only opens on hover. Speaker bubbles in the corner show who&#x27;s talking: the speaker as video, everyone else as small faces. Move your cursor near them and they slide away.</p></li><li class="mcar__s mcar__s--t" aria-label="4 of 4"><h3 class="msub">What was the outcome?</h3><p>A Chrome extension, now in Chrome Web Store review, and a free desktop app for Windows, macOS and Linux. It runs entirely on your computer: no accounts, no servers.</p></li></ul><div class="mcar__ui"><span class="mcar__n kicker"><b>01</b> / 04</span><button class="mcar__b" data-prev aria-label="Previous question"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span></button><button class="mcar__b" data-next aria-label="Next question"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></button></div></div></div></section>
+<section class="msec bare" id="s0">
+<div class="mbody"><figure class="mfig c-a" data-reveal><img src="/assets/fun/poptalk/cover/poptalk-cover-3840x2160.min.webp" alt="PopTalk on a desktop: the call island at the top, speaker bubbles and a chat message in the corner over a document" width="3840" height="2160"></figure></div></section>
+<section class="msec" id="s1"><h2 class="display" data-liquid>Where it came from</h2>
+<div class="mbody"><p data-reveal>I spend half my day on calls and the other half pretending I&#x27;m not on one. The call sits in one tab; my doc, my Figma file and my inbox sit in all the others.</p>
+<p data-reveal>Meet, Teams and Zoom all have an answer for this: the pop-out. It&#x27;s a full window with a grid of faces, parked on top of whatever I&#x27;m doing. It&#x27;s always in the wrong spot, and it&#x27;s always the wrong size.</p>
+<p data-reveal>So I kept tabbing back to the call just to see who was talking, and missed what they said on the way there.</p>
+<figure class="mfig pt-has-cap" data-reveal><video data-auto muted loop playsinline preload="none" poster="/assets/fun/poptalk/clips/01-popouts-in-the-way-poster.webp" aria-label="Three call pop-outs covering one document"><source src="/assets/fun/poptalk/clips/01-popouts-in-the-way.mp4" type="video/mp4"></video><figcaption>Three call pop-outs, one document. Totally in the way. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></div></section>
+<section class="msec" id="s2"><h2 class="display" data-liquid>The insight</h2>
+<div class="mbody"><div class="mcards n2"><div class="mcard" data-reveal><h3 class="msub">I don&#x27;t need to see everyone. I need to know who&#x27;s talking.</h3><p>A call grid gives everyone the same space. In practice, one person talks and the rest listen. The pop-out spends most of its pixels on people who aren&#x27;t saying anything.</p></div><div class="mcard" data-reveal><h3 class="msub">Controls are for moments, not for always.</h3><p>Mute, camera, raise hand, react, leave: I use each of them a few times a call. They don&#x27;t need to be on screen the other 59 minutes.</p></div></div></div></section>
+<section class="msec" id="s3"><h2 class="display" data-liquid>The decision</h2>
+<div class="mbody"><p data-reveal>The design question was how small a call can get before it stops being useful.</p>
+<p data-reveal>The answer was to stop treating it as a window. A window has edges, a title bar and a size you manage. PopTalk has two pieces that float over everything and ask for nothing until you need them.</p>
+<div class="mcards n2"><div class="mcard" data-reveal><h3 class="msub">The island</h3><p>It sits at the top centre, the one spot no app uses. At rest it shows the speaker&#x27;s name and a voice meter. Hover and it opens into the full set of call controls.</p></div><div class="mcard" data-reveal><h3 class="msub">The bubbles</h3><p>They sit in the corner. The speaker gets a video tile; recent speakers stay as small bubbles, five at most; everyone else folds into &quot;+3&quot;. The idea came from Discord&#x27;s voice bubbles.</p></div></div></div></section>
+<section class="msec" id="s4"><h2 class="display" data-liquid>What was shipped</h2>
+<div class="mbody"><p data-reveal>The island and the bubbles, on top of every app, driven by the real Meet call in your browser.</p>
+<div class="mcards n2"><div class="mcard" data-reveal><h3 class="msub">Who&#x27;s talking, at a glance.</h3><p>The speaker&#x27;s bubble grows into live video and the others shrink back. When someone new starts talking, the bubbles trade places on a spring, so the change catches your eye without pulling you out of what you&#x27;re doing.</p></div><div class="mcard" data-reveal><h3 class="msub">One island for every control.</h3><p>Mic, camera, screen share, reactions, raise hand, captions and leave. It&#x27;s black and small, and it only opens on hover.</p></div><div class="mcard" data-reveal><h3 class="msub">Chat pops in where you work.</h3><p>New messages show up under the bubbles with the sender&#x27;s name, then fade. There&#x27;s no panel to open and no tab to find.</p></div><div class="mcard" data-reveal><h3 class="msub">Screen shares land in the big bubble.</h3><p>When someone shares, their screen takes the video tile so you can follow along without switching.</p></div><div class="mcard" data-reveal><h3 class="msub">Out of your way, literally.</h3><p>Move your cursor near the bubbles and they slide clear and fade to a ghost, so you can click whatever was underneath. Move away and they come back. This was the detail that made it feel like a layer rather than a window.</p></div><div class="mcard" data-reveal><h3 class="msub">Yours to place.</h3><p>Hold Alt (Option on a Mac) to drag the bubbles anywhere or resize them.</p></div></div>
+<div class="mcar" data-car data-reveal role="region" aria-roledescription="carousel" aria-label="PopTalk clips and screens"><ul class="mcar__track" tabindex="0"><li class="mcar__s mcar__s--v" aria-label="1 of 11"><figure class="pt-slide"><div class="pt-frame"><video data-auto muted loop playsinline preload="none" poster="/assets/fun/poptalk/clips/03-who-is-talking-poster.webp" aria-label="The speaker&amp;#x27;s bubble grows into live video."><source src="/assets/fun/poptalk/clips/03-who-is-talking.mp4" type="video/mp4"></video></div><figcaption class="pt-cap"><b>Who&#x27;s talking, at a glance.</b> The speaker&#x27;s bubble grows into live video. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="2 of 11"><figure class="pt-slide"><div class="pt-frame"><video data-auto muted loop playsinline preload="none" poster="/assets/fun/poptalk/clips/02-call-island-poster.webp" aria-label="The island opens into every call control on hover."><source src="/assets/fun/poptalk/clips/02-call-island.mp4" type="video/mp4"></video></div><figcaption class="pt-cap"><b>One island for every control.</b> The island opens into every call control on hover. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="3 of 11"><figure class="pt-slide"><div class="pt-frame"><video data-auto muted loop playsinline preload="none" poster="/assets/fun/poptalk/clips/04-chat-pops-in-poster.webp" aria-label="A new message, right under the bubbles."><source src="/assets/fun/poptalk/clips/04-chat-pops-in.mp4" type="video/mp4"></video></div><figcaption class="pt-cap"><b>Chat pops in where you work.</b> A new message, right under the bubbles. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="4 of 11"><figure class="pt-slide"><div class="pt-frame"><video data-auto muted loop playsinline preload="none" poster="/assets/fun/poptalk/clips/05-screen-share-poster.webp" aria-label="A screen share takes the video tile."><source src="/assets/fun/poptalk/clips/05-screen-share.mp4" type="video/mp4"></video></div><figcaption class="pt-cap"><b>Screen shares land in the big bubble.</b> A screen share takes the video tile. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="5 of 11"><figure class="pt-slide"><div class="pt-frame"><video data-auto muted loop playsinline preload="none" poster="/assets/fun/poptalk/clips/06-slides-away-poster.webp" aria-label="Cursor comes close, the bubbles slide clear."><source src="/assets/fun/poptalk/clips/06-slides-away.mp4" type="video/mp4"></video></div><figcaption class="pt-cap"><b>Out of your way, literally.</b> Cursor comes close, the bubbles slide clear. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="6 of 11"><figure class="pt-slide"><div class="pt-frame"><video data-auto muted loop playsinline preload="none" poster="/assets/fun/poptalk/clips/07-drag-and-resize-poster.webp" aria-label="Alt-drag to move and resize."><source src="/assets/fun/poptalk/clips/07-drag-and-resize.mp4" type="video/mp4"></video></div><figcaption class="pt-cap"><b>Yours to place.</b> Alt-drag to move and resize. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="7 of 11"><figure class="pt-slide"><div class="pt-frame"><img src="/assets/fun/poptalk/screens/02-speaker-video.min.webp" alt="PopTalk: The person talking, as video." loading="lazy"></div><figcaption class="pt-cap">The person talking, as video.</figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="8 of 11"><figure class="pt-slide"><div class="pt-frame"><img src="/assets/fun/poptalk/screens/03-speaker-bubbles.min.webp" alt="PopTalk: Camera off: their face as a bubble, with a voice meter." loading="lazy"></div><figcaption class="pt-cap">Camera off: their face as a bubble, with a voice meter.</figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="9 of 11"><figure class="pt-slide"><div class="pt-frame"><img src="/assets/fun/poptalk/screens/01-chat-pops-in.min.webp" alt="PopTalk: A chat message, right under the bubbles." loading="lazy"></div><figcaption class="pt-cap">A chat message, right under the bubbles.</figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="10 of 11"><figure class="pt-slide"><div class="pt-frame"><img src="/assets/fun/poptalk/screens/04-screen-share.min.webp" alt="PopTalk: A screen share, in the big bubble." loading="lazy"></div><figcaption class="pt-cap">A screen share, in the big bubble.</figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="11 of 11"><figure class="pt-slide"><div class="pt-frame"><img src="/assets/fun/poptalk/screens/05-full-desktop.min.webp" alt="PopTalk: The whole desktop: the island up top, the bubbles in the corner, and the work in the middle." loading="lazy"></div><figcaption class="pt-cap">The whole desktop: the island up top, the bubbles in the corner, and the work in the middle.</figcaption></figure></li></ul><div class="mcar__ui"><span class="mcar__n kicker"><b>01</b> / 11</span><button class="mcar__b" data-prev aria-label="Previous artifact"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span></button><button class="mcar__b" data-next aria-label="Next artifact"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></button></div></div>
+<h3 class="msub" data-reveal>Private by design.</h3>
+<p data-reveal>PopTalk reads the call on your computer and draws it on your computer. Nothing gets sent anywhere: no accounts, no servers, no analytics.</p>
+<figure class="mspec mspec--wide" data-spec data-reveal aria-label="PopTalk overlay, annotated"><div class="mspec__col mspec__l"></div><div class="mflow__ph mspec__ph"><div class="mflow__scr"><img src="/assets/fun/poptalk/screens/01-chat-pops-in.min.webp" alt="PopTalk overlay with speaker video, bubbles, a chat message and the island" loading="lazy"></div><div class="mflow__hit"></div></div><div class="mspec__col mspec__r"></div><div class="mspec__list"></div><svg class="mspec__svg" aria-hidden="true"></svg><ol class="mspec__src" hidden><li data-x="0.034" data-y="0.2" data-side="l">Speaker&#x27;s video gets a green ring</li><li data-x="0.398" data-y="0.256" data-side="l">Five bubbles at most, then &quot;+3&quot;: the rest are a count, not a crowd</li><li data-x="0.03" data-y="0.302" data-side="l">Name label sits on the video, so it never needs its own row</li><li data-x="0.03" data-y="0.44" data-side="l">Chat appears under the people it came from, then fades</li><li data-x="0.875" data-y="0.046" data-side="r">The island shows only the speaker&#x27;s name and voice meter at rest</li><li data-x="0.713" data-y="0.046" data-side="r">Controls stay hidden until the cursor reaches the island</li></ol><figcaption>Spec notes on the overlay.</figcaption></figure>
+<h3 class="msub" data-reveal>The hard part, in one line</h3>
+<p data-reveal>A browser allows only one floating window at a time, and I wanted two pieces on screen. So PopTalk is two parts: a Chrome extension that reads the Meet call, and a small desktop app that draws the island and the bubbles over everything. Without the app, the extension still works in a single floating window.</p></div></section>
+<section class="msec mres" id="s5"><h2 class="display" data-liquid>The result</h2>
+<div class="mbody"><div class="statrow" data-reveal><span class="kicker">Desktop platforms (Windows, macOS, Linux)</span><span class="statrow__v">3</span></div>
+<div class="statrow" data-reveal><span class="kicker">Servers. Everything runs on your computer.</span><span class="statrow__v">0</span></div>
+<div class="statrow" data-reveal><span class="kicker">Bubbles at most. The rest fold into a count.</span><span class="statrow__v">5</span></div>
+<div class="statrow" data-reveal><span class="kicker">Island for every call control</span><span class="statrow__v">1</span></div>
+<div class="pt-get" data-reveal><p>PopTalk is free. The extension is in Chrome Web Store review, and the desktop app is on GitHub.</p>
+<div class="links"><a href="https://github.com/samarthdesigns/poptalk" target="_blank" rel="noopener">Get the desktop app</a><span class="pt-soon" aria-label="Chrome Web Store: coming soon">Chrome Web Store · Coming soon</span></div>
+<p class="pt-small">Works with Google Meet in Chrome, Brave and Edge. Not affiliated with Google.</p></div>
+</div></section>
+<section class="msec" id="s6"><h2 class="display" data-liquid>Launch video</h2>
+<div class="mbody"><figure class="mfig pt-has-cap" data-reveal><video controls playsinline preload="none" poster="/assets/fun/poptalk/video/poptalk-promo-poster.webp" aria-label="PopTalk 30-second launch video"><source src="/assets/fun/poptalk/video/poptalk-promo-1080p60.mp4" type="video/mp4"></video><figcaption>The 30-second launch cut. Sound on. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></div></section>
+<section class="msec" id="s7"><h2 class="display" data-liquid>How AI was used</h2>
+<div class="mbody"><ul class="pt-ai" data-reveal>
+<li><b>Code:</b> Claude wrote the extension and desktop app from my designs. I directed, reviewed and tested each build.</li>
+<li><b>Launch video:</b> the motion and music were generated with code. I art-directed every scene.</li>
+<li><b>Not AI:</b> the concept, interaction design, motion choices and brand.</li>
+<li><b>People in the demo:</b> free stock footage from Mixkit, not AI-generated faces.</li>
+</ul></div></section>
+</div>
+</div>
+<section class="mmore band" aria-label="Next case studies">
+  <div class="container mmore__head"><h2 class="display" data-liquid>Next case studies</h2><a class="mmore__all" href="/case-studies.html">View all <span aria-hidden="true">&#8599;</span></a></div>
+  <div class="container mmore__grid"><article class="wcard" data-href="/case-studies/ai-native-design-system.html" data-cursor-pill="Open" data-reveal>
+  <a class="wcard__frame" href="/case-studies/ai-native-design-system.html"><span class="wcard__img"><img src="/framerusercontent.com/images/ipg6enpqoeunJSBDdwjeBsglLk__Q__width__E__1600__A__height__E__960.svg" alt="AI Native Design System" loading="lazy"></span></a>
+  <div class="wcard__cap">
+    <span class="wcard__no">(01)</span>
+    <h3 class="wcard__t"><a href="/case-studies/ai-native-design-system.html">AI Native Design System</a></h3>
+    <p class="wcard__d muted">Pitch demos were rebuilt from zero every time. As the sole designer, I built the system behind $500M+ in deals.</p>
+    <div class="chips"><span class="chip">Design Systems</span><span class="chip">AI-assisted</span><span class="chip">UX Design</span><span class="chip">Research</span></div>
+    <a class="wcard__open" href="/case-studies/ai-native-design-system.html">Open <span aria-hidden="true">&#8599;</span></a>
+  </div>
+</article><article class="wcard" data-href="/case-studies/insider-vibes.html" data-cursor-pill="Open" data-reveal>
+  <a class="wcard__frame" href="/case-studies/insider-vibes.html"><span class="wcard__img"><img src="/framerusercontent.com/images/QuxZeDIu9ZBi4q7sJx9HIWsJgME__Q__width__E__1920__A__height__E__1080.min.webp" alt="Paytm Insider" loading="lazy"></span></a>
+  <div class="wcard__cap">
+    <span class="wcard__no">(02)</span>
+    <h3 class="wcard__t"><a href="/case-studies/insider-vibes.html">Paytm Insider</a></h3>
+    <p class="wcard__d muted">COVID wiped out live events. As lead designer on the pivot, I helped reach 50,000+ paying users in month one.</p>
+    <div class="chips"><span class="chip">Design Systems</span><span class="chip">0→1</span><span class="chip">A/B Testing</span><span class="chip">Research</span><span class="chip">UX Design</span></div>
+    <a class="wcard__open" href="/case-studies/insider-vibes.html">Open <span aria-hidden="true">&#8599;</span></a>
+  </div>
+</article><article class="wcard" data-href="/case-studies/paytm-chat.html" data-cursor-pill="Open" data-reveal>
+  <a class="wcard__frame" href="/case-studies/paytm-chat.html"><span class="wcard__img"><img src="/framerusercontent.com/images/Gp546S1zKuQYpMTXluK20aAlus__Q__width__E__1515__A__height__E__795.png" alt="Paytm Chat" loading="lazy"></span></a>
+  <div class="wcard__cap">
+    <span class="wcard__no">(03)</span>
+    <h3 class="wcard__t"><a href="/case-studies/paytm-chat.html">Paytm Chat</a></h3>
+    <p class="wcard__d muted">Users were leaving for Google Pay&#x27;s chat. I designed pay-first chat for 100M+ users: drop-off fell from 34% to 12%.</p>
+    <div class="chips"><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">Mobile</span><span class="chip">Scale</span></div>
+    <a class="wcard__open" href="/case-studies/paytm-chat.html">Open <span aria-hidden="true">&#8599;</span></a>
+  </div>
+</article></div>
+</section>
+</main>
+<section class="contact band" id="contact">
+  <div class="contact__inner container">
+    <h2 class="display" data-liquid>Always up for a conversation about UX, design systems or AI-native tooling</h2>
+    <div class="links" data-reveal><a href="mailto:contact@samarthnayyar.com">Get in touch</a><a href="/assets/Samarth-Nayyar-Resume.pdf" download="Samarth Nayyar Product Designer Resume.pdf" data-cursor-pill="PDF">Download Resume</a></div>
+    
+  </div>
+</section>
+<footer class="footer">
+  <p class="footer__note">&copy; 2026 Samarth Nayyar. Powered by Caffeine and the love for design.</p>
+  <div class="footer__meta"><span>San Francisco &middot; <span data-local-time></span></span><a class="footer__top" href="#top">Back to top <span aria-hidden="true">&uarr;</span></a></div>
+</footer>
+<script>
+/* Clips: autoplay muted on loop while on screen (incl. inside the carousel), paused off screen. Reduced motion: no autoplay, controls shown. */
+(()=>{const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('video[data-auto]').forEach(v=>{v.muted=true;
+ if(RM){v.controls=true;return;}
+ new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){v.play().catch(()=>{});}else{v.pause();}}),{threshold:.35}).observe(v);});})();
+</script>
+</body>
+</html>

@@ -584,3 +584,19 @@ varying vec2 v;uniform sampler2D T;uniform vec2 R;uniform vec2 C;uniform float t
     c.addEventListener('pointerleave', () => { s.tx = s.ty = 0; c.classList.remove('is-lit'); kick(); });
   });
 })();
+
+/* FUN PROJECTS — native scroll-snap row (swipe/trackpad), prev/next step one card */
+(function(){
+  document.querySelectorAll('[data-fun]').forEach(c => {
+    const tr = c.querySelector('.fun__track'), sl = [...tr.children], pv = c.querySelector('[data-prev]'), nx = c.querySelector('[data-next]');
+    if (!sl.length) return;
+    const step = () => sl.length > 1 ? sl[1].offsetLeft - sl[0].offsetLeft : tr.clientWidth;
+    const idx = () => Math.round(tr.scrollLeft / step());
+    const go = i => tr.scrollTo({left: Math.max(0, Math.min(sl.length - 1, i)) * step(), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+    const upd = () => { pv.disabled = tr.scrollLeft < 4; nx.disabled = tr.scrollLeft > tr.scrollWidth - tr.clientWidth - 4; };
+    pv.addEventListener('click', () => go(idx() - 1));
+    nx.addEventListener('click', () => go(idx() + 1));
+    tr.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') { e.preventDefault(); go(idx() - 1); } if (e.key === 'ArrowRight') { e.preventDefault(); go(idx() + 1); } });
+    tr.addEventListener('scroll', upd, {passive: true}); addEventListener('resize', upd); upd();
+  });
+})();

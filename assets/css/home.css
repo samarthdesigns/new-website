@@ -213,3 +213,24 @@ a.craft__stat:hover i{transform:translateX(4px)}
 .ai-tag{display:inline-block;margin-left:6px;padding:2px 6px;font:600 9px/1.4 var(--sans);letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;vertical-align:middle;background:#fbeef1;color:#a8475b}
 .craft__tools{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:9px;font-size:13px;line-height:1.55;color:var(--mut)}
 .craft__tools b{display:block;color:var(--ink);font-weight:600}
+/* FUN PROJECTS — side-scrolling row of small work cards; outlined round arrows like the case-study carousels */
+.fun{padding-block:0 var(--band-sm)}
+.fun__head{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;margin-bottom:29px}
+.fun__lede{margin:0;max-width:52ch;font-size:16px;line-height:1.6}
+.fun__ui{display:flex;gap:11px;flex:none}
+.fun__b{position:relative;overflow:hidden;width:50px;height:50px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;transition:color .4s var(--liquid),opacity .3s}
+.fun__b::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--forest);transform:scale(0);transition:transform .5s var(--liquid)}
+.fun__b span{position:relative;display:grid;place-items:center}
+.fun__b svg{width:18px;height:18px}
+.fun__b:hover:not(:disabled){color:#fff}.fun__b:hover:not(:disabled)::before{transform:scale(1)}
+.fun__b:disabled{opacity:.35;cursor:default}
+.fun__b:focus-visible,.fun__track:focus-visible{outline:2px solid var(--forest);outline-offset:3px}
+.pg-home .fun__track{display:flex;gap:22px;margin:0;padding:0;list-style:none;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;outline:0}
+.fun__track::-webkit-scrollbar{display:none}
+.fun__s{flex:0 0 calc((100% - 44px)/3);min-width:0;scroll-snap-align:start;display:flex}
+.fun__s .wcard{flex:1}
+.fun__s .wcard__t{font-size:19px}
+.fun__s .wcard__d{font-size:14px}
+@media (max-width:900px){.fun__s{flex-basis:calc((100% - 22px)/2)}}
+@media (max-width:700px){.fun__head{flex-direction:column;align-items:flex-start;gap:18px}.fun__lede{font-size:15px}.fun__s{flex-basis:84%}.pg-home .fun__track{gap:14px}}
+.fun__s .wcard{display:flex;flex-direction:column}.fun__s .wcard__cap{flex:1}.fun__s .wcard__open{margin-top:auto;padding-top:7.2px}

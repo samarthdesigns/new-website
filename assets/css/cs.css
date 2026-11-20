@@ -486,3 +486,6 @@
 .cr--c .cr__ex{background:#fff4ef;border-color:#ffd0c0}
 .cr--c .cr__side h4{font-size:22px;font-weight:800;letter-spacing:-.01em}
 .cr--c .cr__st.ok::before{background:#000}
+/* next case studies: roomier gaps between cards */
+.mmore__grid{gap:clamp(36px,5.5vw,72px)}
+@media (max-width:900px){.mmore__grid{gap:54px}}

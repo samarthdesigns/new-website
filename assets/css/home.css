@@ -234,3 +234,8 @@ a.craft__stat:hover i{transform:translateX(4px)}
 @media (max-width:900px){.fun__s{flex-basis:calc((100% - 22px)/2)}}
 @media (max-width:700px){.fun__head{flex-direction:column;align-items:flex-start;gap:18px}.fun__lede{font-size:15px}.fun__s{flex-basis:84%}.pg-home .fun__track{gap:14px}}
 .fun__s .wcard{display:flex;flex-direction:column}.fun__s .wcard__cap{flex:1}.fun__s .wcard__open{margin-top:auto;padding-top:7.2px}
+/* fun row: roomier gaps between cards */
+.pg-home .fun__track{--fg:clamp(36px,5.5vw,72px);gap:var(--fg)}
+.fun__s{flex-basis:calc((100% - 2*var(--fg))/3)}
+@media (max-width:900px){.fun__s{flex-basis:calc((100% - var(--fg))/2)}}
+@media (max-width:700px){.pg-home .fun__track{--fg:22px}.fun__s{flex-basis:84%}}

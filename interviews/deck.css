@@ -298,6 +298,8 @@ button{font:inherit;color:inherit}
 .res2 b{font:400 88px/1 var(--d-num)}
 .res2 span{color:var(--d-mut)}
 .t-split .vis:has(.res2){flex-direction:column}
+.res2:has(> div:nth-child(3)){grid-template-columns:repeat(3,1fr)}
+.res2:has(> div:nth-child(3)) b{font-size:64px}
 
 /* intro */
 .about{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:40px;align-items:center;width:100%;height:100%}
@@ -500,6 +502,8 @@ button{font:inherit;color:inherit}
 .human li{display:grid;grid-template-columns:240px minmax(0,1fr);gap:32px;align-items:center;padding:32px 0;border-bottom:1px solid var(--d-line)}
 .human b{font:400 48px/1 var(--d-num);color:var(--d-ink)}
 .human p{margin:0;font-size:20px;line-height:1.45;color:var(--d-mut)}
+.human--q li{grid-template-columns:180px minmax(0,1fr);padding:22px 0}
+.human--q b{font-size:28px}
 @media (max-width:760px){.human li{grid-template-columns:1fr;gap:10px;padding:20px 0}.human b{font-size:36px}.human p{font-size:16px}}
 
 /* editing view */

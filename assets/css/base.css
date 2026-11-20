@@ -234,3 +234,9 @@ html.sn-framed,html.sn-framed body{overflow:hidden}
 .comic-drawer__empty{padding:22px 0;border-top:1px solid var(--line);max-width:44ch}
 @media (max-width:900px){.comic-drawer__panel{width:100%}.comic-drawer__strip img{max-height:none;width:100%}.comic-drawer__head{padding:14px 22px}.comic-drawer__body{padding:29px 22px 43px}.comic-drawer__body .display{font-size:31px}}
 @media (max-width:380px){.nav__links a{padding:0 9px;font-size:12.5px}}
+/* work cards outside the Story stack: clean, like a gallery row. No outline or padding, image then a left-aligned title and line */
+.wcard:not(.xslide){border:0;padding:0;background:transparent}
+.wcard:not(.xslide) .wcard__cap{align-items:flex-start;text-align:left;gap:11px;padding-top:25px}
+.wcard:not(.xslide) .wcard__t{font-size:24px}
+.wcard:not(.xslide) .wcard__d{max-width:44ch;line-height:1.65}
+.wcard:not(.xslide) .wcard__no,.wcard:not(.xslide) .chips,.wcard:not(.xslide) .wcard__open{display:none}

@@ -43,9 +43,14 @@
 .pt-get p a{color:inherit;text-decoration:underline;text-underline-offset:3px}
 .pt-get{margin-top:29px}
 .pt-get .links{margin-top:18px}
-.links .pt-soon{position:relative;height:59px;display:grid;place-items:center;padding:0 16px;font-weight:500;font-size:14px;line-height:1.1;text-transform:uppercase;color:var(--muted);border-left:1px solid var(--line);cursor:default}
+.pt-qs{margin-top:36px}
+.pt-steps{margin:11px 0 0;padding:0;list-style:none;counter-reset:st}
+.pt-steps li{counter-increment:st;display:grid;grid-template-columns:29px 1fr;padding:11px 0;border-top:1px solid var(--line)}
+.pt-steps li:last-child{border-bottom:1px solid var(--line)}
+.pt-steps li::before{content:counter(st,decimal-leading-zero);color:var(--muted);font-size:13px;line-height:1.9}
+.pt-guide{margin-top:18px}.pt-guide a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 .pt-small{font-size:13px;color:var(--muted);margin-top:14px}
-@media (max-width:600px){.links{grid-auto-flow:row}.links .pt-soon{border-left:0;border-top:1px solid var(--line)}}
+@media (max-width:600px){.pt-links{grid-auto-flow:row}.pt-links a{border-left:0}.pt-links a+a{border-top:1px solid var(--line)}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js" defer></script>
@@ -72,7 +77,7 @@
       <div class="logo-sq"><img src="/assets/fun/poptalk/brand/poptalk-mark.svg" alt="PopTalk logo" width="43" height="43"></div>
     </div>
     <div class="chips" data-intro-item><span class="chip">UX Design</span><span class="chip">Motion</span><span class="chip">0→1</span><span class="chip">AI-assisted</span></div>
-    <div class="comic" data-intro-item><p class="muted">Not everyone likes to read too much nowadays. Watch the 30-second version?</p><a class="cta" href="#s6"><span>Launch Video</span></a></div>
+    <div class="comic" data-intro-item><p class="muted">Not everyone likes to read too much nowadays. Watch the 30-second version?</p><a class="cta" href="#s1"><span>Launch Video</span></a></div>
   </div>
 </header>
 <div class="mwrap container">
@@ -91,7 +96,7 @@
 <section class="msec" id="s1"><h2 class="display" data-liquid>Overview</h2>
 <div class="mbody"><p data-reveal>I spend half my day on Google Meet calls. The call lives in one tab, and my work lives in all the others. Meet&#x27;s pop-out window was supposed to help, but it just parks a grid of faces on top of whatever I&#x27;m doing.</p>
 <p data-reveal>So I built PopTalk: a tiny island for call controls at the top of my screen, and a few bubbles in the corner that show who&#x27;s talking.</p>
-<figure class="mfig pt-has-cap" data-reveal><video data-auto muted loop playsinline preload="none" poster="/assets/fun/poptalk/clips/01-popouts-in-the-way-poster.webp" aria-label="Call pop-outs covering a document"><source src="/assets/fun/poptalk/clips/01-popouts-in-the-way.mp4" type="video/mp4"></video><figcaption>The problem. Pop-outs, right where I&#x27;m working. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></div></section>
+<figure class="mfig pt-has-cap" data-reveal><video controls playsinline preload="none" poster="/assets/fun/poptalk/video/poptalk-promo-poster.webp" aria-label="PopTalk 30-second launch video"><source src="/assets/fun/poptalk/video/poptalk-promo-1080p60.mp4" type="video/mp4"></video><figcaption>The 30-second launch video. Sound on. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></div></section>
 <section class="msec" id="s2"><h2 class="display" data-liquid>Role &amp; Context</h2>
 <div class="mbody"><p data-reveal>Solo Product Designer · 3 days · 2026</p></div></section>
 <section class="msec" id="s3"><h2 class="display" data-liquid>Toolbox</h2>
@@ -108,13 +113,15 @@
 <div class="mcar" data-car data-reveal role="region" aria-roledescription="carousel" aria-label="PopTalk clips and screen"><ul class="mcar__track" tabindex="0"><li class="mcar__s mcar__s--v" aria-label="1 of 5"><figure class="pt-slide"><div class="pt-frame"><video data-auto muted loop playsinline preload="none" poster="/assets/fun/poptalk/clips/03-who-is-talking-poster.webp" aria-label="Who&#x27;s talking, at a glance."><source src="/assets/fun/poptalk/clips/03-who-is-talking.mp4" type="video/mp4"></video></div><figcaption class="pt-cap">Who&#x27;s talking, at a glance. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="2 of 5"><figure class="pt-slide"><div class="pt-frame"><video data-auto muted loop playsinline preload="none" poster="/assets/fun/poptalk/clips/02-call-island-poster.webp" aria-label="Every control, hidden until I hover."><source src="/assets/fun/poptalk/clips/02-call-island.mp4" type="video/mp4"></video></div><figcaption class="pt-cap">Every control, hidden until I hover. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="3 of 5"><figure class="pt-slide"><div class="pt-frame"><video data-auto muted loop playsinline preload="none" poster="/assets/fun/poptalk/clips/06-slides-away-poster.webp" aria-label="Cursor gets close, bubbles get out of the way."><source src="/assets/fun/poptalk/clips/06-slides-away.mp4" type="video/mp4"></video></div><figcaption class="pt-cap">Cursor gets close, bubbles get out of the way. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="4 of 5"><figure class="pt-slide"><div class="pt-frame"><video data-auto muted loop playsinline preload="none" poster="/assets/fun/poptalk/clips/04-chat-pops-in-poster.webp" aria-label="Chat pops in under the bubbles."><source src="/assets/fun/poptalk/clips/04-chat-pops-in.mp4" type="video/mp4"></video></div><figcaption class="pt-cap">Chat pops in under the bubbles. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="5 of 5"><figure class="pt-slide"><div class="pt-frame"><img src="/assets/fun/poptalk/screens/05-full-desktop.min.webp" alt="PopTalk on a full desktop, with the work still in the middle" loading="lazy"></div><figcaption class="pt-cap">The whole desktop, with the work still in the middle.</figcaption></figure></li></ul><div class="mcar__ui"><span class="mcar__n kicker"><b>01</b> / 05</span><button class="mcar__b" data-prev aria-label="Previous artifact"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span></button><button class="mcar__b" data-next aria-label="Next artifact"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></button></div></div></div></section>
 <section class="msec" id="s6"><h2 class="display" data-liquid>Behind the build</h2>
 <div class="mbody"><h3 class="msub" data-reveal>Me designing, Claude coding</h3>
-<p data-reveal>I designed each piece, and Claude wrote the code. I&#x27;d try a build on a real call, tell it what felt off, like a spring that was too bouncy or a bubble in the wrong spot, and go again. Then I made a launch video the same way.</p>
-<figure class="mfig pt-has-cap" data-reveal><video controls playsinline preload="none" poster="/assets/fun/poptalk/video/poptalk-promo-poster.webp" aria-label="PopTalk 30-second launch video"><source src="/assets/fun/poptalk/video/poptalk-promo-1080p60.mp4" type="video/mp4"></video><figcaption>The 30-second launch video. Sound on. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></div></section>
+<p data-reveal>I designed each piece, and Claude wrote the code. I&#x27;d try a build on a real call, tell it what felt off, like a spring that was too bouncy or a bubble in the wrong spot, and go again. Then I made a launch video the same way.</p></div></section>
 <section class="msec" id="s7"><h2 class="display" data-liquid>Reflection</h2>
 <div class="mbody"><h3 class="msub" data-reveal>Small enough to forget it&#x27;s there</h3>
 <p data-reveal>That was the whole goal. I barely notice PopTalk until someone starts talking, and that&#x27;s how I know it works.</p>
-<div class="pt-get" data-reveal><p>It&#x27;s free. The extension is in Chrome Web Store review, and the desktop app is on <a href="https://github.com/samarthdesigns/poptalk" target="_blank" rel="noopener">GitHub</a>.</p>
-<div class="links"><a href="https://github.com/samarthdesigns/poptalk" target="_blank" rel="noopener">Get the desktop app</a><span class="pt-soon" aria-label="Chrome Web Store: coming soon">Chrome Web Store · Coming soon</span></div>
+<div class="pt-get" data-reveal><p>PopTalk is free. Get it here:</p>
+<div class="links pt-links"><a href="https://github.com/samarthdesigns/poptalk/releases/latest" target="_blank" rel="noopener">Desktop app</a><a href="https://chromewebstore.google.com/detail/nnmapnaeabbfhbdjjmbeiplcdndaeogg" target="_blank" rel="noopener">Chrome extension</a><a href="https://github.com/samarthdesigns/poptalk" target="_blank" rel="noopener">Code and docs</a></div>
+<h3 class="msub pt-qs">Quick start</h3>
+<ol class="pt-steps"><li>Add the extension to Chrome, Brave or Edge.</li><li>Optional: install the desktop app so the bubbles float over every app.</li><li>Join a Google Meet call and switch tabs. PopTalk takes over. Alt+P opens it any time.</li></ol>
+<p class="pt-guide"><a href="https://github.com/samarthdesigns/poptalk/blob/main/USER-GUIDE.md" target="_blank" rel="noopener">Full guide <span aria-hidden="true">&#8599;</span></a></p>
 <p class="pt-small">Works with Google Meet in Chrome, Brave and Edge. Not affiliated with Google.</p></div>
 </div></section>
 </div>

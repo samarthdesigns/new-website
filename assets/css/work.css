@@ -17,3 +17,11 @@
 .wcol{gap:72px}
 @media (max-width:1100px){.wgrid--3 .wcol{flex-basis:calc(50% - 36px)}}
 @media (max-width:700px){.wcol{gap:54px}.wgrid{row-gap:54px}}
+/* Work index: full card details back (number, tags, Open), roomier grid */
+.pg-work .wcard:not(.xslide) .wcard__no{display:block}
+.pg-work .wcard:not(.xslide) .chips{display:flex;justify-content:flex-start;margin-top:4px}
+.pg-work .wcard:not(.xslide) .wcard__open{display:inline-block}
+.pg-work .wgrid{column-gap:clamp(48px,7.5vw,120px)}
+.pg-work .wcol{gap:120px}
+@media (max-width:1100px){.pg-work .wgrid--3 .wcol{flex-basis:calc(50% - 48px)}}
+@media (max-width:700px){.pg-work .wcol{gap:84px}.pg-work .wgrid{row-gap:84px}}

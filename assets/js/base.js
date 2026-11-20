@@ -281,7 +281,9 @@
 (function(){
   const vids = [...document.querySelectorAll('video[data-cover]')];
   if (!vids.length || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  vids.forEach(v => { const p = v.getAttribute('poster'); if (p) v.parentNode.style.background = `url("${p}") center/cover no-repeat`; });
   const load = v => { if (v.dataset.on) return; v.dataset.on = 1; const id = v.dataset.cover, base = v.dataset.base || 'assets/covers/';
+    v.classList.add('is-loading'); v.addEventListener('playing', () => v.classList.remove('is-loading'), {once: true});
     v.innerHTML = `<source src="${base}${id}.webm" type="video/webm"><source src="${base}${id}.mp4" type="video/mp4">`; v.load(); };
   const play = v => { load(v); v.play().catch(() => {}); };
   const stop = v => { v.pause(); if (v.readyState) v.currentTime = 0; };

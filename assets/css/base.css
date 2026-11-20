@@ -240,3 +240,6 @@ html.sn-framed,html.sn-framed body{overflow:hidden}
 .wcard:not(.xslide) .wcard__t{font-size:24px}
 .wcard:not(.xslide) .wcard__d{max-width:44ch;line-height:1.65}
 .wcard:not(.xslide) .wcard__no,.wcard:not(.xslide) .chips,.wcard:not(.xslide) .wcard__open{display:none}
+/* cover reels: poster stays painted underneath; video fades in only once frames play (no flash on touch) */
+video[data-cover]{opacity:1;transition:opacity .35s ease}
+video[data-cover].is-loading{opacity:0}

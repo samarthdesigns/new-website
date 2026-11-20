@@ -60,7 +60,8 @@
 .xdark{background:var(--ink);color:#fff}
 .xproj{position:relative;padding:0 max(var(--gutter),calc((100% - var(--max))/2));display:grid;grid-template-columns:1.1fr .9fr;column-gap:clamp(36px,9vw,116px)}
 .xpin{height:100vh;display:grid;place-items:center;perspective:1440px}
-/* left card = the same white wcard as "Next case studies" */
+/* left card stays white on the dark band (base wcard is outlined) */
+.xslide.wcard{background:#fff;border:0}
 .xstack{position:relative;width:min(100%,378px,calc((100vh - 180px)*.72));aspect-ratio:420/600;transform-style:preserve-3d}
 .xslide{position:absolute;inset:0;overflow:hidden;display:flex;flex-direction:column;color:var(--ink);box-shadow:0 27px 54px -30px rgba(0,0,0,.6);will-change:transform}
 /* image takes whatever height the caption leaves, so every card fills the frame */

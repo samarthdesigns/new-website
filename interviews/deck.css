@@ -31,6 +31,31 @@
 /* notes = their warm checkout banner */
 [data-theme="agoda"] .future{background:#fdeee6;color:#5c2b12}
 
+/* Audyence-inspired, taken from audyence.com (Montserrat, their :root tokens, gradient pill CTAs): my own approximation, not Audyence's design system. */
+[data-theme="audyence"]{
+  --d-bg:#fff;--d-ink:#181b1f;--d-text:#3e434d;--d-mut:#707480;--d-line:#e9edf4;
+  --d-tile:#f7f9fc;--d-tile-2:#f1f3f8;--d-card:#fff;--d-accent:#9d318e;--d-accent-ink:#fff;--d-hl:#f22085;
+  --au-grad:linear-gradient(135deg,#9d318e,#f22085 60%,#f65e45);
+  --d-display:Montserrat,"Helvetica Neue",Arial,sans-serif;--d-display-style:normal;--d-display-weight:700;--d-display-track:-.02em;
+  --d-body:Montserrat,"Helvetica Neue",Arial,sans-serif;--d-num:Montserrat,"Helvetica Neue",Arial,sans-serif;--d-label:Montserrat,"Helvetica Neue",Arial,sans-serif;--d-radius:16px;--d-radius-sm:10px
+}
+[data-theme="audyence"] .disp,[data-theme="audyence"] .gate__t,[data-theme="audyence"] .row__t{font-weight:700}
+[data-theme="audyence"] .row__n,[data-theme="audyence"] .pick__n,[data-theme="audyence"] .stats b,[data-theme="audyence"] .closer b,[data-theme="audyence"] .funnel__row b,[data-theme="audyence"] .steps__v,[data-theme="audyence"] .msg.pay b,[data-theme="audyence"] .res2 b,[data-theme="audyence"] .about__stats b,[data-theme="audyence"] .tl__y,[data-theme="audyence"] .pn,[data-theme="audyence"] .pizza__who b,[data-theme="audyence"] .chrome__c{font-weight:800;letter-spacing:-.02em}
+/* big numbers carry their plum-to-pink gradient */
+[data-theme="audyence"] .stats b,[data-theme="audyence"] .closer b,[data-theme="audyence"] .res2 b,[data-theme="audyence"] .about__stats b{background:var(--au-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+[data-theme="audyence"] .dot{background:var(--au-grad)}
+[data-theme="audyence"] .prog button::after{background:var(--au-grad)}
+[data-theme="audyence"] .s-kick .k b{color:var(--d-accent)}
+/* selected control = their Get Started pill */
+[data-theme="audyence"] .seg{background:var(--d-tile-2)}
+[data-theme="audyence"] .seg button[aria-pressed="true"]{background:linear-gradient(#9d318e,#f22085);color:#fff;box-shadow:none}
+[data-theme="audyence"] .gate__b{background:linear-gradient(#9d318e,#f22085)}
+[data-theme="audyence"] .cap,[data-theme="audyence"] .car__track{box-shadow:inset 0 0 0 1px var(--d-line)}
+[data-theme="audyence"] .cap.is-on{box-shadow:none}
+[data-theme="audyence"] .car__track{background:#fff}
+/* notes = their pale plum tint */
+[data-theme="audyence"] .future{background:#f3e5f1;color:#4a1743}
+
 /* theme switch */
 .tsw{display:inline-flex;align-items:center;gap:10px}
 .seg{display:inline-flex;padding:3px;border-radius:999px;background:var(--d-tile)}

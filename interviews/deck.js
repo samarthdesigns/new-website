@@ -73,7 +73,7 @@
   }
 
   /* ---------- prefs kept in the URL query (?theme=agoda), so a shared link opens the same way */
-  const THEMES_OK = ['site', 'agoda'];
+  const THEMES_OK = ['site', 'agoda', 'audyence'];
   const pref = (k, def) => new URLSearchParams(location.search).get(k) || def;
   function setPref(k, v, def) {
     const q = new URLSearchParams(location.search);

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emoji Popup: One Key, Three Emojis That Fit What You Wrote | Side Project by Samarth Nayyar</title>
+<meta name="description" content="Emoji Popup is a free desktop app for Windows, Mac and Linux. Press one key and a small card shows three emojis that fit what you wrote. Designed solo, with Claude as the engineer.">
+<meta property="og:title" content="Emoji Popup: One Key, Three Emojis That Fit What You Wrote | Side Project by Samarth Nayyar">
+<meta property="og:description" content="Emoji Popup is a free desktop app for Windows, Mac and Linux. Press one key and a small card shows three emojis that fit what you wrote. Designed solo, with Claude as the engineer.">
+<meta property="og:image" content="https://samarthnayyar.com/assets/fun/emoji-popup/cover/emoji-popup-card-1920x1080.webp">
+<link rel="canonical" href="https://samarthnayyar.com/fun/emoji-popup">
+<meta property="og:url" content="https://samarthnayyar.com/fun/emoji-popup">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Samarth Nayyar">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Emoji Popup: One Key, Three Emojis That Fit What You Wrote | Side Project by Samarth Nayyar">
+<meta name="author" content="Samarth Nayyar">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta property="og:locale" content="en_US">
+<meta name="theme-color" content="#f6f6f4">
+<meta name="twitter:description" content="Emoji Popup is a free desktop app for Windows, Mac and Linux. Press one key and a small card shows three emojis that fit what you wrote. Designed solo, with Claude as the engineer.">
+<meta name="twitter:image" content="https://samarthnayyar.com/assets/fun/emoji-popup/cover/emoji-popup-card-1920x1080.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="preload" href="../assets/fonts/GeistPixel-VF.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/GeistPixel-VF.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/base.css?v=45">
+<link rel="stylesheet" href="/assets/css/cs.css?v=45">
+<style>
+/* Fun-project page (shared with PopTalk): video in the case-study frames (flat, no elevation) */
+.vz-tag{display:inline-block;padding:2px 6px;font:600 9px/1.4 var(--sans);letter-spacing:.6px;text-transform:uppercase;white-space:nowrap}
+.vz-tag.mark{background:var(--hot-bg,#fbeef1);color:var(--hot,#a8475b);margin-left:6px;vertical-align:2px}
+.mfig video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.mfig.pt-cover video{aspect-ratio:4/3;background:var(--tile)}
+.mfig figcaption,.pt-cap{margin:11px 0 0;font-size:13px;color:var(--muted)}
+.mfig.pt-has-cap{overflow:visible;background:none}.mfig.pt-has-cap>video,.mfig.pt-has-cap>img{background:var(--tile)}
+.mcar__s--v{aspect-ratio:auto;display:block;background:none;place-items:initial}
+.pt-slide{margin:0}
+.pt-frame{aspect-ratio:16/9;background:var(--tile);overflow:hidden}
+.pt-frame video,.pt-frame img,.mcar__s--v .pt-frame img{display:block;width:100%;height:100%;object-fit:cover}
+.pt-cap b{color:var(--ink);font-weight:600}
+.mres .mcard .statrow__v{display:block;margin-bottom:11px;color:var(--forest)}
+.pt-get p a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.pt-get{margin-top:29px}
+.pt-get .links{margin-top:18px}
+.pt-qs{margin-top:36px}
+.pt-steps{margin:11px 0 0;padding:0;list-style:none;counter-reset:st}
+.pt-steps li{counter-increment:st;display:grid;grid-template-columns:29px 1fr;padding:11px 0;border-top:1px solid var(--line)}
+.pt-steps li:last-child{border-bottom:1px solid var(--line)}
+.pt-steps li::before{content:counter(st,decimal-leading-zero);color:var(--muted);font-size:13px;line-height:1.9}
+.pt-guide{margin-top:18px}.pt-guide a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.pt-small{font-size:13px;color:var(--muted);margin-top:14px}
+@media (max-width:600px){.pt-links{grid-auto-flow:row}.pt-links a{border-left:0}.pt-links a+a{border-top:1px solid var(--line)}}
+/* Emoji Popup: 16:10 frames so clips and square setup renders show whole, no crop */
+.ep-frame{aspect-ratio:16/10}
+.ep-frame img.ep-fit{object-fit:contain}
+.mfig.ep-cover video,.mfig.ep-cover img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;background:#14121c}
+.mfig.ep-16x10 video{aspect-ratio:16/10}
+.mfig.ep-demo video{aspect-ratio:16/10}
+.vz-tag.solo{margin-left:0}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js" defer></script>
+<script src="/assets/js/base.js?v=43" defer></script>
+<script src="/assets/js/cs.js?v=43" defer></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CreativeWork","name":"Emoji Popup","headline":"Emoji Popup: One Key, Three Emojis That Fit What You Wrote","description":"Emoji Popup is a free desktop app for Windows, Mac and Linux. Press one key and a small card shows three emojis that fit what you wrote. Designed solo, with Claude as the engineer.","image":"https://samarthnayyar.com/assets/fun/emoji-popup/cover/emoji-popup-card-1920x1080.webp","url":"https://samarthnayyar.com/fun/emoji-popup","inLanguage":"en-US","author":{"@type":"Person","@id":"https://samarthnayyar.com/#person","name":"Samarth Nayyar","url":"https://samarthnayyar.com/"}}</script>
+<script src="/assets/js/app-link.js"></script><script data-before-send="snAppLink" defer src="https://cloud.umami.is/script.js" data-website-id="12ea2061-77c4-4a85-aa50-0a532e9b67d4"></script></head>
+<body class="pg-cs" data-lenis="{&quot;lerp&quot;: 0.09}">
+<div class="navbar"><header class="nav">
+  <a class="nav__brand" href="/index.html" aria-label="Samarth Nayyar, home">Samarth</a>
+  <nav class="nav__links" aria-label="Primary"><a class="" href="/index.html">Index</a><a class="" href="/case-studies.html">Work</a><a class="" href="/story.html">Story</a><a class="" href="/resume.html">Resume</a></nav>
+  <button class="nav__music" type="button" aria-pressed="false" aria-label="Listen to what I like (plays music)"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="nav__music-t"><span class="nav__music-l">Listen to what I like</span></span></button>
+</header></div>
+<div class="navbar-spacer"></div>
+<div class="progress" aria-hidden="true"><span class="progress__v">0%</span><span class="progress__line"><i></i></span></div>
+<div class="cursor-pill" aria-hidden="true"><span class="cursor-pill__body"></span><span class="cursor-pill__t"></span></div>
+<main id="top">
+<header class="chero hero">
+  <div class="container">
+    <span class="crumb kicker" data-intro-item><a href="/case-studies.html">&larr; Work</a><span>(Side project)</span></span>
+    <h1 class="chero__t" data-intro-lines>Emoji Popup</h1>
+    <div class="chero__row">
+      <p class="chero__lede" data-intro-item>One key, three emojis that fit what you wrote</p>
+      <div class="logo-sq"><img src="/assets/fun/emoji-popup/brand/emoji-popup-icon.svg" alt="Emoji Popup logo" width="43" height="43"></div>
+    </div>
+    <div class="chips" data-intro-item><span class="chip">UX Design</span><span class="chip">Desktop app</span><span class="chip">0→1</span><span class="chip">AI-assisted</span></div>
+    <div class="comic" data-intro-item><p class="muted">Not everyone likes to read too much nowadays. Watch the 18-second version?</p><a class="cta" href="#demo"><span>Demo Video</span></a></div>
+  </div>
+</header>
+<div class="mwrap container">
+<aside class="maside"><div class="aside-stick">
+  <nav class="mindex">
+    <span class="kicker hd">Contents</span>
+    <a class="ni main" href="#top"><span class="no">&#8866;</span><span>Emoji Popup</span><i class="prog"></i></a>
+    <a class="ni" href="#s1" data-sec="s1"><span class="no">01</span><span>Overview</span><i class="prog"></i></a><a class="ni" href="#s2" data-sec="s2"><span class="no">02</span><span>Role &amp; Context</span><i class="prog"></i></a><a class="ni" href="#s3" data-sec="s3"><span class="no">03</span><span>Toolbox</span><i class="prog"></i></a><a class="ni" href="#s4" data-sec="s4"><span class="no">04</span><span>Highlights</span><i class="prog"></i></a><a class="ni" href="#s5" data-sec="s5"><span class="no">05</span><span>Solution</span><i class="prog"></i></a><a class="ni" href="#s6" data-sec="s6"><span class="no">06</span><span>Behind the build</span><i class="prog"></i></a><a class="ni" href="#s7" data-sec="s7"><span class="no">07</span><span>Reflection</span><i class="prog"></i></a>
+  </nav>
+  <nav class="mindex mothers"><span class="kicker hd">Case Studies</span><a class="ni" href="/case-studies/ai-native-design-system.html"><span class="no">01</span><span>AI Native Design System</span></a><a class="ni" href="/case-studies/paytm-chat.html"><span class="no">02</span><span>Paytm Chat</span></a><a class="ni" href="/case-studies/makemytrip.html"><span class="no">03</span><span>MakeMyTrip</span></a><a class="ni" href="/case-studies/insider-vibes.html"><span class="no">04</span><span>Paytm Insider</span></a><a class="ni" href="/case-studies/airtel.html"><span class="no">05</span><span>Airtel</span></a><a class="ni" href="/case-studies/poll-police.html"><span class="no">06</span><span>Poll Police</span></a><a class="ni" href="/case-studies/winuall.html"><span class="no">07</span><span>Winuall</span></a><a class="ni" href="/case-studies/hope-house.html"><span class="no">08</span><span>Hope House</span></a><a class="ni" href="/case-studies/snapshot.html"><span class="no">09</span><span>Snapshot</span></a><a class="ni" href="/case-studies/planteria.html"><span class="no">10</span><span>Planteria</span></a><a class="ni" href="/case-studies/storewell.html"><span class="no">11</span><span>Storewell</span></a><a class="ni" href="/case-studies/moneylingo.html"><span class="no">12</span><span>MoneyLingo</span></a><a class="ni" href="/case-studies/divergent-minds-convergent-design.html"><span class="no">13</span><span>Divergent Minds, Convergent Design</span></a></nav>
+
+</div></aside>
+<div class="mmain">
+<section class="msec bare" id="s0">
+<div class="mbody"><figure class="mfig c-a ep-cover pt-has-cap" data-reveal><video data-auto data-still="/assets/fun/emoji-popup/cover/emoji-popup-cover-3840x2160.webp" muted loop playsinline preload="none" poster="/assets/fun/emoji-popup/cover/emoji-popup-cover-3840x2160.webp" width="1920" height="1080" aria-label="Emoji Popup suggesting three emojis for a message"><source src="/assets/fun/emoji-popup/cover/emoji-popup-cover-loop.mp4" type="video/mp4"></video><figcaption><span class="vz-tag mark solo">AI-assisted</span></figcaption></figure></div></section>
+<section class="msec" id="s1"><h2 class="display" data-liquid>Overview</h2>
+<div class="mbody"><p data-reveal>I put an emoji on almost every message I send. Finding the right one is slower than writing the message: open the picker, guess the name, scroll, give up, settle for 👍.</p>
+<p data-reveal>So I built Emoji Popup. You type like normal, press one key, and a small card shows three emojis that match what you just wrote. Press 1, 2 or 3 and it lands at the end of your message.</p>
+<figure class="mfig pt-has-cap ep-16x10" data-reveal><video data-auto muted loop playsinline preload="none" poster="/assets/fun/emoji-popup/clips/01-text-to-emojis-poster.webp" aria-label="Typing a message, pressing the shortcut and picking an emoji"><source src="/assets/fun/emoji-popup/clips/01-text-to-emojis.mp4" type="video/mp4"></video><figcaption>Type, press the shortcut, pick. The emoji goes at the end of the message. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></div></section>
+<section class="msec" id="s2"><h2 class="display" data-liquid>Role &amp; Context</h2>
+<div class="mbody"><p data-reveal>Solo Product Designer · 2 days · 2026</p></div></section>
+<section class="msec" id="s3"><h2 class="display" data-liquid>Toolbox</h2>
+<div class="mbody"><div class="chips" data-reveal><span class="chip">Claude</span><span class="chip">Qt Quick</span><span class="chip">Rust</span><span class="chip">C++</span><span class="chip">GitHub Actions</span></div></div></section>
+<section class="msec mres" id="s4"><h2 class="display" data-liquid>Highlights</h2>
+<div class="mbody"><div class="mcards n3">
+<div class="mcard" data-reveal><span class="statrow__v">1 key</span><p>From a finished message to the right emoji</p></div>
+<div class="mcard" data-reveal><span class="statrow__v">3 systems</span><p>Windows, Mac and Linux, from one codebase</p></div>
+<div class="mcard" data-reveal><span class="statrow__v">0 servers</span><p>It runs on your computer and talks only to the AI you pick, with your own key. No accounts, no analytics.</p></div>
+</div></div></section>
+<section class="msec" id="s5"><h2 class="display" data-liquid>Solution</h2>
+<div class="mbody"><h3 class="msub" data-reveal>A card that reads the room</h3>
+<p data-reveal>The card opens in the middle of the screen with the three picks already loading. They&#x27;re based on your whole message, not one keyword, so &quot;I refuse to ship a launch on decaf&quot; gets 💀 ☕ 😤 and not just a coffee cup. If none of them fit, type a vibe into the card and it tries again.</p>
+<p data-reveal>There are two shortcuts. <b>AI emojis</b> uses the AI you connected. <b>On this computer</b> never sends anything: it matches your last words against a list of about 6,000 words and slang that ships with the app.</p>
+<div class="mcar" data-car data-reveal role="region" aria-roledescription="carousel" aria-label="Emoji Popup clip and setup screens"><ul class="mcar__track" tabindex="0"><li class="mcar__s mcar__s--v" aria-label="1 of 5"><figure class="pt-slide"><div class="pt-frame ep-frame"><video data-auto muted loop playsinline preload="none" poster="/assets/fun/emoji-popup/clips/02-a-different-mood-poster.webp" aria-label="Same shortcut, different mood."><source src="/assets/fun/emoji-popup/clips/02-a-different-mood.mp4" type="video/mp4"></video></div><figcaption class="pt-cap">Same shortcut, different mood. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="2 of 5"><figure class="pt-slide"><div class="pt-frame ep-frame" style="background:#2a2341"><img class="ep-fit" src="/assets/fun/emoji-popup/screens/03-setup-shortcuts.webp" alt="Setup card, step one: choosing the two shortcuts" loading="lazy" width="1280" height="1280"></div><figcaption class="pt-cap">Pick your own keys on first launch.</figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="3 of 5"><figure class="pt-slide"><div class="pt-frame ep-frame" style="background:#2a2341"><img class="ep-fit" src="/assets/fun/emoji-popup/screens/04-setup-delay.webp" alt="Setup card, step two: the popup delay" loading="lazy" width="1280" height="1280"></div><figcaption class="pt-cap">A delay for shortcuts with several keys.</figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="4 of 5"><figure class="pt-slide"><div class="pt-frame ep-frame" style="background:#2a2341"><img class="ep-fit" src="/assets/fun/emoji-popup/screens/05-setup-ai.webp" alt="Setup card, step three: choosing an AI provider" loading="lazy" width="1280" height="1280"></div><figcaption class="pt-cap">Bring your own AI: Gemini, Claude, OpenAI, OpenRouter, Ollama, or none.</figcaption></figure></li><li class="mcar__s mcar__s--v" aria-label="5 of 5"><figure class="pt-slide"><div class="pt-frame ep-frame" style="background:#dad3ef"><img class="ep-fit" src="/assets/fun/emoji-popup/screens/07-setup-ai-light.webp" alt="The same setup step in light mode" loading="lazy" width="1280" height="1280"></div><figcaption class="pt-cap">Light mode follows your system.</figcaption></figure></li></ul><div class="mcar__ui"><span class="mcar__n kicker"><b>01</b> / 05</span><button class="mcar__b" data-prev aria-label="Previous artifact"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span></button><button class="mcar__b" data-next aria-label="Next artifact"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span></button></div></div>
+<h3 class="msub" data-reveal>Setup in the same card</h3>
+<p data-reveal>There&#x27;s no settings window to learn. The first launch opens the same card the emojis use and walks through three steps: shortcuts, popup delay and AI. It&#x27;s done in under a minute.</p></div></section>
+<section class="msec" id="s6"><h2 class="display" data-liquid>Behind the build</h2>
+<div class="mbody"><h3 class="msub" data-reveal>Me designing, Claude coding</h3>
+<p data-reveal>I designed the card, the motion and the setup, and Claude wrote the code. I used it every day on my own Linux machine and told Claude what felt off. One example: the popup kept reading nothing because my fingers were still on the shortcut keys when it copied the text. The fix was to wait until the keys are up, and that became the popup delay setting in setup.</p>
+<figure class="mfig pt-has-cap ep-demo" id="demo" data-reveal><video controls playsinline preload="none" poster="/assets/fun/emoji-popup/video/emoji-popup-demo-poster.webp" aria-label="Emoji Popup 18-second demo video"><source src="/assets/fun/emoji-popup/video/emoji-popup-demo.mp4" type="video/mp4"></video><figcaption>The 18-second demo. Sound on. <span class="vz-tag mark">AI-assisted</span></figcaption></figure></div></section>
+<section class="msec" id="s7"><h2 class="display" data-liquid>Reflection</h2>
+<div class="mbody"><h3 class="msub" data-reveal>The best feature is the one you don&#x27;t open</h3>
+<p data-reveal>I didn&#x27;t want another app to manage. Emoji Popup has no window, just a key and a card that&#x27;s gone as soon as I pick. I reach for it without thinking, and that&#x27;s how I know it works.</p>
+<div class="pt-get" data-reveal><p>It&#x27;s free and open source on <a href="https://github.com/samarthdesigns/emoji-popup" target="_blank" rel="noopener">GitHub</a>.</p>
+<div class="links pt-links"><a href="https://github.com/samarthdesigns/emoji-popup/releases/latest" target="_blank" rel="noopener">Download</a><a href="https://github.com/samarthdesigns/emoji-popup" target="_blank" rel="noopener">View on GitHub</a></div>
+<p class="pt-small">Windows 10/11, macOS 13+, and Fedora with KDE Plasma 6. Not affiliated with Slack.</p></div>
+</div></section>
+</div>
+</div>
+<section class="mmore band" aria-label="Next case studies">
+  <div class="container mmore__head"><h2 class="display" data-liquid>Next case studies</h2><a class="mmore__all" href="/case-studies.html">View all <span aria-hidden="true">&#8599;</span></a></div>
+  <div class="container mmore__grid"><article class="wcard" data-href="/case-studies/ai-native-design-system.html" data-cursor-pill="Open" data-reveal>
+  <a class="wcard__frame" href="/case-studies/ai-native-design-system.html"><span class="wcard__img"><img src="/framerusercontent.com/images/ipg6enpqoeunJSBDdwjeBsglLk__Q__width__E__1600__A__height__E__960.svg" alt="AI Native Design System" loading="lazy"></span></a>
+  <div class="wcard__cap">
+    <span class="wcard__no">(01)</span>
+    <h3 class="wcard__t"><a href="/case-studies/ai-native-design-system.html">AI Native Design System</a></h3>
+    <p class="wcard__d muted">Pitch demos were rebuilt from zero every time. As the sole designer, I built the system behind $500M+ in deals.</p>
+    <div class="chips"><span class="chip">Design Systems</span><span class="chip">AI-assisted</span><span class="chip">UX Design</span><span class="chip">Research</span></div>
+    <a class="wcard__open" href="/case-studies/ai-native-design-system.html">Open <span aria-hidden="true">&#8599;</span></a>
+  </div>
+</article><article class="wcard" data-href="/case-studies/insider-vibes.html" data-cursor-pill="Open" data-reveal>
+  <a class="wcard__frame" href="/case-studies/insider-vibes.html"><span class="wcard__img"><img src="/framerusercontent.com/images/QuxZeDIu9ZBi4q7sJx9HIWsJgME__Q__width__E__1920__A__height__E__1080.min.webp" alt="Paytm Insider" loading="lazy"></span></a>
+  <div class="wcard__cap">
+    <span class="wcard__no">(02)</span>
+    <h3 class="wcard__t"><a href="/case-studies/insider-vibes.html">Paytm Insider</a></h3>
+    <p class="wcard__d muted">COVID wiped out live events. As lead designer on the pivot, I helped reach 50,000+ paying users in month one.</p>
+    <div class="chips"><span class="chip">Design Systems</span><span class="chip">0→1</span><span class="chip">A/B Testing</span><span class="chip">Research</span><span class="chip">UX Design</span></div>
+    <a class="wcard__open" href="/case-studies/insider-vibes.html">Open <span aria-hidden="true">&#8599;</span></a>
+  </div>
+</article><article class="wcard" data-href="/case-studies/paytm-chat.html" data-cursor-pill="Open" data-reveal>
+  <a class="wcard__frame" href="/case-studies/paytm-chat.html"><span class="wcard__img"><img src="/framerusercontent.com/images/Gp546S1zKuQYpMTXluK20aAlus__Q__width__E__1515__A__height__E__795.png" alt="Paytm Chat" loading="lazy"></span></a>
+  <div class="wcard__cap">
+    <span class="wcard__no">(03)</span>
+    <h3 class="wcard__t"><a href="/case-studies/paytm-chat.html">Paytm Chat</a></h3>
+    <p class="wcard__d muted">Users were leaving for Google Pay&#x27;s chat. I designed pay-first chat for 100M+ users: drop-off fell from 34% to 12%.</p>
+    <div class="chips"><span class="chip">UX Design</span><span class="chip">Research</span><span class="chip">Mobile</span><span class="chip">Scale</span></div>
+    <a class="wcard__open" href="/case-studies/paytm-chat.html">Open <span aria-hidden="true">&#8599;</span></a>
+  </div>
+</article></div>
+</section>
+</main>
+<section class="contact band" id="contact">
+  <div class="contact__inner container">
+    <h2 class="display" data-liquid>Always up for a conversation about UX, design systems or AI-native tooling</h2>
+    <div class="links" data-reveal><a href="mailto:contact@samarthnayyar.com">Get in touch</a><a href="/assets/Samarth-Nayyar-Resume.pdf" download="Samarth Nayyar Product Designer Resume.pdf" data-cursor-pill="PDF">Download Resume</a></div>
+    
+  </div>
+</section>
+<footer class="footer">
+  <p class="footer__note">&copy; 2026 Samarth Nayyar. Powered by Caffeine and the love for design.</p>
+  <div class="footer__meta"><span>San Francisco &middot; <span data-local-time></span></span><a class="footer__top" href="#top">Back to top <span aria-hidden="true">&uarr;</span></a></div>
+</footer>
+<script>
+/* Clips: autoplay muted on loop while on screen (incl. inside the carousel), paused off screen.
+   Reduced motion: no autoplay, controls shown; the cover loop is swapped for its still image. */
+(()=>{const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.querySelectorAll('video[data-auto]').forEach(v=>{v.muted=true;
+ if(RM){if(v.dataset.still){const i=new Image();i.src=v.dataset.still;i.alt=v.getAttribute('aria-label')||'';i.width=1920;i.height=1080;v.replaceWith(i);return;}v.controls=true;return;}
+ new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){v.play().catch(()=>{});}else{v.pause();}}),{threshold:.35}).observe(v);});})();
+</script>
+</body>
+</html>
